@@ -1,2 +1,2 @@
 # jedi
-Jogos Educativos Didático
+Jogos Educativos Didáticos
