@@ -65,6 +65,9 @@ class Phase_01 extends Phaser.Scene
 
     create_actors()
     {
+        this.box  = this.physics.add.sprite(6*16, 4*16, 'tiles_sp', 626);
+        this.box.setScale(2);
+
         // criação das armadilhas
         this.traps  = this.physics.add.group();
         for (let i=36; i<=43; i++){
@@ -139,7 +142,13 @@ class Phase_01 extends Phaser.Scene
             });
 
         // create enemy 3 animation
-
+        this.anims.create({
+            key: 'enemy_3_anim',
+            frames: this.anims.generateFrameNumbers('tiles_sp', {frames: [503, 504, 505, 506, 507, 508, 509, 510]}),
+            frameRate: 8,
+            repeat: -1
+            });
+     
     }
 
     create_collisions()
@@ -148,6 +157,9 @@ class Phase_01 extends Phaser.Scene
         // criação da colisão com paredes
         this.wallsLayer.setCollisionBetween(30, 40, true)
         this.physics.add.collider(this.player, this.wallsLayer);
+        this.physics.add.collider(this.player, this.box);
+        this.physics.add.collider(this.box, this.wallsLayer);
+
         if (this.movingWall_sts != 1){
             this.movingWall.setCollisionByExclusion([-1])
             this.physics.add.collider(this.player, this.movingWall);
@@ -259,13 +271,15 @@ class Phase_01 extends Phaser.Scene
         else{
             this.mage.alpha = 0;
         }
-        this.traps.playAnimation('trap_anim')
+        this.traps.playAnimation('trap_anim');
+        this.enemy_3.play("enemy_3_anim");
     }
 
 
     // update é chamada a cada novo quadro
     update ()
     {
+        //this.box.setVelocity(0, 0);
         // testa se tecla pressionada e seta a velocidade do jogador 
         if (this.keyD?.isDown) {
             this.player.setVelocityX(210);
@@ -343,7 +357,7 @@ class Phase_01 extends Phaser.Scene
         physics: {
               default: 'arcade',
               arcade: {
-                  debug: false,
+                  debug: true,
               },
         },
 
