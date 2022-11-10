@@ -114,6 +114,23 @@ class Phase_01 extends Phaser.Scene
             duration: 1000,
         });
         console.log('tline');
+
+        // texto e tween da 'zona'
+        var t3 = this.add.text(460, 100, "Na zona ;)", {
+            font: "25px Arial",
+            fill: "#20C020",
+            align: "centedr"
+        });
+        t3.alpha = 0
+        this.tzone = this.tweens.add({
+                targets: t3,
+                alpha: 1,
+                paused: true,
+                ease: 'Power1',
+                duration: 1000,
+                yoyo: true,
+                duration: 1000,
+            });
     }
 
     // função para criação dos elementos
@@ -130,6 +147,13 @@ class Phase_01 extends Phaser.Scene
         this.create_animations();
 
         this.create_tweens();
+
+        // adicionando uma zona com gatilho, quando entrar aciona a função onZone
+        this.zoneDialog = true;
+        this.zone = this.add.zone(500, 100).setSize(100, 100);
+        this.physics.world.enable(this.zone);
+        this.physics.add.overlap(this.player, this.zone, this.onZone, null, this);
+
 
         // ligação das teclas de movimento
         this.keyA = this.input.keyboard.addKey('A');
@@ -171,4 +195,11 @@ class Phase_01 extends Phaser.Scene
         }
     }
 
+    // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
+    onZone(){
+        if (this.zoneDialog){
+            this.zoneDialog = false;
+            this.tzone.play();
+        }
+    }
 }
