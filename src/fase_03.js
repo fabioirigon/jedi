@@ -135,7 +135,33 @@ class Fase_03 extends Phaser.Scene {
       repeat: -1
       });
 
+    this.anims.create({
+      key: 'player_up',
+      frames: this.anims.generateFrameNumbers('player_sp', {frames: [105, 107, 108, 109, 110, 111, 112]}),
+      frameRate: 12,
+      repeat: -1      
+    });
 
+    this.anims.create({
+      key: 'player_down',
+      frames: this.anims.generateFrameNumbers('player_sp', {frames: [131, 132, 133, 134, 135, 136, 137, 138]}),
+      frameRate: 12,
+      repeat: -1      
+    });
+
+    this.anims.create({
+      key: 'player_left',
+      frames: this.anims.generateFrameNumbers('player_sp', {frames: [118, 119, 120, 121, 122, 123, 124, 125]}),
+      frameRate: 12,
+      repeat: -1      
+    });
+
+    this.anims.create({
+      key: 'player_right',
+      frames: this.anims.generateFrameNumbers('player_sp', {frames: [144, 145, 146, 147, 148, 149, 150, 151]}),
+      frameRate: 12,
+      repeat: -1      
+    });
   }
 
 
@@ -162,22 +188,30 @@ class Fase_03 extends Phaser.Scene {
   // criação do diálogo
   create_tweens(){
 
-      var t0 = this.add.text(900, 600, "Está perdido? Siga para cima.\n As árvores te mostrarão o caminho.", {
-          font: "15px Arial",
-          fill: "#000000",
+    // Falas da primeira cena
+      var t0 = this.add.text(900, 600, "Está perdido?\n Não se pode atravessar o Rio das Flores", {
+          font: "12px Arial",
+          fill: "#674ea7",
           align: "center"
       });        
-      var t1 = this.add.text(900, 600, "Obrigada bela bruxa!", {
-          font: "15px Arial",
-          fill: "#000000",
+      var t1 = this.add.text(900, 600, "Siga para cima.\n As árvores te mostrarão o caminho", {
+          font: "12px Arial",
+          fill: "#674ea7",
           align: "center"
       });
-      
+      var t2 = this.add.text(900, 600, "Obrigada bela bruxa!", {
+        font: "12px Arial",
+        fill: "#000000",
+        align: "center"
+      });        
+  
       t0.alpha = 0
       t1.alpha = 0
+      t2.alpha = 0
 
+      
       // timeline: sequência
-      this.timeline = this.tweens.createTimeline();
+      this.timeline = this.tweens.createTimeline({paused: true});
 
       // primeira fala - bruxinha
       this.timeline.add({
@@ -189,7 +223,7 @@ class Fase_03 extends Phaser.Scene {
           hold: 3000
       });
 
-      // segunda fala - aventureira
+      // segunda fala - bruxinha
       this.timeline.add({
           targets: t1,
           alpha: 1,
@@ -199,23 +233,80 @@ class Fase_03 extends Phaser.Scene {
           hold: 3000
       });
 
-        // texto e tween da 'zona'
-        var t3 = this.add.text(900, 600, "Na zona ;)", {
-          font: "15px Arial",
-          fill: "#000000",
-          align: "center"
+      // terceira fala - aventureira
+      this.timeline.add({
+        targets: t2,
+        alpha: 1,
+        ease: 'linear',
+        duration: 1000,
+        yoyo: true,
+        hold: 3000
       });
-      t3.alpha = 0
+      
+  // ----------------------------------------------------------------
+  // Falas da segunda cena
+  
+    var t3 = this.add.text(945, 100, "Olá, o senhor sabe como atravessar o rio?", {
+      font: "12px Arial",
+      fill: "#000000",
+      align: "center"
+    });   
+         
+    var t4 = this.add.text(945, 100, "Oque me diz de uma troca justa?\n Uma resposta por outra.", {
+        font: "12px Arial",
+        fill: "#744700",
+        align: "center"
+    });
+    
+    var t5 = this.add.text(945, 100, "Manda ver!", {
+      font: "12px Arial",
+      fill: "#000000",
+      align: "center"
+    });        
 
-      this.tzone = this.tweens.add({
-              targets: t0, t1,
-              alpha: 1,
-              paused: true,
-              ease: 'Power1',
-              duration: 1000,
-              yoyo: true,
-              duration: 1000,
-          });
+    t3.alpha = 0
+    t4.alpha = 0
+    t5.alpha = 0
+
+    // timeline: sequência
+    this.timelineRobin = this.tweens.createTimeline({paused: true});
+
+    // primeira fala - aventureira
+    this.timelineRobin.add({
+        targets: t3,
+        alpha: 1,
+        ease: 'linear',
+        duration: 1000, 
+        yoyo: true,
+        hold: 3000
+    });
+
+    // segunda fala - Robin Rock
+    this.timelineRobin.add({
+        targets: t4,
+        alpha: 1,
+        ease: 'linear',
+        duration: 1000,
+        yoyo: true,
+        hold: 3000
+    });
+
+    // terceira fala - aventureira
+    this.timelineRobin.add({
+      targets: t5,
+      alpha: 1,
+      ease: 'linear',
+      duration: 1000,
+      yoyo: true,
+      hold: 3000
+    });
+  // ----------------------------------------------------------------
+  // DESAFIO DIDATICO
+
+
+
+  // ----------------------------------------------------------------
+  
   }
 
   // função para criação dos elementos
@@ -233,14 +324,17 @@ class Fase_03 extends Phaser.Scene {
     this.physics.world.enable(this.zone);
     this.physics.add.overlap(this.player, this.zone, this.onZone, null, this);
 
+   // this.zoneDialog2 = true;
+    this.zone2 = this.add.zone(970, 90).setSize(100, 100);
+    this.physics.world.enable(this.zone2);
+    this.physics.add.overlap(this.player, this.zone2, this.onZone2, null, this);
+
     // ligação das teclas de movimento
     this.keyA = this.input.keyboard.addKey("A");
     this.keyD = this.input.keyboard.addKey("D");
     this.keyW = this.input.keyboard.addKey("W");
     this.keyS = this.input.keyboard.addKey("S");
 
-    // inicia diálogo e anima o mago:
-    this.timeline.play();
     this.bruxa.play('witch_idle')
 
   }
@@ -250,29 +344,44 @@ class Fase_03 extends Phaser.Scene {
   update() {
     
     if (this.keyD?.isDown) {
-      this.player.setVelocityX(210);
+      this.player.play('player_right', true)
+      this.player.setVelocityX(180);
       // this.player.checkFlip();
+
     } else if (this.keyA?.isDown) {
-      this.player.setVelocityX(-210);
+      this.player.play('player_left', true)
+      this.player.setVelocityX(-180);
       // this.player.checkFlip();
     } else {
       this.player.setVelocityX(0);
     }
 
     // velocidade vertical
-    if (this.keyW.isDown) {
-      this.player.setVelocityY(-210);
-    } else if (this.keyS.isDown) {
-      this.player.setVelocityY(210);
+    if (this.keyW?.isDown) {
+      this.player.play('player_up', true)
+      this.player.setVelocityY(-180);
+    } else if (this.keyS?.isDown) {
+      this.player.play('player_down', true)
+      this.player.setVelocityY(180);
     } else {
       this.player.setVelocityY(0);
     }
+
   }
   // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
   onZone(){
     if (this.zoneDialog){
-        this.zoneDialog = false;
-        this.tzone.play();
+       // this.zoneDialog = false;
+        this.timeline.play();
+       this.zoneDialog = true;
+    }
+  }
+
+  onZone2(){
+    if (this.zoneDialog){
+       // this.zoneDialog = false;
+        this.timelineRobin.play();
+       this.zoneDialog = true;
     }
   }
 
