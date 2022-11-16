@@ -162,6 +162,15 @@ class Fase_03 extends Phaser.Scene {
       frameRate: 12,
       repeat: -1      
     });
+
+    this.anims.create({
+      key: 'player_idle',
+      //frames: this.anims.generateFrameNumbers('player_sp', {frames: [234, 235, 236, 235]}),
+      //frames: this.anims.generateFrameNumbers('player_sp', {frames: [234, 235]}),
+      frames: this.anims.generateFrameNumbers('player_sp', {frames: [26, 27]}),
+      frameRate: 3,
+      repeat: -1  
+    });
   }
 
 
@@ -335,7 +344,11 @@ class Fase_03 extends Phaser.Scene {
     this.keyW = this.input.keyboard.addKey("W");
     this.keyS = this.input.keyboard.addKey("S");
 
+    this.cur_wlk = 0
+
     this.bruxa.play('witch_idle')
+    this.player.play('player_idle')
+
 
   }
 
@@ -344,28 +357,45 @@ class Fase_03 extends Phaser.Scene {
   update() {
     
     if (this.keyD?.isDown) {
-      this.player.play('player_right', true)
-      this.player.setVelocityX(180);
-      // this.player.checkFlip();
+      this.player.setVelocityX(210);
+      if (this.cur_wlk != 1 && this.player.body.velocity.y == 0){
+          this.cur_wlk = 1;
+          this.player.play("player_right");
+      }
+  }
+  else if (this.keyA?.isDown) {
+      this.player.setVelocityX(-210);
+      if (this.cur_wlk != 2 && this.player.body.velocity.y == 0){
+          this.cur_wlk = 2;
+          this.player.play("player_left");
+      }
+  }
+  else{
+      this.player.setVelocityX(0); 
+      if (this.cur_wlk != 0 && this.player.body.velocity.y == 0){
+          this.cur_wlk = 0;
+          this.player.play("player_idle");
+      }
+  }
 
-    } else if (this.keyA?.isDown) {
-      this.player.play('player_left', true)
-      this.player.setVelocityX(-180);
-      // this.player.checkFlip();
-    } else {
-      this.player.setVelocityX(0);
-    }
-
-    // velocidade vertical
-    if (this.keyW?.isDown) {
-      this.player.play('player_up', true)
-      this.player.setVelocityY(-180);
-    } else if (this.keyS?.isDown) {
-      this.player.play('player_down', true)
-      this.player.setVelocityY(180);
-    } else {
-      this.player.setVelocityY(0);
-    }
+  // velocidade vertical
+  if (this.keyW.isDown) {
+      this.player.setVelocityY(-210);
+      if (this.cur_wlk != 3){
+          this.cur_wlk = 3;
+          this.player.play("player_up");
+      }
+  }
+  else if (this.keyS.isDown) {
+      this.player.setVelocityY(210);
+      if (this.cur_wlk != 4){
+          this.cur_wlk = 4;
+          this.player.play("player_down");
+      }
+  }
+  else{
+      this.player.setVelocityY(0); 
+  }
 
   }
   // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
