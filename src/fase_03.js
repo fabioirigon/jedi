@@ -246,19 +246,19 @@ class Fase_03 extends Phaser.Scene {
   // ----------------------------------------------------------------
   // Falas da segunda cena
   
-    var t3 = this.add.text(945, 100, "Olá, o senhor sabe como atravessar o rio?", {
+    var t3 = this.add.text(945, 120, "Olá, o senhor sabe como atravessar o rio?", {
       font: "12px Arial",
       fill: "#000000",
       align: "center"
     });   
          
-    var t4 = this.add.text(945, 100, "Oque me diz de uma troca justa?\n Uma resposta por outra.", {
+    var t4 = this.add.text(945, 120, "Oque me diz de uma troca justa?\n Uma resposta por outra.", {
         font: "12px Arial",
         fill: "#744700",
         align: "center"
     });
     
-    var t5 = this.add.text(945, 100, "Manda ver!", {
+    var t5 = this.add.text(945, 120, "Manda ver!", {
       font: "12px Arial",
       fill: "#000000",
       align: "center"
