@@ -17,6 +17,7 @@ class phase_01 extends Phaser.Scene
         
         // carregando mapa (json) e gráficos do mapa
         this.load.image('tiles', 'assets/images/dungeon-16-16.png');
+        this.load.image('bullet', 'assets/images/bullet.png');
         this.load.tilemapTiledJSON('themap', 'assets/maps/map_phase_01.json');
     }
 
@@ -37,8 +38,12 @@ class phase_01 extends Phaser.Scene
         this.player = new player(this, 250, 75, 'player_sp', 0);
         this.player.setScale(0.6);
 
-        this.mage  = this.physics.add.sprite(78, 128, 'wizardIdle_sp', 0);
+        //this.mage  = this.physics.add.sprite(78, 128, 'wizardIdle_sp', 0);
+        this.mage  = new Wizard(this, 78, 128, 'wizardIdle_sp', 'wizardIdle_sp', 0);
         this.mage.setScale(0.9)
+        //this.mage.setSize(30, 45, true)
+        this.mage.setSize(this.mage.width/3, this.mage.height/2, true)
+
 
         // camera seguindo o jogador
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
@@ -63,9 +68,11 @@ class phase_01 extends Phaser.Scene
         // criação da colisão com paredes
         this.wallsLayer.setCollisionBetween(30, 40, true)
         this.physics.add.collider(this.player, this.wallsLayer);
+        this.physics.add.collider(this.mage.bullets, this.wallsLayer, this.mage.bulletHitWall, null, this);
+        this.physics.add.overlap(this.player, this.mage.bullets, bulletHitPlayer, null, this);
 
         // colisão com armadilhas
-        this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
+        //this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
     }
 
 
@@ -112,9 +119,16 @@ class phase_01 extends Phaser.Scene
 
     // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
     onZone(){
+        /*
         if (this.zoneDialog){
             this.zoneDialog = false;
             this.tzone.play();
         }
+        */
     }
+}
+
+function bulletHitPlayer(player, bullet){
+    bullet.setActive(false);
+    bullet.setVisible(false);
 }

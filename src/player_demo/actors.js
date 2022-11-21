@@ -9,6 +9,8 @@ class player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.body.setCollideWorldBounds(true);
+    this.setSize(this.width/2, 2*this.height/3, true);
+    this.setOffset(this.width/4, this.height/3);
 
 
     this.move_enable = true;
