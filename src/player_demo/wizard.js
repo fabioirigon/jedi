@@ -1,71 +1,3 @@
-console.log("actors!! ")
-
-class Bullet extends Phaser.Physics.Arcade.Sprite
-{
-    constructor (scene, x, y)
-    {
-        super(scene, x, y, 'bullet');
-
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
-        this.setCollideWorldBounds(true);
-        //this.body.onWorldBounds = true;
-    }
-
-    fire (x, y, vx, vy)
-    {
-        this.body.reset(x, y);
-
-        this.setActive(true);
-        this.setVisible(true);
-
-        this.setVelocityX(vx);
-        this.setVelocityY(vy);
-    }
-
-    preUpdate (time, delta)
-    {
-        super.preUpdate(time, delta);
-
-        if (this.y <= -32)
-        {
-            this.setActive(false);
-            this.setVisible(false);
-        }
-    }
-}
-
-class Bullets extends Phaser.Physics.Arcade.Group
-{
-    constructor (scene)
-    {
-        super(scene.physics.world, scene);
-
-        this.enableBody = true;
-        this.physicsBodyType = Phaser.Physics.ARCADE;        
-
-        this.createMultiple({
-            frameQuantity: 5,
-            key: 'bullet',
-            active: false,
-            visible: false,
-            classType: Bullet
-        });
-
-        //this.body.collideWorldBounds = true;
-    }
-
-    fireBullet (x, y, vx, vy)
-    {
-        let bullet = this.getFirstDead(false);
-
-        if (bullet)
-        {
-            bullet.fire(x, y, vx, vy);
-        }
-    }
-}
-
 
 class Wizard extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, texture_idle, texture_attack) {
@@ -90,25 +22,9 @@ class Wizard extends Phaser.Physics.Arcade.Sprite {
         bullet.setVisible(false);
     }
 
-    console.log('bb: ', bullet, bullet.body);
-    bullet.setVelocityY(-300);
-    /*
-    this.bullets.enableBody = true;
-    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-
-    for (var i=0; i<5; i++)
-    {
-        var b = this.bullets.create(200, 200, 'bullet');
-        console.log('bb: ', b.body)s
-        b.body.setVelocityX(20);
-    }
-    */
     console.log('bullets added')
 
-    this.facing = [0, 1];
-    scene.create_animations(texture_idle, texture_attack);
-
-    this.timer = scene.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: this.attack, callbackScope: this });
+    //scene.create_animations(texture_idle, texture_attack);
 
     this.anims.create({
         key: 'wizard_idle',
@@ -125,7 +41,7 @@ class Wizard extends Phaser.Physics.Arcade.Sprite {
         });
 
     this.anims.play('wizard_idle');
-    //this.bullets.fireBullet(200, 200);
+    this.timer = scene.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: this.attack, callbackScope: this });
   }
 
 
@@ -142,29 +58,12 @@ class Wizard extends Phaser.Physics.Arcade.Sprite {
         bullet.setVelocityX(vx);
         bullet.setVelocityY(vy);        
     }
-    this.timer = this.scene.time.addEvent({ delay: Phaser.Math.Between(200, 1000), callback: this.attack, callbackScope: this });
-  }
-
-  re_enable(){
-    this.setImmovable(false);
+    this.timer = this.scene.time.addEvent({ delay: Phaser.Math.Between(100, 600), callback: this.attack, callbackScope: this });
   }
 
   preUpdate (time, delta)
   {
     super.preUpdate(time, delta);
-
-    if (this.move_enable){
-      this.set_player_velocity();
-      this.set_walk_animation();
-    }
-    else{
-      this.setVelocityX(0); 
-      this.setVelocityY(0); 
-    }
-
-    if (this.scene.keySPACE.isDown && this.attack_enable) {
-      this.attack();
-    }
   }
 
   bulletHitWall(bullet, wall){
