@@ -14,7 +14,6 @@ class Phase_01 extends Phaser.Scene
             this.movingWall_sts = data.movingWall_sts;
         }
     }
-    
 
     // função para carregamento de assets
     preload ()
@@ -56,8 +55,7 @@ class Phase_01 extends Phaser.Scene
 
         // camera seguindo o jogador
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
-        this.cameras.main.setZoom(1.5)   
-;
+        this.cameras.main.setZoom(1.5);
 
     }
 
@@ -97,16 +95,51 @@ class Phase_01 extends Phaser.Scene
         // criação da colisão com paredes
         this.wallsMap.setCollisionBetween(0, 9999, true)
         this.physics.add.collider(this.player, this.wallsMap);
-
-        /* // colisão com os inimigos
-        this.physics.add.overlap(this.player, this.enemy_0, enemyHit, null, this);
-        this.physics.add.overlap(this.player, this.enemy_1, enemyHit, null, this);
-        this.physics.add.overlap(this.player, this.enemy_2, enemyHit, null, this);
-        this.physics.add.overlap(this.player, this.enemy_3, enemyHit, null, this);
-        */
         
     }
 
+    create_tweens()
+    {
+        var t0 = this.add.text(80, 300, "Alguns dizem que há um tesouro no fim da caverna", {
+            font: "15px Arial",
+            fill: "#20C020",
+            align: "center"
+        });        
+
+        var t1 = this.add.text(150, 300, "Continue por sua conta e risco", {
+            font: "15px Arial",
+            fill: "#20C020",
+            align: "center"
+        });
+
+        t0.alpha = 0
+        t1.alpha = 0
+
+        this.timeline = this.tweens.createTimeline();
+        this.timeline.add({
+            targets: t0,
+            alpha: 1,
+            ease: 'linear',
+            duration: 1000, 
+            yoyo: true,
+            hold: 3000
+        });
+
+        this.timeline.add({
+            targets: t1,
+            alpha: 1,
+            ease: 'linear',
+            duration: 1000,
+            yoyo: true,
+            hold: 3000
+        });
+
+        //this.zone = scene.add.zone(0, 0, 200, 200);
+        
+        
+        console.log('tline');
+
+    }
 
     // função para criação dos elementos
     create ()
@@ -118,6 +151,13 @@ class Phase_01 extends Phaser.Scene
         this.create_collisions();
 
         this.create_animations();
+
+        this.create_tweens();
+
+        this.zoneDialog = true;
+        this.zone = this.add.zone(200, 300).setSize(200, 200);
+        this.physics.world.enable(this.zone);
+        this.physics.add.overlap(this.player, this.zone, this.onZone, null, this);
 
         // ligação das teclas de movimento
         this.keyA = this.input.keyboard.addKey('A');
@@ -180,5 +220,13 @@ class Phase_01 extends Phaser.Scene
             this.player.play("pl_wlk_rig");
         }*/
         
+    }
+
+    // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
+    onZone(){
+        if (this.zoneDialog){
+            this.zoneDialog = false;
+            this.timeline.play();
+        }
     }
 }
