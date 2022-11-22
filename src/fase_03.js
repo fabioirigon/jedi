@@ -4,9 +4,14 @@ class Fase_03 extends Phaser.Scene {
     super("Fase_03");
   }
 
+
   // função para carregamento de assets
   preload() {
     this.load.spritesheet("player_sp", "assets/spritesheets/player_sp.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+    this.load.spritesheet("playerbow_sp", "assets/spritesheets/playerbow_sp.png", {
       frameWidth: 64,
       frameHeight: 64,
     });
@@ -94,8 +99,8 @@ class Fase_03 extends Phaser.Scene {
     this.robin.body.immovable = true;
     this.robin.body.moves = false;
 
-    this.player = this.physics.add.sprite(800, 700, 'player_sp', 26)
-    //this.player = this.physics.add.sprite(1020, 600, "player_sp", 26);
+    //this.player = this.physics.add.sprite(800, 700, 'player_sp', 26)
+    this.player = this.physics.add.sprite(800, 100, "player_sp", 26);
     this.player.setScale(0.4);
     this.player.setSize(32, 32);
     this.player.setOffset(16, 32);
@@ -117,6 +122,9 @@ class Fase_03 extends Phaser.Scene {
     this.esfera5 = this.physics.add.sprite(1150, 550, "tls_solaria", 331);
     this.esfera6 = this.physics.add.sprite(1150, 575, "tls_solaria", 331);
     this.esfera7 = this.physics.add.sprite(1150, 600, "tls_solaria", 331);
+    this.esfera7.tint = 0x3388ff;
+
+    //game.input.onDown.add(changeTint, this);
 
 
 
@@ -170,6 +178,34 @@ class Fase_03 extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers('player_sp', {frames: [26, 27]}),
       frameRate: 3,
       repeat: -1  
+    });
+
+    this.anims.create({
+      key: 'bow_up',
+      frames: this.anims.generateFrameNumbers('playerbow_sp', {frames: [208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220]}),
+      frameRate: 16,
+      repeat: false      
+    });
+
+    this.anims.create({
+      key: 'bow_left',
+      frames: this.anims.generateFrameNumbers('playerbow_sp', {frames: [221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233]}),
+      frameRate: 16,
+      repeat: false      
+    });
+
+    this.anims.create({
+      key: 'bow_down',
+      frames: this.anims.generateFrameNumbers('playerbow_sp', {frames: [234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246]}),
+      frameRate: 16,
+      repeat: false      
+    });
+
+    this.anims.create({
+      key: 'bow_right',
+      frames: this.anims.generateFrameNumbers('playerbow_sp', {frames: [247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259]}),
+      frameRate: 16,
+      repeat: false      
     });
   }
 
@@ -309,13 +345,81 @@ class Fase_03 extends Phaser.Scene {
       yoyo: true,
       hold: 3000
     });
-  // ----------------------------------------------------------------
-  // DESAFIO DIDATICO
 
+    // ----------------------------------------------------------------
+    // Continuação da segunda cena
 
+    var t6 = this.add.text(945, 120, "Impressionante! Tome este arco!", {
+      font: "12px Arial",
+      fill: "#744700",
+      align: "center"
+    });   
+         
+    var t7 = this.add.text(945, 120, "Para atravessar o rio, atire nos cristais\nde número primo que estão na outra margem.", {
+        font: "12px Arial",
+        fill: "#744700",
+        align: "center"
+    });
+    
+    var t8 = this.add.text(945, 120, "Assim a ponte será revelada!", {
+      font: "12px Arial",
+      fill: "#744700",
+      align: "center"
+    });       
 
-  // ----------------------------------------------------------------
-  
+    var t9 = this.add.text(945, 120, "Valeu meu consagrado!", {
+      font: "12px Arial",
+      fill: "#000000",
+      align: "center"
+    });  
+
+    t6.alpha = 0
+    t7.alpha = 0
+    t8.alpha = 0
+    t9.alpha = 0
+
+    // timeline: sequência
+    this.timelineRobin2 = this.tweens.createTimeline({paused: true});
+
+    // 
+    this.timelineRobin2.add({
+        targets: t6,
+        alpha: 1,
+        ease: 'linear',
+        duration: 1000, 
+        yoyo: true,
+        hold: 3000
+    });
+
+    // 
+    this.timelineRobin2.add({
+        targets: t7,
+        alpha: 1,
+        ease: 'linear',
+        duration: 1000,
+        yoyo: true,
+        hold: 3000
+    });
+
+    // 
+    this.timelineRobin2.add({
+      targets: t8,
+      alpha: 1,
+      ease: 'linear',
+      duration: 1000,
+      yoyo: true,
+      hold: 3000
+    });
+
+    // 
+    this.timelineRobin2.add({
+      targets: t9,
+      alpha: 1,
+      ease: 'linear',
+      duration: 1000,
+      yoyo: true,
+      hold: 3000
+    });
   }
 
   // função para criação dos elementos
@@ -343,29 +447,38 @@ class Fase_03 extends Phaser.Scene {
     this.keyD = this.input.keyboard.addKey("D");
     this.keyW = this.input.keyboard.addKey("W");
     this.keyS = this.input.keyboard.addKey("S");
+    this.keySpace = this.input.keyboard.addKey("Space");
 
     this.cur_wlk = 0
+    this.last_dir = 0
 
     this.bruxa.play('witch_idle')
     this.player.play('player_idle')
 
+    // habilita movimento
+    this.enable_move = true;
 
+    this.bow = false;
   }
-
  
   // update é chamada a cada novo quadro
   update() {
     
+  // variável enaable move controla o movimento
+  if (this.enable_move){
+    
     if (this.keyD?.isDown) {
-      this.player.setVelocityX(210);
+      this.player.setVelocityX(180);
       if (this.cur_wlk != 1 && this.player.body.velocity.y == 0){
           this.cur_wlk = 1;
+          this.last_dir = 1;
           this.player.play("player_right");
       }
   }
   else if (this.keyA?.isDown) {
-      this.player.setVelocityX(-210);
+      this.player.setVelocityX(-180);
       if (this.cur_wlk != 2 && this.player.body.velocity.y == 0){
+          this.last_dir = 2;
           this.cur_wlk = 2;
           this.player.play("player_left");
       }
@@ -380,15 +493,17 @@ class Fase_03 extends Phaser.Scene {
 
   // velocidade vertical
   if (this.keyW.isDown) {
-      this.player.setVelocityY(-210);
+      this.player.setVelocityY(-180);
       if (this.cur_wlk != 3){
+          this.last_dir = 3;
           this.cur_wlk = 3;
           this.player.play("player_up");
       }
   }
   else if (this.keyS.isDown) {
-      this.player.setVelocityY(210);
+      this.player.setVelocityY(180);
       if (this.cur_wlk != 4){
+          this.last_dir = 4;
           this.cur_wlk = 4;
           this.player.play("player_down");
       }
@@ -397,22 +512,116 @@ class Fase_03 extends Phaser.Scene {
       this.player.setVelocityY(0); 
   }
 
+  if (this.keySpace?.isDown && this.bow == true ) {
+    this.enable_move = false;
+    this.player.setVelocityX(0);
+    this.player.setVelocityY(0);
+    switch(this.last_dir){
+      case 1: 
+        this.player.play("bow_right");
+      break;
+      case 2:
+        this.player.play("bow_left");
+      break;
+      case 3:
+        this.player.play("bow_up");
+      break;
+      case 4:
+        this.player.play("bow_down");
+      break;
+    }//switch
+    setTimeout(() => {  this.enable_move = true; this.player.play("player_idle");}, 1000);
   }
+  }
+}
+
   // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
   onZone(){
     if (this.zoneDialog){
-       // this.zoneDialog = false;
+      
         this.timeline.play();
-       this.zoneDialog = true;
+        this.zoneDialog = true;
     }
   }
 
   onZone2(){
     if (this.zoneDialog){
-       // this.zoneDialog = false;
-        this.timelineRobin.play();
-       this.zoneDialog = true;
+
+
+      this.zoneDialog = false;
+
+      this.timelineRobin.play();
+       
+      // impede o movimento
+      this.enable_move = false;
+      
+      this.player.setVelocityX(0);
+      this.player.setVelocityY(0);
+      this.player.play("player_idle", true);
+
+       setTimeout(() => {
+
+      // pergunta: 
+      this.quest = this.add.text(945, 120, "Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?", {
+        font: "12px Arial",
+        fill: "#744700",
+        align: "center"
+      });
+
+      this.a0 = this.add.text(945, 175, "◯ 3589 livros", {
+          font: "12px Arial",
+          fill: "#744700",
+          align: "center"
+      });
+
+      this.a1 = this.add.text(945, 200, "◯ 3859 livros", {
+          font: "12px Arial",
+          fill: "#744700",
+          align: "center"
+      });
+
+      this.a2 = this.add.text(945, 225, "◯ 30859 livros", {
+          font: "12px Arial",
+          fill: "#744700",
+          align: "center"
+      });
+
+      this.a3 = this.add.text(945, 250, "◯ 38590 livros", {
+        font: "12px Arial",
+        fill: "#744700",
+        align: "center"
+    });
+
+      // deixa clicar e liga com a função
+      this.a0.setInteractive();
+      this.a0.on('pointerdown', this.errou, this);
+      this.a1.setInteractive();
+      this.a1.on('pointerdown', this.acertou, this);
+      this.a2.setInteractive();
+      this.a2.on('pointerdown', this.errou, this);
+      this.a3.setInteractive();
+      this.a3.on('pointerdown', this.errou, this);
+
+     }, 15000);
     }
+  }
+
+  // função erro e acerto
+  errou(){
+      console.log("errou");
+       this.scene.restart();
+  }
+
+  acertou(){
+      console.log("acertou");
+      this.enable_move = true;
+      this.quest.setVisible(false);
+      this.a0.setVisible(false);
+      this.a1.setVisible(false);
+      this.a2.setVisible(false);
+      this.a3.setVisible(false);
+      this.bow = true;
+      this.timelineRobin2.play();
   }
 
 }
