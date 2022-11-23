@@ -159,7 +159,13 @@ class Fase_05 extends Phaser.Scene
       frameRate: 2,
       repeat: 0
     });
-
+    this.anims.create({
+      key: 'pixie_leave',
+      frames: this.anims.generateFrameNumbers('pixie_sp', {frames: [0,1,2,3,4,5,6,7,8,36,37,38,39,40,41,42,43,44,43,42,43,44]}),
+      frameRate: 10,
+      repeat: 0
+    });
+    
     console.log('CreateAnimations');
   }
 
@@ -614,6 +620,7 @@ class Fase_05 extends Phaser.Scene
   liberaProximaFase(){
     this.wallsLayer2.setVisible(false);
     this.wallsLayer2.setCollisionBetween(0, 10000,false);
+    this.pixie.play('pixie_leave');
     console.log("liberaProximaFase");
   }
 
