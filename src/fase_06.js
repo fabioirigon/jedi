@@ -93,7 +93,7 @@ class Phase_01 extends Phaser.Scene
     {
 
         // criação da colisão com paredes
-        this.wallsMap.setCollisionBetween(0, 9999, true)
+        this.wallsMap.setCollisionBetween(0, 1, true)
         this.physics.add.collider(this.player, this.wallsMap);
         
     }
@@ -134,10 +134,24 @@ class Phase_01 extends Phaser.Scene
             hold: 3000
         });
 
-        //this.zone = scene.add.zone(0, 0, 200, 200);
-        
-        
-        console.log('tline');
+
+        var t3 = this.add.text(374, 920, "Preparesse para morrer", {
+        font: "15px Arial",
+        fill: "#f72b2b",
+        align: "center"
+        });        
+
+        t3.alpha = 0
+
+        this.timelineChefao = this.tweens.createTimeline();
+        this.timelineChefao.add({
+            targets: t3,
+            alpha: 1,
+            ease: 'linear',
+            duration: 1000, 
+            yoyo: true,
+            hold: 3000
+        });
 
     }
 
@@ -154,10 +168,17 @@ class Phase_01 extends Phaser.Scene
 
         this.create_tweens();
 
+        //Zona cavaleiro
         this.zoneDialog = true;
         this.zone = this.add.zone(200, 300).setSize(200, 200);
         this.physics.world.enable(this.zone);
         this.physics.add.overlap(this.player, this.zone, this.onZone, null, this);
+
+        // Zona chefão
+        this.zoneDialogChefao = true;
+        this.zoneChefao = this.add.zone(450, 900).setSize(300, 300);
+        this.physics.world.enable(this.zoneChefao);
+        this.physics.add.overlap(this.player, this.zoneChefao, this.onZoneChefao, null, this);
 
         // ligação das teclas de movimento
         this.keyA = this.input.keyboard.addKey('A');
@@ -227,6 +248,13 @@ class Phase_01 extends Phaser.Scene
         if (this.zoneDialog){
             this.zoneDialog = false;
             this.timeline.play();
+        }
+    }
+
+    onZoneChefao(){
+        if (this.zoneDialogChefao){
+            this.zoneDialogChefao = false;
+            this.timelineChefao.play();
         }
     }
 }
