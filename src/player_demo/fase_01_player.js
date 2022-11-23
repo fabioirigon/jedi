@@ -35,6 +35,7 @@ class phase_01 extends Phaser.Scene
     {
         // criação do jogador
         //this.player = this.physics.add.sprite(250, 75, 'player_sp', 0)
+        console.log('abadabadu')
         this.player = new player(this, 250, 75, 'player_sp', 0);
         this.player.setScale(0.6);
 
@@ -43,7 +44,6 @@ class phase_01 extends Phaser.Scene
         this.mage.setScale(0.9)
         //this.mage.setSize(30, 45, true)
         this.mage.setSize(this.mage.width/3, this.mage.height/2, true)
-
 
         // camera seguindo o jogador
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
@@ -68,8 +68,10 @@ class phase_01 extends Phaser.Scene
         // criação da colisão com paredes
         this.wallsLayer.setCollisionBetween(30, 40, true)
         this.physics.add.collider(this.player, this.wallsLayer);
-        this.physics.add.collider(this.mage.bullets, this.wallsLayer, this.mage.bulletHitWall, null, this);
-        this.physics.add.overlap(this.player, this.mage.bullets, bulletHitPlayer, null, this);
+        this.physics.add.collider(this.mage.bullets, this.wallsLayer, projectilHitWall, null, this);
+        this.physics.add.collider(this.player.arrows, this.wallsLayer, projectilHitWall, null, this);
+        this.physics.add.overlap(this.player, this.mage.bullets, projectilHitActor, null, this);
+        this.physics.add.overlap(this.mage, this.player.arrows, projectilHitActor, null, this);
 
         // colisão com armadilhas
         //this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
@@ -128,7 +130,16 @@ class phase_01 extends Phaser.Scene
     }
 }
 
-function bulletHitPlayer(player, bullet){
-    bullet.setActive(false);
-    bullet.setVisible(false);
+function projectilHitActor(actor, projectil){
+    projectil.setActive(false);
+    projectil.setVisible(false);
+    projectil.setVelocity(0, 0);
+    projectil.body.reset(-10, -10);
+
+    actor.getDamage(7);
 }
+
+function projectilHitWall(projectil, wall){
+    projectil.setActive(false);
+    projectil.setVisible(false);
+  }

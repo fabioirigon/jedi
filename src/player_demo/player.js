@@ -1,8 +1,9 @@
 console.log("actors!! ")
 
-class player extends Phaser.Physics.Arcade.Sprite {
+//class player extends Phaser.Physics.Arcade.Sprite {
+class player extends Actor {
   constructor(scene, x, y, texture, frame) {
-    console.log("0", texture, frame)
+    console.log("act 0", texture, frame)
     super(scene, x, y, texture, frame);
     console.log("2")
     this.scene = scene
@@ -12,6 +13,14 @@ class player extends Phaser.Physics.Arcade.Sprite {
     this.setSize(this.width/2, 2*this.height/3, true);
     this.setOffset(this.width/4, this.height/3);
 
+    this.arrows = scene.physics.add.group();
+    this.arrows.enableBody = true;
+    this.arrows.physicsBodyType = Phaser.Physics.ARCADE;
+    for (var i = 0; i < 5; i++){
+        var arrow = this.arrows.create(100 + i * 48,50, 'bullet');
+        arrow.setActive(false);
+        arrow.setVisible(false);
+    }
 
     this.move_enable = true;
     this.attack_enable = true;
@@ -48,25 +57,25 @@ class player extends Phaser.Physics.Arcade.Sprite {
     this.anims.create({
         key: 'attack_up',
         frames: this.anims.generateFrameNumbers(texture, {start: 208, end: 220}),
-        frameRate: 20,
+        frameRate: 30,
         repeat: 0
         });
     this.anims.create({
         key: 'attack_left',
         frames: this.anims.generateFrameNumbers(texture, {start: 221, end: 233}),
-        frameRate: 20,
+        frameRate: 30,
         repeat: 0
         });
     this.anims.create({
         key: 'attack_down',
         frames: this.anims.generateFrameNumbers(texture, {start: 234, end: 246}),
-        frameRate: 20,
+        frameRate: 30,
         repeat: 0
         });
     this.anims.create({
         key: 'attack_right',
         frames: this.anims.generateFrameNumbers(texture, {start: 247, end: 259}),
-        frameRate: 20,
+        frameRate: 30,
         repeat: 0
         });
 
@@ -142,6 +151,20 @@ class player extends Phaser.Physics.Arcade.Sprite {
   re_enable(){
     this.attack_enable = true;
     this.move_enable = true;
+
+    var arrow = this.arrows.getFirstDead(false);
+    if (arrow){
+        var vx = this.facing[0] * 100
+        var vy = this.facing[1] * 100
+
+        arrow.body.reset(this.x, this.y);
+        arrow.setActive(true);
+        arrow.setVisible(true);
+
+        arrow.setVelocityX(vx);
+        arrow.setVelocityY(vy);
+    }
+
 
   }
 

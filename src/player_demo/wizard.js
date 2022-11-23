@@ -1,5 +1,5 @@
 
-class Wizard extends Phaser.Physics.Arcade.Sprite {
+class Wizard extends Actor {
   constructor(scene, x, y, texture_idle, texture_attack) {
     super(scene, x, y, texture_idle, 0);
     this.scene = scene
