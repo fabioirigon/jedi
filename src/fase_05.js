@@ -78,6 +78,7 @@ class Fase_05 extends Phaser.Scene
     this.orcE.setScale(0.5);
 
     this.orcG = this.physics.add.sprite(490, 258, 'orc_guarda_sp', 26);
+    this.orcG.setImmovable(true);
     this.orcG.setScale(0.5);
 
     this.orcX = this.physics.add.sprite(900, 260, 'orc_xama_sp', 26);
@@ -178,6 +179,7 @@ class Fase_05 extends Phaser.Scene
     this.physics.add.collider(this.player, this.wallsLayer5);
     this.wallsLayer6.setCollisionBetween(0, 10000,false);
     this.physics.add.collider(this.player, this.wallsLayer5);
+    this.physics.add.collider(this.player,this.orcG);
 
     console.log('CreateCollisions');
   }
