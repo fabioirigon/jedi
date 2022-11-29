@@ -9,7 +9,7 @@ class player extends Actor {
     this.scene = scene
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.body.setCollideWorldBounds(true);
+    //this.body.setCollideWorldBounds(true);
     this.setSize(this.width/2, 2*this.height/3, true);
     this.setOffset(this.width/4, this.height/3);
 
@@ -184,8 +184,17 @@ class player extends Actor {
     if (this.scene.keySPACE.isDown && this.attack_enable) {
       this.attack();
     }
+  }
 
-
+  die(){
+    this.attack_enable = false;
+    this.move_enable = false;
+    this.body.enable=false;
+    this.on('animationcomplete', this.game_over);
+    this.anims.play('die');
+  }
+  game_over(){
+    console.log('game over');
   }
 
 }

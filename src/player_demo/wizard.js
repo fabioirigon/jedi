@@ -17,7 +17,7 @@ class Wizard extends Actor {
 
     for (var i = 0; i < 5; i++)
     {
-        var bullet = this.bullets.create(100 + i * 48,50, 'bullet');
+        var bullet = this.bullets.create(-10,-10, 'bullet');
         bullet.setActive(false);
         bullet.setVisible(false);
     }
@@ -39,7 +39,15 @@ class Wizard extends Actor {
         frameRate: 20,
         repeat: 1
         });
+    this.anims.create({
+        key: 'wizard_death',
+        frames: this.anims.generateFrameNumbers('wizardDeath_sp', {start: 0, end: 4}),
+        frameRate: 10,
+        repeat: 1,
 
+        });
+
+    // /home/fip/Documents/UTFPR/Disciplinas/OFC_Int/Phaser/gen_assets/wizard death.png    
     this.anims.play('wizard_idle');
     this.timer = scene.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: this.attack, callbackScope: this });
   }
@@ -47,6 +55,9 @@ class Wizard extends Actor {
 
   attack(){ 
     //console.log('wizard attack', this.bullets.countActive(true), this.bullets.countActive(false));
+    if (this.body.enable == false){
+        return;
+    }
     var vx = this.scene.player.x - this.x
     var vy = this.scene.player.y - this.y
     var bullet = this.bullets.getFirstDead(false);
@@ -70,5 +81,16 @@ class Wizard extends Actor {
     bullet.setActive(false);
     bullet.setVisible(false);
   }
+  die(){
+    this.attack_enable = false;
+    this.move_enable = false;
+    this.body.enable=false;
+    this.anims.play('wizard_death');
+    this.on('animationcomplete', this.vanish);    
+  }
+  vanish(){
+    this.setVisible(false);
+  }
+
 }
 

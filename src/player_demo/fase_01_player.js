@@ -12,6 +12,7 @@ class phase_01 extends Phaser.Scene
     {
         // carregando spritesheets
         this.load.spritesheet('wizardIdle_sp', 'assets/spritesheets/wizard_idle.png', { frameWidth: 80, frameHeight: 80});
+        this.load.spritesheet('wizardDeath_sp', 'assets/spritesheets/wizard_death.png', { frameWidth: 80, frameHeight: 80});
         this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('tiles_sp', 'assets/images/dungeon-16-16.png', { frameWidth: 16, frameHeight: 16});
         
@@ -94,9 +95,15 @@ class phase_01 extends Phaser.Scene
 
         // adicionando uma zona com gatilho, quando entrar aciona a função onZone
         this.zoneDialog = true;
-        this.zone = this.add.zone(500, 100).setSize(100, 100);
-        this.physics.world.enable(this.zone);
-        this.physics.add.overlap(this.player, this.zone, this.onZone, null, this);
+        this.dlgZone = this.add.zone(500, 70).setSize(100, 150);
+        this.dlgOffZone_0 = this.add.zone(400, 70).setSize(10, 150);
+        this.dlgOffZone_1 = this.add.zone(600, 70).setSize(10, 150);
+        this.physics.world.enable(this.dlgZone);
+        this.physics.world.enable(this.dlgOffZone_0);
+        this.physics.world.enable(this.dlgOffZone_1);
+        this.physics.add.overlap(this.player, this.dlgZone, this.onZone, null, this);
+        this.physics.add.overlap(this.player, this.dlgOffZone_0, this.offZone, null, this);
+        this.physics.add.overlap(this.player, this.dlgOffZone_1, this.offZone, null, this);
 
 
         // ligação das teclas de movimento
@@ -106,7 +113,11 @@ class phase_01 extends Phaser.Scene
         this.keyS = this.input.keyboard.addKey('S');
         this.keySPACE = this.input.keyboard.addKey('SPACE');
 
+        this.dlgBox = this.add.rectangle(400, 500, 500, 300, 0x000000);
+        this.dlgBox.setScrollFactor(0);
+        this.dlgBox.setVisible(false)
 
+        this.dialogActive = false;
         // inicia diálogo e anima o mago:
         //this.mage.play('mage_idle')
     }
@@ -121,12 +132,18 @@ class phase_01 extends Phaser.Scene
 
     // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
     onZone(){
-        /*
-        if (this.zoneDialog){
-            this.zoneDialog = false;
-            this.tzone.play();
+        if (this.dialogActive == false){
+            console.log('dlgBox');
+            this.dialogActive = true;
+            // Rectangle( [x] [, y] [, width] [, height])
+            this.dlgBox.setVisible(true)
         }
-        */
+    }
+
+    offZone(){
+        console.log('dlgOffBox');
+        this.dlgBox.setVisible(false);
+        this.dialogActive = false;
     }
 }
 
@@ -136,10 +153,17 @@ function projectilHitActor(actor, projectil){
     projectil.setVelocity(0, 0);
     projectil.body.reset(-10, -10);
 
-    actor.getDamage(7);
+    console.log('HP', actor.getHP())
+    actor.damage(22);
+    if (actor.getHP() == 0){
+        actor.die();
+        //this.physics.world.removeCollider(collider);
+    }
 }
 
 function projectilHitWall(projectil, wall){
     projectil.setActive(false);
     projectil.setVisible(false);
+    projectil.setVelocity(0, 0);
+    projectil.body.reset(-10, -10);
   }
