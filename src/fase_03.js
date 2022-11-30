@@ -93,7 +93,6 @@ class Fase_03 extends Phaser.Scene {
   }
 
   create_actors(){
-    // criação do char
 
     // Criação do Robin Rock
     this.robin = this.physics.add.sprite(995, 90, "robin_sp", 26);
@@ -421,11 +420,11 @@ class Fase_03 extends Phaser.Scene {
       this.timelineRobin.play();
        
       // impede o movimento
-      this.enable_move = false;
+      this.player.move_enable = false;
+      this.player.anims.stop();
       
       this.player.setVelocityX(0);
       this.player.setVelocityY(0);
-      this.player.play("player_idle", true);
 
        setTimeout(() => {
 
@@ -471,6 +470,7 @@ class Fase_03 extends Phaser.Scene {
       this.a3.on('pointerdown', this.errou, this);
 
      }, 15000);
+
     }
   }
 
@@ -482,7 +482,7 @@ class Fase_03 extends Phaser.Scene {
 
   acertou(){
       console.log("acertou");
-      //this.enable_move = true;
+      this.player.move_enable = true;
       this.quest.setVisible(false);
       this.a0.setVisible(false);
       this.a1.setVisible(false);
