@@ -14,10 +14,11 @@ class Fase_02 extends Phaser.Scene
         // carregando spritesheets
         this.load.spritesheet('player_sp', 'assets/spritesheets/dante_1.png', { frameWidth: 48, frameHeight: 48 });
         this.load.spritesheet('mage_sp', 'assets/spritesheets/Mage.png', { frameWidth:48, frameHeight: 48});
+        this.load.spritesheet('mage_sp2', 'assets/spritesheets/Mage.png', { frameWidth:48, frameHeight: 48});
         // carregando mapa (json) e gráficos do mapa
         this.load.image('tiles', 'assets/images/dungeon2.png');
         console.log('load map');
-        this.load.tilemapTiledJSON('themap', 'assets/maps/dungeon2.json');
+        this.load.tilemapTiledJSON('themap', 'assets/maps/dungeon2B.json');
     }
 
     create_map(){
@@ -33,14 +34,16 @@ class Fase_02 extends Phaser.Scene
     create_actors()
     {
         // criação do jogador
-        this.player = this.physics.add.sprite(120.1 , 2038.1, 'player_sp', 0)
+        this.player = this.physics.add.sprite(292.19999999999993  , 2887, 'player_sp', 0)
         this.player.setScale(0.6)
         // Criando mago
-        this.mage = this.physics.add.sprite(67.19999999999999 , 1596.6999999999998, 'mage_sp',0)
+        this.mage = this.physics.add.sprite(291.69999999999993, 2435.5, 'mage_sp',0)
+        this.mage.setScale(0.6)
+        this.mage = this.physics.add.sprite(1347.2 , 2371.7, 'mage_sp2',0)
         this.mage.setScale(0.6)
         // camera seguindo o jogador
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
-        this.cameras.main.setZoom(1)   
+        this.cameras.main.setZoom(2)   // mudar para 2
 
     }
 
@@ -53,7 +56,8 @@ class Fase_02 extends Phaser.Scene
     {
 
         // criação da colisão com paredes
-        this.wallsLayer.setCollisionBetween(30, 40, true)
+        //this.wallsLayer.setCollisionBetween(0, 4000, true) // seta colisao com sprit de 0 a 4000
+        this.wallsLayer.setCollisionByExclusion([-1], true)// seta colisao em todo mundo, menos em -1 onde so pode positivo
         this.physics.add.collider(this.player, this.wallsLayer);
 
         // colisão com armadilhas
@@ -63,7 +67,7 @@ class Fase_02 extends Phaser.Scene
     // criação do diálogo
     create_tweens()
     {   // falas
-        var t0 = this.add.text(203.70000000000002 , 2072.7, "Acho que vejo um mago....", {
+        var t0 = this.add.text(337.29999999999995  , 2872.6, "Acho que vejo um mago....", {
             font: "18px Arial",
             fill: "#ffffff",
             align: "center"
@@ -77,6 +81,15 @@ class Fase_02 extends Phaser.Scene
             duration: 1000, 
             yoyo: true,
             hold: 3000
+        });
+        this.tzone = this.tweens.add({
+            targets: t0,
+            alpha: 1,
+            paused: true,
+            ease: 'Power1',
+            duration: 1000,
+            yoyo: true,
+            duration: 1000,
         });
     }
 
@@ -97,7 +110,7 @@ class Fase_02 extends Phaser.Scene
 
         // adicionando uma zona com gatilho, quando entrar aciona a função onZone
         this.zoneDialog = true;
-        this.zone = this.add.zone(67.19999999999999,1596.6999999999998).setSize(50, 50);
+        this.zone = this.add.zone(288.29999999999995 ,2421.1).setSize(50, 50);
         this.physics.world.enable(this.zone);
         this.physics.add.overlap(this.player, this.zone, this.onZone, null, this);
 
@@ -112,6 +125,7 @@ class Fase_02 extends Phaser.Scene
 
         // habilita movimento
         this.enable_move = true;
+        this.timeline.play();
 
     }
 
@@ -158,22 +172,22 @@ class Fase_02 extends Phaser.Scene
             this.zoneDialog = false;
 
             // pergunta: 
-            this.quest = this.add.text(127.1 , 1663.6, "O que é, o que é? É tão frágil que,\n só de mencioná-lo, ele se quebra?", {
+            this.quest = this.add.text(323.2 , 2463.1, "O que é, o que é? É tão frágil que,\n só de mencioná-lo, ele se quebra?", {
                 font: "18px Arial",
                 fill: "#ffffff",
                 align: "centedr"
             });
-            this.a0 = this.add.text(127.1, 1703.6, "Agua", {
+            this.a0 = this.add.text(323.2, 2493.1, "Agua", {
                 font: "18px Arial",
                 fill: "#ffffff",
                 align: "centedr"
             });
-            this.a1 = this.add.text(127.1, 1723.6, "Vidro", {
+            this.a1 = this.add.text(323.2, 2513.1, "Vidro", {
                 font: "18px Arial",
                 fill: "#ffffff",
                 align: "centedr"
             });
-            this.a2 = this.add.text(127.1, 1743.6, "Manteiga", {
+            this.a2 = this.add.text(323.2, 2533.1, "Manteiga", {
                 font: "18px Arial",
                 fill: "#ffffff",
                 align: "centedr"
