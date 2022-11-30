@@ -470,9 +470,13 @@ class Fase_05 extends Phaser.Scene
   {
 
   }
-
+  
   // Tratando zonas de dialogos
-
+  
+   insideProximaFaseZone(){
+    console.log("Vai próxima fase");
+  }
+  
   insidePixieZone(){
     if(this.pixieZone){
       this.pixieZone = false;
@@ -556,6 +560,11 @@ class Fase_05 extends Phaser.Scene
     this.wallsLayer2.setVisible(false);
     this.wallsLayer2.setCollisionBetween(0, 10000,false);
     this.pixie.play('pixie_leave');
+
+    this.proximaFaseZone = this.add.zone(1576, 805).setSize(1, 250);
+    this.physics.world.enable(this.proximaFaseZone);
+    this.physics.add.overlap(this.player, this.proximaFaseZone, this.insideProximaFaseZone, null, this);
+    
     console.log("liberaProximaFase");
   }
 
