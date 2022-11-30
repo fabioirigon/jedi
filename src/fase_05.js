@@ -66,7 +66,7 @@ class Fase_05 extends Phaser.Scene
   {
 
     // criação do jogador
-    this.player = this.physics.add.sprite(10, 840, 'player_sp', 19);
+    this.player = new player(this, 10, 840, 'player_sp', 19);
     this.player.setScale(0.25);
 
     // Criação da pixie
@@ -97,38 +97,14 @@ class Fase_05 extends Phaser.Scene
 
   create_animations()
   {
-
-    // animações (caminhando)
-    this.anims.create({
-      key: 'pl_wlk_dwn',
-      frames: this.anims.generateFrameNumbers('player_sp', {frames: [130,131,132,133,134,135,136,137,138]}),
-      frameRate: 8,
-      repeat: -1
-    });
-    this.anims.create({
-      key: 'pl_wlk_lef',
-      frames: this.anims.generateFrameNumbers('player_sp', {frames: [117,118,119,120,121,122,123,124,125]}),
-      frameRate: 8,
-      repeat: -1
-    });
-    this.anims.create({
-      key: 'pl_wlk_up',
-      frames: this.anims.generateFrameNumbers('player_sp', {frames: [104,105,106,107,108,109,110,111,112]}),
-      frameRate: 8,
-      repeat: -1
-    });
-    this.anims.create({
-      key: 'pl_wlk_rig',
-      frames: this.anims.generateFrameNumbers('player_sp', {frames: [143,144,145,146,147,148,149,150,151]}),
-      frameRate: 8,
-      repeat: -1
-    });
+    // Animacoes
     this.anims.create({
       key: 'pixie_stand',
       frames: this.anims.generateFrameNumbers('pixie_sp', {frames: [0,1,2,3,4,5,4,3,2,1]}),
       frameRate: 15,
       repeat: -1
     });
+    
     this.anims.create({
       key: 'orc_exp_stand',
       frames: this.anims.generateFrameNumbers('orc_expulso_sp', {frames: [26,27,29,27]}),
@@ -492,47 +468,6 @@ class Fase_05 extends Phaser.Scene
   // update é chamada a cada novo quadro
   update ()
   {
-    // testa se tecla pressionada e seta a velocidade do jogador
-    if (this.keyD?.isDown) {
-      this.player.setVelocityX(150);
-      if (this.cur_wlk != 1 && this.player.body.velocity.y == 0){
-        this.cur_wlk = 1;
-        this.player.play("pl_wlk_rig");
-      }
-    }
-    else if (this.keyA?.isDown) {
-      this.player.setVelocityX(-150);
-      if (this.cur_wlk != 2 && this.player.body.velocity.y == 0){
-        this.cur_wlk = 2;
-        this.player.play("pl_wlk_lef");
-      }
-    }
-    else{
-      this.player.setVelocityX(0);
-      if (this.cur_wlk != 0 && this.player.body.velocity.y == 0){
-        this.cur_wlk = 0;
-        this.player.anims.stop();
-      }
-    }
-
-    // velocidade vertical
-    if (this.keyW.isDown) {
-      this.player.setVelocityY(-150);
-      if (this.cur_wlk != 3){
-        this.cur_wlk = 3;
-        this.player.play("pl_wlk_up");
-      }
-    }
-    else if (this.keyS.isDown) {
-      this.player.setVelocityY(150);
-      if (this.cur_wlk != 4){
-        this.cur_wlk = 4;
-        this.player.play("pl_wlk_dwn");
-      }
-    }
-    else{
-      this.player.setVelocityY(0);
-    }
 
   }
 
