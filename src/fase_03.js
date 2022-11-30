@@ -1,24 +1,29 @@
 class Fase_03 extends Phaser.Scene {
+  // O construtor registra o nome da cena
   constructor() {
-    // ######## acertar nome da fase ##########
     super("Fase_03");
   }
 
-
   // função para carregamento de assets
   preload() {
-    this.load.spritesheet("player_sp", "assets/spritesheets/player_sp.png", {
-      frameWidth: 64,
-      frameHeight: 64,
-    });
+
+    // Personagem principal
     this.load.spritesheet("playerbow_sp", "assets/spritesheets/playerbow_sp.png", {
       frameWidth: 64,
       frameHeight: 64,
     });
+    // Robin Rock
     this.load.spritesheet("robin_sp", "assets/spritesheets/robin_sp.png", {
       frameWidth: 64,
       frameHeight: 64,
     });
+    // Good Witch
+    this.load.spritesheet("witch_sp","assets/spritesheets/witch_sp.png", {
+      frameWidth: 32,
+      frameHeight: 48,
+    });
+    
+    // Elementos gráficos do mapa
     this.load.spritesheet("tls_firstasset", "assets/maps/first_asset.png", {
       frameWidth: 32,
       frameHeight: 32,
@@ -33,13 +38,10 @@ class Fase_03 extends Phaser.Scene {
       frameHeight: 32,
       margin: 16 
     });
-    this.load.spritesheet("witch_sp","assets/spritesheets/witch_sp.png", {
-      frameWidth: 32,
-      frameHeight: 48,
-    });
 
     this.load.image("tiles1", "assets/maps/first_asset.png");
     this.load.image("tiles2", "assets/maps/solaria.png");
+    this.load.image('bullet', 'assets/images/bullet.png');
     this.load.image("tiles3", "assets/maps/top-down-forest-tileset.png");
 
     this.load.tilemapTiledJSON("fase3", "assets/maps/fase.json");
@@ -93,19 +95,20 @@ class Fase_03 extends Phaser.Scene {
   create_actors(){
     // criação do char
 
-    //criação do robin
+    // Criação do Robin Rock
     this.robin = this.physics.add.sprite(995, 90, "robin_sp", 26);
     this.robin.setScale(0.4);
     this.robin.body.immovable = true;
     this.robin.body.moves = false;
 
-    //this.player = this.physics.add.sprite(800, 700, 'player_sp', 26)
-    this.player = this.physics.add.sprite(800, 100, "player_sp", 26);
+
+    // Criação do personagem principal
+    this.player = new player(this, 800, 100, 'playerbow_sp', 26);
     this.player.setScale(0.4);
     this.player.setSize(32, 32);
     this.player.setOffset(16, 32);
     
-    //criação da bruxinha
+    // Criação da Good Witch
     this.bruxa = this.physics.add.sprite(1032, 660, "witch_sp", 1);
     this.bruxa.setScale(0.7);
     this.bruxa.setSize(16, 16);
@@ -114,7 +117,7 @@ class Fase_03 extends Phaser.Scene {
     this.bruxa.body.moves = false;
     this.bruxa.flipX = true;
 
-    //criação das esferas do dragão
+    // Criação das esferas do dragão
     this.esfera1 = this.physics.add.sprite(1150, 450, "tls_solaria", 331);
     this.esfera2 = this.physics.add.sprite(1150, 475, "tls_solaria", 331);
     this.esfera3 = this.physics.add.sprite(1150, 500, "tls_solaria", 331);
@@ -142,71 +145,6 @@ class Fase_03 extends Phaser.Scene {
       frameRate: 8,
       repeat: -1
       });
-
-    this.anims.create({
-      key: 'player_up',
-      frames: this.anims.generateFrameNumbers('player_sp', {frames: [105, 107, 108, 109, 110, 111, 112]}),
-      frameRate: 12,
-      repeat: -1      
-    });
-
-    this.anims.create({
-      key: 'player_down',
-      frames: this.anims.generateFrameNumbers('player_sp', {frames: [131, 132, 133, 134, 135, 136, 137, 138]}),
-      frameRate: 12,
-      repeat: -1      
-    });
-
-    this.anims.create({
-      key: 'player_left',
-      frames: this.anims.generateFrameNumbers('player_sp', {frames: [118, 119, 120, 121, 122, 123, 124, 125]}),
-      frameRate: 12,
-      repeat: -1      
-    });
-
-    this.anims.create({
-      key: 'player_right',
-      frames: this.anims.generateFrameNumbers('player_sp', {frames: [144, 145, 146, 147, 148, 149, 150, 151]}),
-      frameRate: 12,
-      repeat: -1      
-    });
-
-    this.anims.create({
-      key: 'player_idle',
-      //frames: this.anims.generateFrameNumbers('player_sp', {frames: [234, 235, 236, 235]}),
-      //frames: this.anims.generateFrameNumbers('player_sp', {frames: [234, 235]}),
-      frames: this.anims.generateFrameNumbers('player_sp', {frames: [26, 27]}),
-      frameRate: 3,
-      repeat: -1  
-    });
-
-    this.anims.create({
-      key: 'bow_up',
-      frames: this.anims.generateFrameNumbers('playerbow_sp', {frames: [208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220]}),
-      frameRate: 16,
-      repeat: false      
-    });
-
-    this.anims.create({
-      key: 'bow_left',
-      frames: this.anims.generateFrameNumbers('playerbow_sp', {frames: [221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233]}),
-      frameRate: 16,
-      repeat: false      
-    });
-
-    this.anims.create({
-      key: 'bow_down',
-      frames: this.anims.generateFrameNumbers('playerbow_sp', {frames: [234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246]}),
-      frameRate: 16,
-      repeat: false      
-    });
-
-    this.anims.create({
-      key: 'bow_right',
-      frames: this.anims.generateFrameNumbers('playerbow_sp', {frames: [247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259]}),
-      frameRate: 16,
-      repeat: false      
-    });
   }
 
 
@@ -215,16 +153,24 @@ class Fase_03 extends Phaser.Scene {
     //criação da colisão
     this.ground2Layer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.ground2Layer);
+    //this.physics.add.collider(this.player.arrows, this.ground2Layer, projectilHitWall, null, this);
+
     this.tree1Layer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.tree1Layer);
+    this.physics.add.collider(this.player.arrows, this.tree1Layer, projectilHitWall, null, this);
+
     this.tree2Layer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.tree2Layer);
+    this.physics.add.collider(this.player.arrows, this.tree2Layer, projectilHitWall, null, this);
+
     this.houseLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.houseLayer);
+    this.physics.add.collider(this.player.arrows, this.houseLayer, projectilHitWall, null, this);
+
     this.bridge2Layer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.bridge2Layer);
-    this.houseLayer.setCollisionByExclusion([-1]);
-    this.physics.add.collider(this.player, this.houseLayer);
+    this.physics.add.collider(this.player.arrows, this.bridge2Layer, projectilHitWall, null, this);
+
     this.physics.add.collider(this.player, this.robin);
     this.physics.add.collider(this.player, this.bruxa);
 
@@ -426,8 +372,8 @@ class Fase_03 extends Phaser.Scene {
   create() {
 
     this.create_map();
-    this.create_animations();
     this.create_actors();
+    this.create_animations();
     this.create_collisions();
     this.create_tweens();
 
@@ -447,92 +393,14 @@ class Fase_03 extends Phaser.Scene {
     this.keyD = this.input.keyboard.addKey("D");
     this.keyW = this.input.keyboard.addKey("W");
     this.keyS = this.input.keyboard.addKey("S");
-    this.keySpace = this.input.keyboard.addKey("Space");
-
-    this.cur_wlk = 0
-    this.last_dir = 0
+    this.keySPACE = this.input.keyboard.addKey("Space");
 
     this.bruxa.play('witch_idle')
-    this.player.play('player_idle')
-
-    // habilita movimento
-    this.enable_move = true;
-
-    this.bow = false;
   }
  
   // update é chamada a cada novo quadro
   update() {
-    
-  // variável enaable move controla o movimento
-  if (this.enable_move){
-    
-    if (this.keyD?.isDown) {
-      this.player.setVelocityX(180);
-      if (this.cur_wlk != 1 && this.player.body.velocity.y == 0){
-          this.cur_wlk = 1;
-          this.last_dir = 1;
-          this.player.play("player_right");
-      }
-  }
-  else if (this.keyA?.isDown) {
-      this.player.setVelocityX(-180);
-      if (this.cur_wlk != 2 && this.player.body.velocity.y == 0){
-          this.last_dir = 2;
-          this.cur_wlk = 2;
-          this.player.play("player_left");
-      }
-  }
-  else{
-      this.player.setVelocityX(0); 
-      if (this.cur_wlk != 0 && this.player.body.velocity.y == 0){
-          this.cur_wlk = 0;
-          this.player.play("player_idle");
-      }
-  }
-
-  // velocidade vertical
-  if (this.keyW.isDown) {
-      this.player.setVelocityY(-180);
-      if (this.cur_wlk != 3){
-          this.last_dir = 3;
-          this.cur_wlk = 3;
-          this.player.play("player_up");
-      }
-  }
-  else if (this.keyS.isDown) {
-      this.player.setVelocityY(180);
-      if (this.cur_wlk != 4){
-          this.last_dir = 4;
-          this.cur_wlk = 4;
-          this.player.play("player_down");
-      }
-  }
-  else{
-      this.player.setVelocityY(0); 
-  }
-
-  if (this.keySpace?.isDown && this.bow == true ) {
-    this.enable_move = false;
-    this.player.setVelocityX(0);
-    this.player.setVelocityY(0);
-    switch(this.last_dir){
-      case 1: 
-        this.player.play("bow_right");
-      break;
-      case 2:
-        this.player.play("bow_left");
-      break;
-      case 3:
-        this.player.play("bow_up");
-      break;
-      case 4:
-        this.player.play("bow_down");
-      break;
-    }//switch
-    setTimeout(() => {  this.enable_move = true; this.player.play("player_idle");}, 1000);
-  }
-  }
+   
 }
 
   // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
@@ -614,14 +482,34 @@ class Fase_03 extends Phaser.Scene {
 
   acertou(){
       console.log("acertou");
-      this.enable_move = true;
+      //this.enable_move = true;
       this.quest.setVisible(false);
       this.a0.setVisible(false);
       this.a1.setVisible(false);
       this.a2.setVisible(false);
       this.a3.setVisible(false);
-      this.bow = true;
+      //this.bow = true;
       this.timelineRobin2.play();
   }
+}
 
+function projectilHitActor(actor, projectil){
+  projectil.setActive(false);
+  projectil.setVisible(false);
+  projectil.setVelocity(0, 0);
+  projectil.body.reset(-10, -10);
+
+  console.log('HP', actor.getHP())
+  actor.damage(22);
+  if (actor.getHP() == 0){
+      actor.die();
+      //this.physics.world.removeCollider(collider);
+  }
+}
+
+function projectilHitWall(projectil, wall){
+  projectil.setActive(false);
+  projectil.setVisible(false);
+  projectil.setVelocity(0, 0);
+  projectil.body.reset(-10, -10);
 }
