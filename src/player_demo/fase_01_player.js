@@ -19,6 +19,7 @@ class phase_01 extends Phaser.Scene
         // carregando mapa (json) e gráficos do mapa
         this.load.image('tiles', 'assets/images/dungeon-16-16.png');
         this.load.image('bullet', 'assets/images/bullet.png');
+        this.load.image('arrow', 'assets/images/arrow.png');
         this.load.tilemapTiledJSON('themap', 'assets/maps/map_phase_01.json');
     }
 
@@ -153,12 +154,12 @@ function projectilHitActor(actor, projectil){
     projectil.setVelocity(0, 0);
     projectil.body.reset(-10, -10);
 
-    console.log('HP', actor.getHP())
     actor.damage(22);
     if (actor.getHP() == 0){
         actor.die();
         //this.physics.world.removeCollider(collider);
     }
+    console.log('HP', actor.getHP())
 }
 
 function projectilHitWall(projectil, wall){

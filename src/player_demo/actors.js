@@ -14,10 +14,10 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
   }
 
   damage(value){
-      // console.log("dmg.")
-      this.bar_fg.width =  80*this.hp/100;
-      if ((this.hp - value) > 0)
-          this.hp = this.hp - value
+      if ((this.hp - value) > 0){
+          this.hp = this.hp - value;
+          this.bar_fg.width =  80*this.hp/100;
+        }
       else {
         this.hp = 0;
         //this.disableBody(true, true);
@@ -38,7 +38,6 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
 
   draw_bar()
   {
-    //this.bar.originX = 0.9
     this.bar_bg.x = this.x
     this.bar_bg.y = this.y-21
     this.bar_fg.x = this.x

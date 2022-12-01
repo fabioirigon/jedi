@@ -17,7 +17,8 @@ class player extends Actor {
     this.arrows.enableBody = true;
     this.arrows.physicsBodyType = Phaser.Physics.ARCADE;
     for (var i = 0; i < 5; i++){
-        var arrow = this.arrows.create(100 + i * 48,50, 'bullet');
+        var arrow = this.arrows.create(-10, -10, 'arrow');
+        arrow.setScale(0.2);
         arrow.setActive(false);
         arrow.setVisible(false);
     }
@@ -133,7 +134,7 @@ class player extends Actor {
   }
 
   attack(){ 
-    console.log('attack', this.facing, this.facing[0])
+    console.log('attack', this.facing, this.arrows.countActive(false));
     this.attack_enable = false;
     this.move_enable = false;
     this.on('animationcomplete', this.re_enable);
@@ -149,6 +150,7 @@ class player extends Actor {
   }
 
   re_enable(){
+    this.removeListener('animationcomplete');
     this.attack_enable = true;
     this.move_enable = true;
 
@@ -163,6 +165,16 @@ class player extends Actor {
 
         arrow.setVelocityX(vx);
         arrow.setVelocityY(vy);
+        var ang = 0;
+        var pi = Phaser.Math.PI2/2;
+        if (this.facing[0] == 1)
+          ang = 0.5;
+        else if (this.facing[0] == -1)
+          ang = -0.5;
+        else if  (this.facing[1] == 1)
+           ang = 1;
+        console.log(ang, this.facing);
+        arrow.rotation = ang*pi;
     }
 
 

@@ -69,7 +69,7 @@ class Wizard extends Actor {
         bullet.setVelocityX(vx);
         bullet.setVelocityY(vy);        
     }
-    this.timer = this.scene.time.addEvent({ delay: Phaser.Math.Between(100, 600), callback: this.attack, callbackScope: this });
+    //this.timer = this.scene.time.addEvent({ delay: Phaser.Math.Between(100, 600), callback: this.attack, callbackScope: this });
   }
 
   preUpdate (time, delta)
