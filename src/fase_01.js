@@ -1,10 +1,10 @@
 // cada cena do jogo é uma classe que extende a classe base Phaser.Scene
-class Phase_01 extends Phaser.Scene
+class phase_01 extends Phaser.Scene
 {
     // O construtor registra o nome da cena
     constructor ()
     {
-        super('Phase_01'); 
+        super('phase_01'); 
     }
 
     // esta função é usada para receber dados, no caso o status da parede
@@ -20,7 +20,7 @@ class Phase_01 extends Phaser.Scene
     preload ()
     {
         // carregando spritesheets
-        this.load.spritesheet('player_sp', 'assets/spritesheets/dante_1.png', { frameWidth: 48, frameHeight: 48 });
+        this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('wizardIdle_sp', 'assets/spritesheets/wizard_idle.png', { frameWidth: 80, frameHeight: 80});
         this.load.spritesheet('tiles_sp', 'assets/images/dungeon-16-16.png', { frameWidth: 16, frameHeight: 16});
         
@@ -48,17 +48,43 @@ class Phase_01 extends Phaser.Scene
         for (let i=36; i<=43; i++){
             this.traps.add(this.add.sprite(36*16+8, i*16+8, 'tiles_sp', 353))
         }
+        for (let i=36; i<=57; i++){
+            for (let j=58; j<=80; j=j+7){
+                this.traps.add(this.add.sprite(j*16+8, i*16+8, 'tiles_sp', 353))
+            }
+        }
+
 
         // criação do jogador
-        this.player = this.physics.add.sprite(250, 75, 'player_sp', 0)
-        this.player.setScale(0.6)
+        //this.player = this.physics.add.sprite(250, 75, 'player_sp', 0)
+        this.player = new player(this, 250, 75, 'player_sp', 0);
+        this.player.setScale(0.6);
+        this.player.has_bow = false;
 
         // criação dos inimigos
         this.enemy_0  = this.physics.add.sprite(38*16, 1*16, 'tiles_sp', 638)
         this.enemy_1  = this.physics.add.sprite(44*16, 1*16, 'tiles_sp', 638)
         this.enemy_2  = this.physics.add.sprite(50*16, 1*16, 'tiles_sp', 638)
-        this.enemy_3  = this.physics.add.sprite(64*16, 20*16, 'tiles_sp', 503)
-        this.enemy_0.setScale(2);this.enemy_1.setScale(2);this.enemy_2.setScale(2);this.enemy_3.setScale(2);
+        this.enemy_3  = this.physics.add.sprite(64*16, 18*16, 'tiles_sp', 503)
+        this.enemy_4  = this.physics.add.sprite(64*16, 26*16, 'tiles_sp', 503)
+        this.enemy_5  = this.physics.add.sprite(50*16, 22*16, 'tiles_sp', 503)
+        // this.enemy_6  = this.physics.add.sprite(100, 100, 'tiles_sp', 251)
+        this.enemy_6  = this.physics.add.sprite(1350, 900, 'tiles_sp', 251)
+        this.enemy_0.setScale(2);this.enemy_1.setScale(2);this.enemy_2.setScale(2);
+        this.enemy_3.setScale(2);this.enemy_4.setScale(2);this.enemy_5.setScale(2);
+        this.enemy_6.setScale(2);
+
+        this.bullets  = this.physics.add.group();
+        for (let i=0; i<=5; i++){
+            var blt = this.add.sprite(-10, -10, 'tiles_sp', 658);
+            blt.setScale(1.5);
+            blt.setActive(false);
+            blt.setVisible(false);
+            this.bullets.add(blt);
+        }
+        this.bullets.enableBody = true;
+        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        this.timer = this.time.addEvent({ delay: Phaser.Math.Between(2000, 4000), callback: this.monster_shoot, callbackScope: this });
 
         this.mage  = this.physics.add.sprite(78, 128, 'wizardIdle_sp', 0);
         this.mage.setScale(0.9)
@@ -74,32 +100,6 @@ class Phase_01 extends Phaser.Scene
 
     create_animations()
     {
-        // animações (caminhando)        
-        this.anims.create({
-            key: 'pl_wlk_dwn',
-            frames: this.anims.generateFrameNumbers('player_sp', {frames: [0, 4, 8, 12]}),
-            frameRate: 8,
-            repeat: -1
-            });
-        this.anims.create({
-            key: 'pl_wlk_lef',
-            frames: this.anims.generateFrameNumbers('player_sp', {frames: [1, 5, 9, 13]}),
-            frameRate: 8,
-            repeat: -1
-            });
-        this.anims.create({
-            key: 'pl_wlk_up',
-            frames: this.anims.generateFrameNumbers('player_sp', {frames: [2, 6, 10, 14]}),
-            frameRate: 8,
-            repeat: -1
-            });
-        this.anims.create({
-            key: 'pl_wlk_rig',
-            frames: this.anims.generateFrameNumbers('player_sp', {frames: [3, 7, 11, 15]}),
-            frameRate: 8,
-            repeat: -1
-            });
-
         this.anims.create({
             key: 'mage_idle',
             frames: this.anims.generateFrameNumbers('wizardIdle_sp', {frames: [0, 1, 2, 3, 4, 5, 6, 7, 8,9, 8, 7, 6, 5, 4, 3, 2, 1]}),
@@ -110,9 +110,27 @@ class Phase_01 extends Phaser.Scene
         this.anims.create({
             key: 'trap_anim',
             frames: this.anims.generateFrameNumbers('tiles_sp', {frames: [353,354,355,356,356]}),
-            frameRate: 6,
+            frameRate: 12,
             repeat: -1,
-            repeatDelay: 2000,
+            repeatDelay: 500,
+            yoyo: true
+            });
+
+        this.anims.create({
+            key: 'enemy_1_anim',
+            frames: this.anims.generateFrameNumbers('tiles_sp', {start: 503, end: 510}),
+            frameRate: 12,
+            repeat: -1,
+            repeatDelay: 500,
+            yoyo: true
+            });
+
+        this.anims.create({
+            key: 'enemy_6_anim',
+            frames: this.anims.generateFrameNumbers('tiles_sp', {start: 251, end: 254}),
+            frameRate: 12,
+            repeat: -1,
+            repeatDelay: 500,
             yoyo: true
             });
 
@@ -139,6 +157,9 @@ class Phase_01 extends Phaser.Scene
         this.physics.add.overlap(this.player, this.enemy_1, this.enemyHit, null, this);
         this.physics.add.overlap(this.player, this.enemy_2, this.enemyHit, null, this);
         this.physics.add.overlap(this.player, this.enemy_3, this.enemyHit, null, this);
+        this.physics.add.overlap(this.player, this.enemy_4, this.enemyHit, null, this);
+        this.physics.add.overlap(this.player, this.enemy_5, this.enemyHit, null, this);
+        this.physics.add.overlap(this.player, this.bullets, this.bulletHit, null, this);
         
         // colisão com armadilhas
         this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
@@ -160,18 +181,23 @@ class Phase_01 extends Phaser.Scene
             yoyo:true,
         });
 
-        var t0 = this.add.text(15, 180, "Você nunca verá as fadinhas", {
-            font: "15px Arial",
-            fill: "#F0A020",
-            align: "center"
-        });        
-        var t1 = this.add.text(160, 100, "Vai se lascar!", {
-            font: "25px Arial",
-            fill: "#20C020",
-            align: "center"
-        });
+        var wd = window.innerWidth;
+        var wh = window.innerHeight;
+        console.log("wind", wd, wh)
+
+        this.dlgBox = this.add.rectangle(wd/2, 3*wh/4, wd/2, wh/4, 0x000000);
+        this.dlgBox.setScrollFactor(0);
+        this.dlgBox.setVisible(false);
+
+        var player_txt_cfg = {font: "15px Arial",fill: "#F0A020", align: "center"}
+        var wiz_txt_cfg = {font: "15px Arial",fill: "#10F0A0", align: "center"}
+        var t0 = this.add.text(2*wd/20, 6*wh/20, "Vá se acostumando com este calabouço.\nVocê nunca verá o sol novamente!", wiz_txt_cfg);
+        var t1 = this.add.text(2*wd/20, 6*wh/20, "Fala com a minha mãozinha...", player_txt_cfg);
+        var t2 = this.add.text(2*wd/20, 6*wh/20, "Vai se arrepender disso uhahahaha", wiz_txt_cfg);
         t0.alpha = 0
         t1.alpha = 0
+        t2.alpha = 0
+
 
         this.timeline = this.tweens.createTimeline();
         this.timeline.add({
@@ -180,7 +206,9 @@ class Phase_01 extends Phaser.Scene
             ease: 'linear',
             duration: 1000, 
             yoyo: true,
-            hold: 3000
+            hold: 3000,
+            onStart: this.createBox,
+            onStartParams: [true, this.dlgBox, this.player],
         });
 
         this.timeline.add({
@@ -189,7 +217,17 @@ class Phase_01 extends Phaser.Scene
             ease: 'linear',
             duration: 1000,
             yoyo: true,
-            hold: 3000
+            hold: 3000,
+        });
+        this.timeline.add({
+            targets: t2,
+            alpha: 1,
+            ease: 'linear',
+            duration: 1000,
+            yoyo: true,
+            hold: 3000,
+            onComplete: this.createBox,
+            onCompleteParams: [false, this.dlgBox, this.player],
         });
         this.timeline.add({
             targets: this.mage,
@@ -199,8 +237,8 @@ class Phase_01 extends Phaser.Scene
         });
         //this.timeline.play();
         console.log('tline');
-
     }
+
 
     // função para criação dos elementos
     create ()
@@ -229,82 +267,58 @@ class Phase_01 extends Phaser.Scene
         this.cur_wlk = 0
         if (this.movingWall_sts == 0)
         {
-            this.timeline.play();
+            //this.timeline.play();
             this.mage.play('mage_idle')
         }
         else{
             this.mage.alpha = 0;
         }
-        this.traps.playAnimation('trap_anim')
+        this.traps.playAnimation('trap_anim');
+
+        this.enemy_3.play('enemy_1_anim');
+        this.enemy_4.play('enemy_1_anim');
+        this.enemy_5.play('enemy_1_anim');
+        this.enemy_6.play('enemy_6_anim');
+        
     }
 
+
+    move_enemy(enemy){
+        var dx = this.player.x-enemy.x;
+        var dy = this.player.y-enemy.y;
+        var scl = 160/Math.sqrt(dx*dx+dy*dy)
+        if (dx*dx + dy*dy < 200*200 && scl>0){
+            enemy.setVelocityX(dx*scl);
+            enemy.setVelocityY(dy*scl);
+        }
+        else{
+            enemy.setVelocityX(0);
+            enemy.setVelocityY(0);
+        }
+    }
 
     // update é chamada a cada novo quadro
     update ()
     {
-        // testa se tecla pressionada e seta a velocidade do jogador 
-        if (this.keyD?.isDown) {
-            this.player.setVelocityX(210);
-            if (this.cur_wlk != 1 && this.player.body.velocity.y == 0){
-                this.cur_wlk = 1;
-                this.player.play("pl_wlk_rig");
-            }
+        if (this.keySPACE.isDown) {
+            console.log(this.player.x, this.player.y);
         }
-        else if (this.keyA?.isDown) {
-            this.player.setVelocityX(-210);
-            if (this.cur_wlk != 2 && this.player.body.velocity.y == 0){
-                this.cur_wlk = 2;
-                this.player.play("pl_wlk_lef");
-            }
-        }
-        else{
-            this.player.setVelocityX(0); 
-            if (this.cur_wlk != 0 && this.player.body.velocity.y == 0){
-                this.cur_wlk = 0;
-                this.player.anims.stop();
-            }
-        }
-
-        // velocidade vertical
-        if (this.keyW.isDown) {
-            this.player.setVelocityY(-210);
-            if (this.cur_wlk != 3){
-                this.cur_wlk = 3;
-                this.player.play("pl_wlk_up");
-            }
-        }
-        else if (this.keyS.isDown) {
-            this.player.setVelocityY(210);
-            if (this.cur_wlk != 4){
-                this.cur_wlk = 4;
-                this.player.play("pl_wlk_dwn");
-            }
-        }
-        else{
-            this.player.setVelocityY(0); 
-        }
-
-        /*
-        if (Phaser.Input.Keyboard.JustDown(this.keyD))
-        {
-            console.log('jd')
-            this.player.play("pl_wlk_rig");
-        }*/
-
 
         // Movimento do inimigo
-        var dx = this.player.x-this.enemy_3.x;
-        var dy = this.player.y-this.enemy_3.y;
-        if (dx*dx + dy*dy < 150*150){
-            this.enemy_3.setVelocityX(dx);
-            this.enemy_3.setVelocityY(dy);
-        }
-        else{
-            this.enemy_3.setVelocityX(0);
-            this.enemy_3.setVelocityY(0);
+        this.move_enemy(this.enemy_3);
+        this.move_enemy(this.enemy_4);
+        this.move_enemy(this.enemy_5);
 
-        }
-        
+        this.bullets.getMatching('active', true).forEach(function(blt){
+            var dx = blt.body.x - this.enemy_6.x;
+            var dy = blt.body.y - this.enemy_6.y;
+
+            if (dx*dx + dy *dy > 500*500){
+                blt.setVisible(false);
+                blt.setActive(false)
+            }
+        }, this);
+
     }
 
     trataPorta (porta, player){
@@ -314,14 +328,49 @@ class Phase_01 extends Phaser.Scene
 
     enemyHit (player, enemy){
         //player.disableBody(true, false);
-        console.log("enemy hit");
+        //console.log("enemy hit", player);
+        player.getDamage(3);
+        //if (player.getHPValue() == 0)
+
     }
 
     trapHit(player, trap){
         if (trap.anims.getProgress() > 0.1)
         {
-            console.log("trap hit");
+            player.getDamage(5);
+            //dcon sole.log("trap hit");
         }
         
+    }
+    bulletHit(player, bullet){
+        player.getDamage(20);
+        bullet.setActive(false);
+        bullet.setVisible(false);
+    }
+
+
+    createBox(tween, targets, setVisible, box, player){
+        console.log('set vis', setVisible, box)
+        box.setVisible(setVisible);
+        //player.body.immovable = setVisible;
+        player.move_enable = !setVisible;
+    }
+
+    monster_shoot(){
+        var bullet = this.bullets.getFirstDead(false);
+        var vx = this.player.x - this.enemy_6.x
+        var vy = this.player.y - this.enemy_6.y
+        var scl = 300/Math.sqrt(vx*vx+vy*vy)
+        //console.log('blt', bullet)
+        if (bullet){
+            bullet.body.reset(this.enemy_6.x, this.enemy_6.y);
+            bullet.setActive(true);
+            bullet.setVisible(true);
+
+            bullet.body.setVelocityX(vx*scl);
+            bullet.body.setVelocityY(vy*scl);        
+        }
+        this.timer = this.time.addEvent({ delay: Phaser.Math.Between(500, 3000), callback: this.monster_shoot, callbackScope: this });
+
     }
 }

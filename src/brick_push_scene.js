@@ -7,7 +7,8 @@ class brick_push_scene extends Phaser.Scene {
 
     preload ()
     {
-        this.load.spritesheet('bricks', 'assets/images/brickWall.png', { frameWidth: 64, frameHeight: 64 }); 
+        //this.load.spritesheet('bricks', 'assets/images/brickWall.png', { frameWidth: 64, frameHeight: 64 }); 
+        this.load.spritesheet('bricks', 'assets/images/brickWall_old.png', { frameWidth: 64, frameHeight: 64 }); 
         this.load.image('parch', 'assets/images/parch.png');
     }
 
@@ -80,13 +81,13 @@ class brick_push_scene extends Phaser.Scene {
 
 
         this.R0.on('pointerup', function (pointer) {
-            this.scene.start('Phase_01', {'movingWall_sts': 2});
+            this.scene.start('phase_01', {'movingWall_sts': 2});
         }, this);
         this.R1.on('pointerup', function (pointer) {
-            this.scene.start('Phase_01', {'movingWall_sts': 2});
+            this.scene.start('phase_01', {'movingWall_sts': 2});
         }, this);
         this.R2.on('pointerup', function (pointer) {
-            this.scene.start('Phase_01', {'movingWall_sts': 1});
+            this.scene.start('phase_01', {'movingWall_sts': 1});
         }, this);
         /*
         this.input.on('pointerup', function (pointer) {

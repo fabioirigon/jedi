@@ -23,6 +23,7 @@ class player extends Actor {
         arrow.setVisible(false);
     }
 
+    this.has_bow = true;
     this.move_enable = true;
     this.attack_enable = true;
     this.facing = [0, 1];
@@ -134,7 +135,7 @@ class player extends Actor {
   }
 
   attack(){ 
-    console.log('attack', this.facing, this.arrows.countActive(false));
+    //console.log('attack', this.facing, this.arrows.countActive(false));
     this.attack_enable = false;
     this.move_enable = false;
     this.on('animationcomplete', this.re_enable);
@@ -193,7 +194,7 @@ class player extends Actor {
       this.setVelocityY(0); 
     }
 
-    if (this.scene.keySPACE.isDown && this.attack_enable) {
+    if (this.scene.keySPACE.isDown && this.attack_enable && this.has_bow) {
       this.attack();
     }
   }
