@@ -11,12 +11,19 @@ class Fase_05 extends Phaser.Scene
   preload ()
   {
     // carregando spritesheets
+    this.load.image('tiles', 'assets/images/dungeon-16-16.png');
+    this.load.image('bullet', 'assets/images/bullet.png');
+    this.load.image('arrow', 'assets/images/arrow.png');
     this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('pixie_sp', 'assets/spritesheets/pixie.png', { frameWidth: 26, frameHeight: 41 });
     this.load.spritesheet('orc_expulso_sp', 'assets/spritesheets/orc_expulso.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('orc_guarda_sp', 'assets/spritesheets/orc_guarda.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('orc_xama_sp', 'assets/spritesheets/orc_xama.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('orc_chefe_sp', 'assets/spritesheets/orc_chefe.png', { frameWidth: 64, frameHeight: 64 });
+
+    this.load.spritesheet('orc_femea_sp', 'assets/spritesheets/orc_femea.png', { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('orc_macho_lanca_sp', 'assets/spritesheets/orc_macho_lanca.png', { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('orc_macho_machado_sp', 'assets/spritesheets/orc_macho_machado.png', { frameWidth: 64, frameHeight: 64 });
 
     // carregando mapa (json) e gráficos do mapa
     this.load.image('tiles_estruturas1', 'assets/images/fase_05/estruturas1.png');
@@ -87,6 +94,66 @@ class Fase_05 extends Phaser.Scene
     this.orcC = this.physics.add.sprite(1185, 605, 'orc_chefe_sp', 26);
     this.orcC.setScale(0.5);
 
+    // Adiciona inimigos
+    this.orc1 = new orc(this,269.5,928,'orc_femea_sp','orc_femea_sp');
+    this.orc1.setScale(0.5);
+
+    this.orc2 = new orc(this,127.5,1430,'orc_macho_lanca_sp','orc_macho_lanca_sp');
+    this.orc2.setScale(0.5);
+
+    this.orc3 = new orc(this,478.5,1254,'orc_macho_machado_sp','orc_macho_machado_sp');
+    this.orc3.setScale(0.5);
+
+    this.orc4 = new orc(this,399.5,1051.5,'orc_femea_sp','orc_femea_sp');
+    this.orc4.setScale(0.5);
+
+    this.orc5 = new orc(this,722.5,833.5,'orc_macho_lanca_sp','orc_macho_lanca_sp');
+    this.orc5.setScale(0.5);
+
+    this.orc6 = new orc(this,1004,992,'orc_macho_machado_sp','orc_macho_machado_sp');
+    this.orc6.setScale(0.5);
+
+    this.orc7 = new orc(this,994,1259,'orc_femea_sp','orc_femea_sp');
+    this.orc7.setScale(0.5);
+
+    this.orc8 = new orc(this,1404.5,827,'orc_macho_lanca_sp','orc_macho_lanca_sp');
+    this.orc8.setScale(0.5);
+
+    this.orc9 = new orc(this,1452,1457,'orc_macho_machado_sp','orc_macho_machado_sp');
+    this.orc9.setScale(0.5);
+
+    this.orc10 = new orc(this,1128,1534.5,'orc_femea_sp','orc_femea_sp');
+    this.orc10.setScale(0.5);
+
+    this.orc11 = new orc(this,700,1519.5,'orc_macho_lanca_sp','orc_macho_lanca_sp');
+    this.orc11.setScale(0.5);
+
+    this.orc12 = new orc(this,73,528,'orc_macho_machado_sp','orc_macho_machado_sp');
+    this.orc12.setScale(0.5);
+
+    this.orc13 = new orc(this,55,96,'orc_femea_sp','orc_femea_sp');
+    this.orc13.setScale(0.5);
+
+    this.orc14 = new orc(this,89,331.5,'orc_macho_lanca_sp','orc_macho_lanca_sp');
+    this.orc14.setScale(0.5);
+
+    this.orc15 = new orc(this,1096.5,96,'orc_macho_machado_sp','orc_macho_machado_sp');
+    this.orc15.setScale(0.5);
+
+    this.orc16 = new orc(this,729,95,'orc_femea_sp','orc_femea_sp');
+    this.orc16.setScale(0.5);
+
+    this.orc17 = new orc(this,1488,429.5,'orc_macho_lanca_sp','orc_macho_lanca_sp');
+    this.orc17.setScale(0.5);
+
+    this.orc18 = new orc(this,691.5,732,'orc_macho_machado_sp','orc_macho_machado_sp');
+    this.orc18.setScale(0.5);
+
+    this.orc19 = new orc(this,87,999.5,'orc_femea_sp','orc_femea_sp');
+    this.orc19.setScale(0.5);
+
+    this.orc20 = new orc(this,737.5,491.5,'orc_macho_lanca_sp','orc_macho_lanca_sp');
+    this.orc20.setScale(0.5);
 
     // camera seguindo o jogador
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
@@ -104,7 +171,7 @@ class Fase_05 extends Phaser.Scene
       frameRate: 15,
       repeat: -1
     });
-    
+
     this.anims.create({
       key: 'orc_exp_stand',
       frames: this.anims.generateFrameNumbers('orc_expulso_sp', {frames: [26,27,29,27]}),
@@ -141,27 +208,97 @@ class Fase_05 extends Phaser.Scene
       frameRate: 10,
       repeat: 0
     });
-    
+
     console.log('CreateAnimations');
   }
 
-  create_collisions()
-  {
+  addColisoesParedes(actor){
+    this.physics.add.collider(actor, this.wallsLayer1);
+    this.physics.add.collider(actor, this.wallsLayer2);
+    this.physics.add.collider(actor, this.wallsLayer3);
+    this.physics.add.collider(actor, this.wallsLayer4);
+    this.physics.add.collider(actor, this.wallsLayer5);
+    this.physics.add.collider(actor, this.wallsLayer6);
+  }
+
+  create_collisions(){
 
     // criação da colisão com paredes
     this.wallsLayer1.setCollisionBetween(0, 10000,true);
-    this.physics.add.collider(this.player, this.wallsLayer1);
     this.wallsLayer2.setCollisionBetween(0, 10000,true);
-    this.physics.add.collider(this.player, this.wallsLayer2);
     this.wallsLayer3.setCollisionBetween(0, 10000,true);
-    this.physics.add.collider(this.player, this.wallsLayer3);
     this.wallsLayer4.setCollisionBetween(0, 10000,true);
-    this.physics.add.collider(this.player, this.wallsLayer4);
     this.wallsLayer5.setCollisionBetween(0, 10000,true);
-    this.physics.add.collider(this.player, this.wallsLayer5);
     this.wallsLayer6.setCollisionBetween(0, 10000,false);
-    this.physics.add.collider(this.player, this.wallsLayer5);
+
+    this.addColisoesParedes(this.player);
+    this.addColisoesParedes(this.orc1);
+    this.addColisoesParedes(this.orc2);
+    this.addColisoesParedes(this.orc3);
+    this.addColisoesParedes(this.orc4);
+    this.addColisoesParedes(this.orc5);
+    this.addColisoesParedes(this.orc6);
+    this.addColisoesParedes(this.orc7);
+    this.addColisoesParedes(this.orc8);
+    this.addColisoesParedes(this.orc9);
+    this.addColisoesParedes(this.orc10);
+    this.addColisoesParedes(this.orc11);
+    this.addColisoesParedes(this.orc12);
+    this.addColisoesParedes(this.orc13);
+    this.addColisoesParedes(this.orc14);
+    this.addColisoesParedes(this.orc15);
+    this.addColisoesParedes(this.orc16);
+    this.addColisoesParedes(this.orc17);
+    this.addColisoesParedes(this.orc18);
+    this.addColisoesParedes(this.orc19);
+    this.addColisoesParedes(this.orc20);
+
+
+    this.physics.add.collider(this.player.arrows, this.wallsLayer3, projectilHitWall, null, this);
+    this.physics.add.collider(this.player.arrows, this.wallsLayer5, projectilHitWall, null, this);
     this.physics.add.collider(this.player,this.orcG);
+
+    this.physics.add.overlap(this.orc1, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc2, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc3, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc4, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc5, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc6, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc7, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc8, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc9, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc10, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc11, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc12, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc13, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc14, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc15, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc16, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc17, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc18, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc19, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.overlap(this.orc20, this.player.arrows, projectilHitActor, null, this);
+
+    this.physics.add.overlap(this.player, this.orc1, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc2, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc3, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc4, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc5, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc6, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc7, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc8, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc9, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc10, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc11, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc12, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc13, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc14, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc15, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc16, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc17, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc18, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc19, this.enemyHit, null, this);
+    this.physics.add.overlap(this.player, this.orc20, this.enemyHit, null, this);
 
     console.log('CreateCollisions');
   }
@@ -426,7 +563,7 @@ class Fase_05 extends Phaser.Scene
     this.create_tweens();
 
     // Variável de controle da fase
-    this.orcChefeDerrotado = true;
+    this.orcChefeDerrotado = false;
 
     // Criacao das zonas de dialogo
     this.zoneDialog = true;
@@ -464,19 +601,61 @@ class Fase_05 extends Phaser.Scene
     console.log('Create');
   }
 
+  move_enemy(enemy){
+      var dx = this.player.x-enemy.x;
+      var dy = this.player.y-enemy.y;
+      var scl = 130/Math.sqrt(dx*dx+dy*dy)
+      if (dx*dx + dy*dy < 200*200 && scl>0){
+          enemy.setVelocityX(dx*scl);
+          enemy.setVelocityY(dy*scl);
+      }
+      else{
+          enemy.setVelocityX(0);
+          enemy.setVelocityY(0);
+      }
+  }
+
+  enemyHit (player, enemy){
+      //player.disableBody(true, false);
+      //console.log("enemy hit", player);
+      player.getDamage(3);
+      if (player.getHPValue() == 0){
+        player.die();
+      }
+
+  }
 
   // update é chamada a cada novo quadro
   update ()
   {
-
+      this.move_enemy(this.orc1);
+      this.move_enemy(this.orc2);
+      this.move_enemy(this.orc3);
+      this.move_enemy(this.orc4);
+      this.move_enemy(this.orc5);
+      this.move_enemy(this.orc6);
+      this.move_enemy(this.orc7);
+      this.move_enemy(this.orc8);
+      this.move_enemy(this.orc9);
+      this.move_enemy(this.orc10);
+      this.move_enemy(this.orc11);
+      this.move_enemy(this.orc12);
+      this.move_enemy(this.orc13);
+      this.move_enemy(this.orc14);
+      this.move_enemy(this.orc15);
+      this.move_enemy(this.orc16);
+      this.move_enemy(this.orc17);
+      this.move_enemy(this.orc18);
+      this.move_enemy(this.orc19);
+      this.move_enemy(this.orc20);
   }
-  
+
   // Tratando zonas de dialogos
-  
+
    insideProximaFaseZone(){
     console.log("Vai próxima fase");
   }
-  
+
   insidePixieZone(){
     if(this.pixieZone){
       this.pixieZone = false;
@@ -485,8 +664,13 @@ class Fase_05 extends Phaser.Scene
         this.pixieDialog2.on('complete',this.questaoCadeado,this);
       }else{
         this.pixieDialog1.play();
+        this.pixieDialog1.on('complete',this.resetaPixie,this);
       }
     }
+  }
+
+  resetaPixie(){
+    this.pixieZone = true;
   }
 
   questaoCadeado(){
@@ -564,7 +748,7 @@ class Fase_05 extends Phaser.Scene
     this.proximaFaseZone = this.add.zone(1576, 805).setSize(1, 250);
     this.physics.world.enable(this.proximaFaseZone);
     this.physics.add.overlap(this.player, this.proximaFaseZone, this.insideProximaFaseZone, null, this);
-    
+
     console.log("liberaProximaFase");
   }
 
@@ -638,6 +822,7 @@ class Fase_05 extends Phaser.Scene
     this.a2.setVisible(false);
     this.a3.setVisible(false);
     this.orcG.play('orc_guarda_death');
+    this.orcG.body.enable = false;
   }
 
   insideOrcXzone(){
@@ -721,3 +906,24 @@ class Fase_05 extends Phaser.Scene
   }
 
 }
+
+function projectilHitActor(actor, projectil){
+    projectil.setActive(false);
+    projectil.setVisible(false);
+    projectil.setVelocity(0, 0);
+    projectil.body.reset(-10, -10);
+
+    actor.getDamage(22);
+    if (actor.getHPValue() == 0){
+        actor.die();
+        //this.physics.world.removeCollider(collider);
+    }
+    console.log('HP', actor.getHPValue())
+}
+
+function projectilHitWall(projectil, wall){
+    projectil.setActive(false);
+    projectil.setVisible(false);
+    projectil.setVelocity(0, 0);
+    projectil.body.reset(-10, -10);
+  }
