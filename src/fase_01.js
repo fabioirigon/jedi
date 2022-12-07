@@ -261,6 +261,7 @@ class phase_01 extends Phaser.Scene
         this.keyW = this.input.keyboard.addKey('W');
         this.keyS = this.input.keyboard.addKey('S');
         this.keySPACE = this.input.keyboard.addKey('SPACE');
+        this.game_over = false;
 
 
         // estado do jogador
@@ -309,6 +310,7 @@ class phase_01 extends Phaser.Scene
         this.move_enemy(this.enemy_4);
         this.move_enemy(this.enemy_5);
 
+        // inimigo atira 
         this.bullets.getMatching('active', true).forEach(function(blt){
             var dx = blt.body.x - this.enemy_6.x;
             var dy = blt.body.y - this.enemy_6.y;
@@ -318,6 +320,12 @@ class phase_01 extends Phaser.Scene
                 blt.setActive(false)
             }
         }, this);
+
+        if (this.game_over){
+            if (this.keySPACE.isDown) {
+                this.scene.restart();
+            }            
+        }
 
     }
 
@@ -330,15 +338,18 @@ class phase_01 extends Phaser.Scene
         //player.disableBody(true, false);
         //console.log("enemy hit", player);
         player.getDamage(3);
-        //if (player.getHPValue() == 0)
-
+        if (player.getHPValue() == 0){
+            player.die();
+        }
     }
 
     trapHit(player, trap){
         if (trap.anims.getProgress() > 0.1)
         {
             player.getDamage(5);
-            //dcon sole.log("trap hit");
+            if (player.getHPValue() == 0){
+                player.die();
+            }
         }
         
     }
@@ -346,13 +357,15 @@ class phase_01 extends Phaser.Scene
         player.getDamage(20);
         bullet.setActive(false);
         bullet.setVisible(false);
+        if (player.getHPValue() == 0){
+            player.die();
+        }
     }
 
 
     createBox(tween, targets, setVisible, box, player){
         console.log('set vis', setVisible, box)
         box.setVisible(setVisible);
-        //player.body.immovable = setVisible;
         player.move_enable = !setVisible;
     }
 
@@ -371,6 +384,17 @@ class phase_01 extends Phaser.Scene
             bullet.body.setVelocityY(vy*scl);        
         }
         this.timer = this.time.addEvent({ delay: Phaser.Math.Between(500, 3000), callback: this.monster_shoot, callbackScope: this });
+    }
+    gameOver(){
+        console.log('game over');
+        this.game_over = true;
+        player.move_enable = false;
 
+        var wd = window.innerWidth;
+        var wh = window.innerHeight;        
+        var txt_cfg = {font: "15px Arial",fill: "#F0F000", align: "center"}
+        console.log(this.player.x, this.player.y, txt_cfg)
+        var t0 = this.add.text(this.player.x, this.player.y, "Pressione Espaço para reiniciar", txt_cfg);
+        //t0.setScrollFactor(0);
     }
 }

@@ -200,14 +200,16 @@ class player extends Actor {
   }
 
   die(){
+    console.log('a')
     this.attack_enable = false;
+    console.log('b')
     this.move_enable = false;
+    console.log('c')
     this.body.enable=false;
-    this.on('animationcomplete', this.game_over);
+    console.log(this.scene.gameOver)
+    this.on('animationcomplete', this.scene.gameOver, this.scene);
+    console.log('e')
     this.anims.play('die');
-  }
-  game_over(){
-    console.log('game over');
   }
 
 }
