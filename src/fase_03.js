@@ -12,7 +12,12 @@ class Fase_03 extends Phaser.Scene {
       frameWidth: 64,
       frameHeight: 64,
     });
-    // Robin Rock
+    // Elfa
+    this.load.spritesheet("elfa", "assets/spritesheets/elfa.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });    
+    // Robin Rocks
     this.load.spritesheet("robin_sp", "assets/spritesheets/robin_sp.png", {
       frameWidth: 64,
       frameHeight: 64,
@@ -75,9 +80,6 @@ class Fase_03 extends Phaser.Scene {
     this.bridge2Layer = this.map.createLayer(
       "bridge2",
       [this.tileset1, this.tileset2, this.tileset3], 0, 0);
-    this.bridgeLayer = this.map.createLayer(
-      "bridge",
-      [this.tileset1, this.tileset2, this.tileset3], 0, 0);
     this.tree1Layer = this.map.createLayer(
       "tree1",
       [this.tileset1, this.tileset2, this.tileset3], 0, 0);
@@ -90,6 +92,11 @@ class Fase_03 extends Phaser.Scene {
     this.perfumariaLayer = this.map.createLayer(
       "perfumaria",
       [this.tileset1, this.tileset2, this.tileset3], 0, 0);
+    this.bridgeLayer = this.map.createLayer(
+      "bridge",
+      [this.tileset1, this.tileset2, this.tileset3], 0, 0);
+    this.bridgeLayer.setVisible(false);
+   //   this.bridgeLayer;
   }
 
   create_actors(){
@@ -102,10 +109,21 @@ class Fase_03 extends Phaser.Scene {
 
 
     // Criação do personagem principal
-    this.player = new player(this, 800, 100, 'playerbow_sp', 26);
+    this.player = new player(this, 50, 750, 'playerbow_sp', 26);
     this.player.setScale(0.4);
     this.player.setSize(32, 32);
     this.player.setOffset(16, 32);
+    this.player.bow_enable = false;
+
+    // Criação da Elfa 
+    this.elfa = new Elfa(this, 300, 375, 'elfa', 26);
+    this.elfa.setScale(0.4);
+    this.elfa.setSize(32, 32);
+    this.elfa.setOffset(16, 32);
+    this.elfa.body.immovable = true;
+    this.elfa.body.moves = false;
+    this.elfa.flipX = true;
+
     
     // Criação da Good Witch
     this.bruxa = this.physics.add.sprite(1032, 660, "witch_sp", 1);
@@ -117,16 +135,48 @@ class Fase_03 extends Phaser.Scene {
     this.bruxa.flipX = true;
 
     // Criação das esferas do dragão
+    var e1 = this.add.text(1135, 445, "1", {font: "12px Arial",fill: "#000000",align: "center"});
     this.esfera1 = this.physics.add.sprite(1150, 450, "tls_solaria", 331);
+    this.esfera1.body.immovable = true;
+    this.esfera1.body.moves = false;
+
+    var e2 = this.add.text(1135, 470, "2", {font: "12px Arial",fill: "#000000",align: "center"});
     this.esfera2 = this.physics.add.sprite(1150, 475, "tls_solaria", 331);
+    this.esfera2.body.immovable = true;
+    this.esfera2.body.moves = false;
+
+    var e3 = this.add.text(1135, 495, "3", {font: "12px Arial",fill: "#000000",align: "center"});
     this.esfera3 = this.physics.add.sprite(1150, 500, "tls_solaria", 331);
+    this.esfera3.body.immovable = true;
+    this.esfera3.body.moves = false;
+
+    var e4 = this.add.text(1135, 520, "4", {font: "12px Arial",fill: "#000000",align: "center"});
     this.esfera4 = this.physics.add.sprite(1150, 525, "tls_solaria", 331);
+    this.esfera4.body.immovable = true;
+    this.esfera4.body.moves = false;
+    
+    var e5 = this.add.text(1135, 545, "5", {font: "12px Arial",fill: "#000000",align: "center"});
     this.esfera5 = this.physics.add.sprite(1150, 550, "tls_solaria", 331);
+    this.esfera5.body.immovable = true;
+    this.esfera5.body.moves = false;
+
+    var e6 = this.add.text(1135, 570, "6", {font: "12px Arial",fill: "#000000",align: "center"});
     this.esfera6 = this.physics.add.sprite(1150, 575, "tls_solaria", 331);
+    this.esfera6.body.immovable = true;
+    this.esfera6.body.moves = false;
+    
+    var e7 = this.add.text(1135, 595, "7", {font: "12px Arial",fill: "#000000",align: "center"});
     this.esfera7 = this.physics.add.sprite(1150, 600, "tls_solaria", 331);
-    this.esfera7.tint = 0x3388ff;
+    this.esfera7.body.immovable = true;
+    this.esfera7.body.moves = false;
 
     //game.input.onDown.add(changeTint, this);
+
+    //criação da parede invisível
+    this.invisible = this.physics.add.sprite(1048, 695, "tls_solaria", 345);
+    this.invisible.body.immovable = true;
+    this.invisible.body.moves = false;
+    this.invisible.setSize(16, 40);
 
 
 
@@ -157,22 +207,41 @@ class Fase_03 extends Phaser.Scene {
     this.tree1Layer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.tree1Layer);
     this.physics.add.collider(this.player.arrows, this.tree1Layer, projectilHitWall, null, this);
+    this.physics.add.collider(this.elfa.bullets, this.tree1Layer, projectilHitWall, null, this);
 
     this.tree2Layer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.tree2Layer);
     this.physics.add.collider(this.player.arrows, this.tree2Layer, projectilHitWall, null, this);
+    this.physics.add.collider(this.elfa.bullets, this.tree2Layer, projectilHitWall, null, this);
 
     this.houseLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.houseLayer);
     this.physics.add.collider(this.player.arrows, this.houseLayer, projectilHitWall, null, this);
+    this.physics.add.collider(this.elfa.bullets, this.houseLayer, projectilHitWall, null, this);
 
-    this.bridge2Layer.setCollisionByExclusion([-1]);
-    this.physics.add.collider(this.player, this.bridge2Layer);
-    this.physics.add.collider(this.player.arrows, this.bridge2Layer, projectilHitWall, null, this);
+    this.physics.add.overlap(this.player, this.elfa.bullets, projectilHitActor, null, this);
+    this.physics.add.overlap(this.elfa, this.player.arrows, projectilHitActor, null, this);
 
     this.physics.add.collider(this.player, this.robin);
     this.physics.add.collider(this.player, this.bruxa);
+    this.physics.add.collider(this.player, this.elfa);
 
+    this.physics.add.collider(this.player, this.esfera1);
+    this.physics.add.collider(this.player.arrows, this.esfera1, projectilHitCrystal, null, this);
+    this.physics.add.collider(this.player, this.esfera2);
+    this.physics.add.collider(this.player.arrows, this.esfera2, projectilHitCrystal2, null, this);
+    this.physics.add.collider(this.player, this.esfera3);
+    this.physics.add.collider(this.player.arrows, this.esfera3, projectilHitCrystal3, null, this);
+    this.physics.add.collider(this.player, this.esfera4);
+    this.physics.add.collider(this.player.arrows, this.esfera4, projectilHitCrystal, null, this);
+    this.physics.add.collider(this.player, this.esfera5);
+    this.physics.add.collider(this.player.arrows, this.esfera5, projectilHitCrystal5, null, this);
+    this.physics.add.collider(this.player, this.esfera6);
+    this.physics.add.collider(this.player.arrows, this.esfera6, projectilHitCrystal, null, this);
+    this.physics.add.collider(this.player, this.esfera7);
+    this.physics.add.collider(this.player.arrows, this.esfera7, projectilHitCrystal7, null, this);
+
+    this.physics.add.collider(this.player, this.invisible);
   }
 
   // criação do diálogo
@@ -387,6 +456,22 @@ class Fase_03 extends Phaser.Scene {
     this.physics.world.enable(this.zone2);
     this.physics.add.overlap(this.player, this.zone2, this.onZone2, null, this);
 
+    // adicionando uma zona de saida
+    this.zoneSaida = this.add.zone(1200, 500).setSize(10, 80);
+    this.physics.world.enable(this.zoneSaida);
+    this.physics.add.overlap(this.player, this.zoneSaida, this.onZoneSaida, null, this);
+    this.physics.add.collider(this.player.arrows, this.zoneSaida, projectilHitCrystal, null, this);
+    this.zoneSaida.body.immovable = true;
+    this.zoneSaida.body.moves = false;
+
+    // adicionando uma zona de saida
+    this.parede = this.add.zone(5, 750).setSize(10, 80);
+    this.physics.world.enable(this.parede);
+    this.physics.add.collider(this.player.arrows, this.parede, projectilHitCrystal, null, this);
+    this.physics.add.collider(this.player, this.parede, null, null, this);
+    this.parede.body.immovable = true;
+    this.parede.body.moves = false;
+
     // ligação das teclas de movimento
     this.keyA = this.input.keyboard.addKey("A");
     this.keyD = this.input.keyboard.addKey("D");
@@ -395,12 +480,30 @@ class Fase_03 extends Phaser.Scene {
     this.keySPACE = this.input.keyboard.addKey("Space");
 
     this.bruxa.play('witch_idle')
+
+    this.crystal2 = false;
+    this.crystal3 = false;
+    this.crystal5 = false;
+    this.crystal7 = false;
+    this.ponte = true;
+    this.bow = false;
   }
  
   // update é chamada a cada novo quadro
   update() {
-   
+
+    if(this.crystal2 && this.crystal3 && this.crystal5 && this.crystal7 && this.ponte){
+      this.bridgeLayer.setVisible(true);
+      this.bridge2Layer.setActive(false);
+      this.invisible.destroy();
+      this.ponte = false;
+    }
+
 }
+
+  onZoneSaida(){
+    console.log("saiu")
+  }
 
   // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
   onZone(){
@@ -488,7 +591,7 @@ class Fase_03 extends Phaser.Scene {
       this.a1.setVisible(false);
       this.a2.setVisible(false);
       this.a3.setVisible(false);
-      //this.bow = true;
+      this.bow = true;
       this.timelineRobin2.play();
   }
 }
@@ -499,17 +602,61 @@ function projectilHitActor(actor, projectil){
   projectil.setVelocity(0, 0);
   projectil.body.reset(-10, -10);
 
-  console.log('HP', actor.getHP())
-  actor.damage(22);
-  if (actor.getHP() == 0){
-      actor.die();
+  console.log('HP', this.actor.getHP())
+  this.actor.damage(22);
+  if (this.actor.getHP() == 0){
+      this.actor.die();
       //this.physics.world.removeCollider(collider);
   }
 }
+
 
 function projectilHitWall(projectil, wall){
   projectil.setActive(false);
   projectil.setVisible(false);
   projectil.setVelocity(0, 0);
   projectil.body.reset(-10, -10);
+}
+
+function projectilHitCrystal(crystal, projectil){
+  projectil.setActive(false);
+  projectil.setVisible(false);
+  projectil.setVelocity(0, 0);
+  projectil.body.reset(-10, -10);
+}
+
+function projectilHitCrystal2(crystal, projectil){
+  projectil.setActive(false);
+  projectil.setVisible(false);
+  projectil.setVelocity(0, 0);
+  projectil.body.reset(-10, -10);
+  this.crystal2 = true;
+  this.esfera2.tint = 0x3388ff;
+}
+
+function projectilHitCrystal3(crystal, projectil){
+  projectil.setActive(false);
+  projectil.setVisible(false);
+  projectil.setVelocity(0, 0);
+  projectil.body.reset(-10, -10);
+  this.crystal3 = true;
+  this.esfera3.tint = 0x3388ff;
+}
+
+function projectilHitCrystal5(crystal, projectil){
+  projectil.setActive(false);
+  projectil.setVisible(false);
+  projectil.setVelocity(0, 0);
+  projectil.body.reset(-10, -10);
+  this.crystal5 = true;
+  this.esfera5.tint = 0x3388ff;
+}
+
+function projectilHitCrystal7(crystal, projectil){
+  projectil.setActive(false);
+  projectil.setVisible(false);
+  projectil.setVelocity(0, 0);
+  projectil.body.reset(-10, -10);
+  this.crystal7 = true;
+  this.esfera7.tint = 0x3388ff;
 }
