@@ -21,48 +21,48 @@ class Elfa extends Actor {
           bullet.setVisible(false);
       }
   
-      //this.anims.create({
-         // key: 'elfa_idle',
-         // frames: this.anims.generateFrameNumbers(texture_idle, {start: 0, end: 5}),
-         // frameRate: 6,
-         // yoyo:true,
-         // repeat: -1
-         // });
+      this.anims.create({
+          key: 'elfa_idle',
+          frames: this.anims.generateFrameNumbers('elfa', {start: 27, end: 28}),
+          frameRate: 2,
+          yoyo:true,
+          repeat: -1
+          });
       this.anims.create({
           key: 'elfa_attack_up',
-          frames: this.anims.generateFrameNumbers(texture_attack, {start: 208, end: 220}),
+          frames: this.anims.generateFrameNumbers('elfa', {start: 208, end: 220}),
           frameRate: 20,
           repeat: 0
           });
       this.anims.create({
           key: 'elfa_attack_left',
-          frames: this.anims.generateFrameNumbers(texture_attack, {start: 221, end: 233}),
+          frames: this.anims.generateFrameNumbers('elfa', {start: 221, end: 233}),
           frameRate: 20,
           repeat: 0
           });
        this.anims.create({
           key: 'elfa_attack_down',
-          frames: this.anims.generateFrameNumbers(texture_attack, {start: 234, end: 246}),
+          frames: this.anims.generateFrameNumbers('elfa', {start: 234, end: 246}),
           frameRate: 20,
           repeat: 0
           });
        this.anims.create({
           key: 'elfa_attack_right',
-          frames: this.anims.generateFrameNumbers(texture_attack, {start: 247, end: 259}),
+          frames: this.anims.generateFrameNumbers('elfa', {start: 247, end: 259}),
           frameRate: 20,
           repeat: 0
           });
           
-      this.anims.create({
-          key: 'elfa_death',
-          frames: this.anims.generateFrameNumbers(texture_death, {start: 260, end: 265}),
-          frameRate: 20,
-          repeat: 0,
+          this.anims.create({
+            key: 'elfa_death',
+            frames: this.anims.generateFrameNumbers('elfa', {start: 260, end: 264}),
+            frameRate: 10,
+            repeat: 0
   
           });
    
       this.anims.play('elfa_idle');
-      this.timer = scene.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: this.attack, callbackScope: this });
+      this.timer = this.scene.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: this.attack, callbackScope: this });
     }
   
   
@@ -81,6 +81,8 @@ class Elfa extends Actor {
           bullet.setVelocityX(vx);
           bullet.setVelocityY(vy);        
       }
+      this.timer = this.scene.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: this.attack, callbackScope: this });
+
     }
   
     preUpdate (time, delta)
@@ -93,11 +95,13 @@ class Elfa extends Actor {
       bullet.setVisible(false);
     }
     die(){
+
       this.attack_enable = false;
       this.move_enable = false;
       this.body.enable=false;
+      console.log("die", this, this.anims);
       this.anims.play('elfa_death');
-      this.on('animationcomplete', this.vanish);    
+      //this.on('animationcomplete', this.vanish);    
     }
     vanish(){
       this.setVisible(false);
