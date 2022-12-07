@@ -113,7 +113,7 @@ class Fase_03 extends Phaser.Scene {
     this.player.setScale(0.4);
     this.player.setSize(32, 32);
     this.player.setOffset(16, 32);
-    this.player.bow_enable = false;
+    this.player.has_bow = true;
 
     // Criação da Elfa 
     this.elfa = new Elfa(this, 300, 375, 'elfa', 26);
@@ -248,22 +248,26 @@ class Fase_03 extends Phaser.Scene {
   create_tweens(){
 
     // Falas da primeira cena
-      var t0 = this.add.text(900, 600, "Está perdido?\n Não se pode atravessar o Rio das Flores", {
-          font: "12px Arial",
+      var t0 = this.add.text(530, 650, "Está perdido?\n Não se pode atravessar o Rio das Flores", {
+          font: "15px Arial",
           fill: "#674ea7",
           align: "center"
       });        
-      var t1 = this.add.text(900, 600, "Siga para cima.\n As árvores te mostrarão o caminho", {
-          font: "12px Arial",
+      var t1 = this.add.text(530, 650, "Siga para cima.\n As árvores te mostrarão o caminho", {
+          font: "15px Arial",
           fill: "#674ea7",
           align: "center"
       });
-      var t2 = this.add.text(900, 600, "Obrigada bela bruxa!", {
-        font: "12px Arial",
+      var t2 = this.add.text(530, 650, "Obrigada bela bruxa!", {
+        font: "15px Arial",
         fill: "#000000",
         align: "center"
       });        
-  
+
+      t0.setScrollFactor(0);
+      t1.setScrollFactor(0);
+      t2.setScrollFactor(0);
+
       t0.alpha = 0
       t1.alpha = 0
       t2.alpha = 0
@@ -443,6 +447,12 @@ class Fase_03 extends Phaser.Scene {
     this.create_actors();
     this.create_animations();
     this.create_collisions();
+
+    this.dlgBox = this.add.rectangle(700, 700, 1000, 200, 0x000000);
+    this.dlgBox.setScrollFactor(0);
+    this.dlgBox.setVisible(false)
+    this.dialogActive = false;
+
     this.create_tweens();
 
     // adicionando uma zona com gatilho, quando entrar aciona a função onZone
@@ -486,7 +496,7 @@ class Fase_03 extends Phaser.Scene {
     this.crystal5 = false;
     this.crystal7 = false;
     this.ponte = true;
-    this.bow = false;
+
   }
  
   // update é chamada a cada novo quadro
@@ -508,7 +518,7 @@ class Fase_03 extends Phaser.Scene {
   // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
   onZone(){
     if (this.zoneDialog){
-      
+        this.dlgBox.setVisible(true)
         this.timeline.play();
         this.zoneDialog = true;
     }
@@ -591,7 +601,7 @@ class Fase_03 extends Phaser.Scene {
       this.a1.setVisible(false);
       this.a2.setVisible(false);
       this.a3.setVisible(false);
-      this.bow = true;
+      this.player.has_bow = true;
       this.timelineRobin2.play();
   }
 }
@@ -602,10 +612,10 @@ function projectilHitActor(actor, projectil){
   projectil.setVelocity(0, 0);
   projectil.body.reset(-10, -10);
 
-  console.log('HP', this.actor.getHP())
-  this.actor.damage(22);
-  if (this.actor.getHP() == 0){
-      this.actor.die();
+  console.log('HP', actor.getHPValue())
+  actor.getDamage(22);
+  if (actor.getHPValue() == 0){
+      actor.die();
       //this.physics.world.removeCollider(collider);
   }
 }
@@ -623,6 +633,16 @@ function projectilHitCrystal(crystal, projectil){
   projectil.setVisible(false);
   projectil.setVelocity(0, 0);
   projectil.body.reset(-10, -10);
+  if(this.ponte){
+    this.crystal2 = false;
+    this.crystal3 = false;
+    this.crystal5 = false;
+    this.crystal7 = false;
+    this.esfera2.tint = 0xffffff;
+    this.esfera3.tint = 0xffffff;
+    this.esfera5.tint = 0xffffff;
+    this.esfera7.tint = 0xffffff;
+  }
 }
 
 function projectilHitCrystal2(crystal, projectil){
