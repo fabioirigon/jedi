@@ -60,11 +60,11 @@ class Fase_05 extends Phaser.Scene
     this.groundLayer1 = this.map.createLayer('Ground', tilesets);
     this.wallsLayer1 = this.map.createLayer('River', tilesets);
     this.groundLayer2 = this.map.createLayer('Pontes', tilesets);
-    this.wallsLayer2 = this.map.createLayer('BlockingPassage', tilesets);
     this.groundLayer3 = this.map.createLayer('SoftPlants', tilesets);
     this.wallsLayer3 = this.map.createLayer('HardPlants', tilesets);
     this.wallsLayer4 = this.map.createLayer('GroundObjects', tilesets);
     this.wallsLayer5 = this.map.createLayer('GroundStructures', tilesets);
+    this.wallsLayer2 = this.map.createLayer('BlockingPassage', tilesets);
     this.wallsLayer6 = this.map.createLayer('SkyStructures', tilesets);
     console.log('CreateLayers');
   }
@@ -74,6 +74,7 @@ class Fase_05 extends Phaser.Scene
 
     // criação do jogador
     this.player = new player(this, 10, 840, 'player_sp', 19);
+    this.player.has_bow = true;
     this.player.setScale(0.25);
 
     // Criação da pixie
@@ -132,6 +133,7 @@ class Fase_05 extends Phaser.Scene
     this.orc12.setScale(0.5);
 
     this.orc13 = new orc(this,55,96,'orc_femea_sp','orc_femea_sp');
+    this.orc13.setSize(64,64);
     this.orc13.setScale(0.5);
 
     this.orc14 = new orc(this,89,331.5,'orc_macho_lanca_sp','orc_macho_lanca_sp');
@@ -604,7 +606,7 @@ class Fase_05 extends Phaser.Scene
   move_enemy(enemy){
       var dx = this.player.x-enemy.x;
       var dy = this.player.y-enemy.y;
-      var scl = 130/Math.sqrt(dx*dx+dy*dy)
+      var scl = 100/Math.sqrt(dx*dx+dy*dy)
       if (dx*dx + dy*dy < 200*200 && scl>0){
           enemy.setVelocityX(dx*scl);
           enemy.setVelocityY(dy*scl);
@@ -902,7 +904,10 @@ class Fase_05 extends Phaser.Scene
 
   errou(){
     console.log("errou");
-    this.scene.restart();
+    this.player.getDamage(10);
+    if(this.player.getHPValue() <=0){
+      this.player.die();
+    }
   }
 
 }

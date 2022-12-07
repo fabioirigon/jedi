@@ -5,7 +5,7 @@ class orc extends Actor {
     this.scene = scene
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.setSize(1.0);
+    this.setSize(this.width/2, 2*this.height/3, true);
     this.setOffset(this.width/4, this.height/3);
     this.scene = scene;
 
