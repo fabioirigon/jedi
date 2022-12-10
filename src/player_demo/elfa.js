@@ -98,10 +98,10 @@ class Elfa extends Actor {
 
       this.attack_enable = false;
       this.move_enable = false;
-      this.body.enable=false;
-      console.log("die", this, this.anims);
+      this.body.enable = false;
+      console.log("elfa_death", this, this.anims);
       this.anims.play('elfa_death');
-      //this.on('animationcomplete', this.vanish);    
+      this.on('animationcomplete', this.vanish);
     }
     vanish(){
       this.setVisible(false);

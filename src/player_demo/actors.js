@@ -7,8 +7,10 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
     //this.body.setCollideWorldBounds(true);
     this.hp = 100;
-    this.bar_bg =  scene.add.rectangle(x, y-20, 80, 8, 0x000000);
-    this.bar_fg =  scene.add.rectangle(x-40, y-20, 80, 6, 0x00ff00);
+    this.bar_bg =  scene.add.rectangle(x, y-20, 105, 8, 0x000000);
+    this.bar_bg.setScale(0.8);
+    this.bar_fg =  scene.add.rectangle(x-32, y-20, 100, 6, 0x00ff00);
+    this.bar_fg.setScale(0.8);
     this.bar_fg.setOrigin(0.1, 0.5)
     this.draw_bar()
   }
@@ -41,7 +43,7 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
     //this.bar.originX = 0.9
     this.bar_bg.x = this.x
     this.bar_bg.y = this.y-20
-    this.bar_fg.x = this.x-40
+    this.bar_fg.x = this.x-32
     this.bar_fg.y = this.y-20
         /*
         this.bar.clear();
