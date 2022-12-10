@@ -96,7 +96,6 @@ class Fase_03 extends Phaser.Scene {
       "bridge",
       [this.tileset1, this.tileset2, this.tileset3], 0, 0);
     this.bridgeLayer.setVisible(false);
-   //   this.bridgeLayer;
   }
 
   create_actors(){
@@ -107,23 +106,12 @@ class Fase_03 extends Phaser.Scene {
     this.robin.body.immovable = true;
     this.robin.body.moves = false;
 
-
     // Criação do personagem principal
-    this.player = new player(this, 50, 750, 'playerbow_sp', 26);
+    this.player = new player(this, 25, 735, 'playerbow_sp', 26);
     this.player.setScale(0.4);
     this.player.setSize(32, 32);
     this.player.setOffset(16, 32);
-    this.player.has_bow = true;
-
-    // Criação da Elfa 
-    this.elfa = new Elfa(this, 300, 375, 'elfa', 26);
-    this.elfa.setScale(0.4);
-    this.elfa.setSize(32, 32);
-    this.elfa.setOffset(16, 32);
-    this.elfa.body.immovable = true;
-    this.elfa.body.moves = false;
-    this.elfa.flipX = true;
-
+    this.player.has_bow = false;
     
     // Criação da Good Witch
     this.bruxa = this.physics.add.sprite(1032, 660, "witch_sp", 1);
@@ -207,24 +195,17 @@ class Fase_03 extends Phaser.Scene {
     this.tree1Layer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.tree1Layer);
     this.physics.add.collider(this.player.arrows, this.tree1Layer, projectilHitWall, null, this);
-    this.physics.add.collider(this.elfa.bullets, this.tree1Layer, projectilHitWall, null, this);
 
     this.tree2Layer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.tree2Layer);
     this.physics.add.collider(this.player.arrows, this.tree2Layer, projectilHitWall, null, this);
-    this.physics.add.collider(this.elfa.bullets, this.tree2Layer, projectilHitWall, null, this);
 
     this.houseLayer.setCollisionByExclusion([-1]);
     this.physics.add.collider(this.player, this.houseLayer);
     this.physics.add.collider(this.player.arrows, this.houseLayer, projectilHitWall, null, this);
-    this.physics.add.collider(this.elfa.bullets, this.houseLayer, projectilHitWall, null, this);
-
-    this.physics.add.overlap(this.player, this.elfa.bullets, projectilHitActor, null, this);
-    this.physics.add.overlap(this.elfa, this.player.arrows, projectilHitActor, null, this);
 
     this.physics.add.collider(this.player, this.robin);
     this.physics.add.collider(this.player, this.bruxa);
-    this.physics.add.collider(this.player, this.elfa);
 
     this.physics.add.collider(this.player, this.esfera1);
     this.physics.add.collider(this.player.arrows, this.esfera1, projectilHitCrystal, null, this);
@@ -248,19 +229,19 @@ class Fase_03 extends Phaser.Scene {
   create_tweens(){
 
     // Falas da primeira cena
-      var t0 = this.add.text(530, 650, "Está perdido?\n Não se pode atravessar o Rio das Flores", {
+      var t0 = this.add.text(975, 675, "Está perdido?\n Não se pode atravessar o Rio das Flores", {
           font: "15px Arial",
           fill: "#674ea7",
           align: "center"
       });        
-      var t1 = this.add.text(530, 650, "Siga para cima.\n As árvores te mostrarão o caminho", {
+      var t1 = this.add.text(975, 675, "Siga para cima.\n As árvores te mostrarão o caminho", {
           font: "15px Arial",
           fill: "#674ea7",
           align: "center"
       });
-      var t2 = this.add.text(530, 650, "Obrigada bela bruxa!", {
+      var t2 = this.add.text(975, 675, "Obrigada bela bruxa!", {
         font: "15px Arial",
-        fill: "#000000",
+        fill: "#DC143C",
         align: "center"
       });        
 
@@ -309,23 +290,27 @@ class Fase_03 extends Phaser.Scene {
   // ----------------------------------------------------------------
   // Falas da segunda cena
   
-    var t3 = this.add.text(945, 120, "Olá, o senhor sabe como atravessar o rio?", {
-      font: "12px Arial",
-      fill: "#000000",
+    var t3 = this.add.text(975, 675, "Olá, o senhor sabe como atravessar o rio?", {
+      font: "15px Arial",
+      fill: "#DC143C",
       align: "center"
     });   
          
-    var t4 = this.add.text(945, 120, "Oque me diz de uma troca justa?\n Uma resposta por outra.", {
-        font: "12px Arial",
+    var t4 = this.add.text(975, 675, "Oque me diz de uma troca justa?\n Uma resposta por outra.", {
+        font: "15px Arial",
         fill: "#744700",
         align: "center"
     });
     
-    var t5 = this.add.text(945, 120, "Manda ver!", {
-      font: "12px Arial",
-      fill: "#000000",
+    var t5 = this.add.text(975, 675, "Manda ver!", {
+      font: "15px Arial",
+      fill: "#DC143C",
       align: "center"
     });        
+
+    t3.setScrollFactor(0);
+    t4.setScrollFactor(0);
+    t5.setScrollFactor(0);
 
     t3.alpha = 0
     t4.alpha = 0
@@ -367,29 +352,34 @@ class Fase_03 extends Phaser.Scene {
     // ----------------------------------------------------------------
     // Continuação da segunda cena
 
-    var t6 = this.add.text(945, 120, "Impressionante! Tome este arco!", {
-      font: "12px Arial",
+    var t6 = this.add.text(975, 675, "Impressionante! Tome este arco!", {
+      font: "15px Arial",
       fill: "#744700",
       align: "center"
     });   
          
-    var t7 = this.add.text(945, 120, "Para atravessar o rio, atire nos cristais\nde número primo que estão na outra margem.", {
-        font: "12px Arial",
+    var t7 = this.add.text(975, 675, "Para atravessar o rio, atire nos cristais\nde número primo que estão na outra margem.", {
+        font: "15px Arial",
         fill: "#744700",
         align: "center"
     });
     
-    var t8 = this.add.text(945, 120, "Assim a ponte será revelada!", {
-      font: "12px Arial",
+    var t8 = this.add.text(975, 675, "Assim a ponte será revelada!", {
+      font: "15px Arial",
       fill: "#744700",
       align: "center"
     });       
 
-    var t9 = this.add.text(945, 120, "Valeu meu consagrado!", {
-      font: "12px Arial",
-      fill: "#000000",
+    var t9 = this.add.text(975, 675, "Valeu meu consagrado!", {
+      font: "15px Arial",
+      fill: "#DC143C",
       align: "center"
     });  
+
+    t6.setScrollFactor(0);
+    t7.setScrollFactor(0);
+    t8.setScrollFactor(0);
+    t9.setScrollFactor(0);
 
     t6.alpha = 0
     t7.alpha = 0
@@ -448,7 +438,8 @@ class Fase_03 extends Phaser.Scene {
     this.create_animations();
     this.create_collisions();
 
-    this.dlgBox = this.add.rectangle(700, 700, 1000, 200, 0x000000);
+    // Fundo para os dialogos
+    this.dlgBox = this.add.rectangle(1050, 750, 1250, 210, 0x000000);
     this.dlgBox.setScrollFactor(0);
     this.dlgBox.setVisible(false)
     this.dialogActive = false;
@@ -457,11 +448,11 @@ class Fase_03 extends Phaser.Scene {
 
     // adicionando uma zona com gatilho, quando entrar aciona a função onZone
     this.zoneDialog = true;
-    this.zone = this.add.zone(1000, 650).setSize(100, 100);
+    this.zone = this.add.zone(1020, 650).setSize(80, 100);
     this.physics.world.enable(this.zone);
     this.physics.add.overlap(this.player, this.zone, this.onZone, null, this);
 
-   // this.zoneDialog2 = true;
+    this.zoneDialog2 = true;
     this.zone2 = this.add.zone(970, 90).setSize(100, 100);
     this.physics.world.enable(this.zone2);
     this.physics.add.overlap(this.player, this.zone2, this.onZone2, null, this);
@@ -470,11 +461,11 @@ class Fase_03 extends Phaser.Scene {
     this.zoneSaida = this.add.zone(1200, 500).setSize(10, 80);
     this.physics.world.enable(this.zoneSaida);
     this.physics.add.overlap(this.player, this.zoneSaida, this.onZoneSaida, null, this);
-    this.physics.add.collider(this.player.arrows, this.zoneSaida, projectilHitCrystal, null, this);
+    this.physics.add.collider(this.zoneSaida, this.player.arrows, projectilHitZone, null, this);
     this.zoneSaida.body.immovable = true;
     this.zoneSaida.body.moves = false;
 
-    // adicionando uma zona de saida
+    // adicionando uma parede na entrada do mapa
     this.parede = this.add.zone(5, 750).setSize(10, 80);
     this.physics.world.enable(this.parede);
     this.physics.add.collider(this.player.arrows, this.parede, projectilHitCrystal, null, this);
@@ -488,6 +479,7 @@ class Fase_03 extends Phaser.Scene {
     this.keyW = this.input.keyboard.addKey("W");
     this.keyS = this.input.keyboard.addKey("S");
     this.keySPACE = this.input.keyboard.addKey("Space");
+    this.game_over = false;
 
     this.bruxa.play('witch_idle')
 
@@ -509,6 +501,12 @@ class Fase_03 extends Phaser.Scene {
       this.ponte = false;
     }
 
+    if (this.game_over){
+      if (this.keySPACE.isDown) {
+          this.scene.restart();
+      }            
+    }
+    
 }
 
   onZoneSaida(){
@@ -517,19 +515,37 @@ class Fase_03 extends Phaser.Scene {
 
   // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
   onZone(){
-    if (this.zoneDialog){
-        this.dlgBox.setVisible(true)
-        this.timeline.play();
-        this.zoneDialog = true;
+    if (this.zoneDialog == true){
+
+      // impede o movimento
+      this.player.move_enable = false;
+      this.player.anims.stop();
+      
+      this.player.setVelocityX(0);
+      this.player.setVelocityY(0);
+
+      this.dlgBox.setVisible(true)
+      this.timeline.play();
+
+      setTimeout(() => {
+        this.dlgBox.setVisible(false)
+        this.player.move_enable = true;
+
+      }, 15000);
+
+      this.zoneDialog = false;
+
     }
   }
 
   onZone2(){
-    if (this.zoneDialog){
+    if (this.zoneDialog2 == true){
 
 
       this.zoneDialog = false;
+      this.zoneDialog2 = false;
 
+      this.dlgBox.setVisible(true)
       this.timelineRobin.play();
        
       // impede o movimento
@@ -539,38 +555,44 @@ class Fase_03 extends Phaser.Scene {
       this.player.setVelocityX(0);
       this.player.setVelocityY(0);
 
-       setTimeout(() => {
+      setTimeout(() => {
 
-      // pergunta: 
-      this.quest = this.add.text(945, 120, "Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?", {
-        font: "12px Arial",
-        fill: "#744700",
-        align: "center"
-      });
+        // pergunta: 
+        this.quest = this.add.text(975, 660, "Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?", {
+          font: "15px Arial",
+          fill: "#744700",
+          align: "center"
+        });
 
-      this.a0 = this.add.text(945, 175, "◯ 3589 livros", {
-          font: "12px Arial",
+        this.a0 = this.add.text(1010, 735, "◯ 3589 livros", {
+            font: "15px Arial",
+            fill: "#744700",
+            align: "center"
+        });
+
+        this.a1 = this.add.text(1135, 735, "◯ 3859 livros", {
+            font: "15px Arial",
+            fill: "#744700",
+            align: "center"
+        });
+
+        this.a2 = this.add.text(1010, 765, "◯ 30859 livros", {
+            font: "15px Arial",
+            fill: "#744700",
+            align: "center"
+        });
+
+        this.a3 = this.add.text(1135, 765, "◯ 38590 livros", {
+          font: "15px Arial",
           fill: "#744700",
           align: "center"
       });
 
-      this.a1 = this.add.text(945, 200, "◯ 3859 livros", {
-          font: "12px Arial",
-          fill: "#744700",
-          align: "center"
-      });
-
-      this.a2 = this.add.text(945, 225, "◯ 30859 livros", {
-          font: "12px Arial",
-          fill: "#744700",
-          align: "center"
-      });
-
-      this.a3 = this.add.text(945, 250, "◯ 38590 livros", {
-        font: "12px Arial",
-        fill: "#744700",
-        align: "center"
-    });
+      this.quest.setScrollFactor(0);
+      this.a0.setScrollFactor(0);
+      this.a1.setScrollFactor(0);
+      this.a2.setScrollFactor(0);
+      this.a3.setScrollFactor(0);
 
       // deixa clicar e liga com a função
       this.a0.setInteractive();
@@ -581,8 +603,8 @@ class Fase_03 extends Phaser.Scene {
       this.a2.on('pointerdown', this.errou, this);
       this.a3.setInteractive();
       this.a3.on('pointerdown', this.errou, this);
-
-     }, 15000);
+      
+    }, 15000);
 
     }
   }
@@ -595,7 +617,6 @@ class Fase_03 extends Phaser.Scene {
 
   acertou(){
       console.log("acertou");
-      this.player.move_enable = true;
       this.quest.setVisible(false);
       this.a0.setVisible(false);
       this.a1.setVisible(false);
@@ -603,7 +624,41 @@ class Fase_03 extends Phaser.Scene {
       this.a3.setVisible(false);
       this.player.has_bow = true;
       this.timelineRobin2.play();
+      setTimeout(() => {
+        this.player.move_enable = true;
+        this.dlgBox.setVisible(false)
+      }, 20000);
+
+    
+    // Criação da Elfa
+    this.elfa = new Elfa(this, 225, 350, 'elfa', 26);
+    this.elfa.setScale(0.4);
+    this.elfa.setSize(32, 32);
+    this.elfa.setOffset(16, 32);
+    this.elfa.body.immovable = true;
+    this.elfa.body.moves = false;
+    this.elfa.flipX = true;
+
+    this.physics.add.collider(this.elfa.bullets, this.tree1Layer, projectilHitWall, null, this);
+    this.physics.add.collider(this.elfa.bullets, this.tree2Layer, projectilHitWall, null, this);
+    this.physics.add.collider(this.elfa.bullets, this.ground2Layer, projectilHitWall, null, this);
+    this.physics.add.collider(this.elfa, this.player.arrows, projectilHitActor, null, this);
+    this.physics.add.collider(this.player, this.elfa.bullets, projectilHitActor, null, this);
+    this.physics.add.collider(this.player, this.elfa);
   }
+
+  gameOver(){
+    console.log('game over');
+    this.game_over = true;
+    player.move_enable = false;
+  
+    var wd = window.innerWidth;
+    var wh = window.innerHeight;        
+    var txt_cfg = {font: "15px Arial",fill: "#F0F000", align: "center"}
+    console.log(this.player.x, this.player.y, txt_cfg)
+    var t0 = this.add.text(this.player.x, this.player.y, "Pressione Espaço para reiniciar", txt_cfg);
+  }
+
 }
 
 function projectilHitActor(actor, projectil){
@@ -616,7 +671,6 @@ function projectilHitActor(actor, projectil){
   actor.getDamage(22);
   if (actor.getHPValue() == 0){
       actor.die();
-      //this.physics.world.removeCollider(collider);
   }
 }
 
@@ -643,6 +697,13 @@ function projectilHitCrystal(crystal, projectil){
     this.esfera5.tint = 0xffffff;
     this.esfera7.tint = 0xffffff;
   }
+}
+
+function projectilHitZone(zone, projectil){
+  projectil.setActive(false);
+  projectil.setVisible(false);
+  projectil.setVelocity(0, 0);
+  projectil.body.reset(-10, -10);
 }
 
 function projectilHitCrystal2(crystal, projectil){
@@ -680,3 +741,4 @@ function projectilHitCrystal7(crystal, projectil){
   this.crystal7 = true;
   this.esfera7.tint = 0x3388ff;
 }
+
