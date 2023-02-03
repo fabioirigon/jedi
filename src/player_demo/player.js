@@ -19,6 +19,7 @@ class player extends Actor {
     for (var i = 0; i < 5; i++){
         var arrow = this.arrows.create(-10, -10, 'arrow');
         arrow.setScale(0.2);
+        arrow.body.setSize(10, 10);
         arrow.setActive(false);
         arrow.setVisible(false);
     }
@@ -192,6 +193,9 @@ class player extends Actor {
     else{
       this.setVelocityX(0); 
       this.setVelocityY(0); 
+    }
+    if (this.scene.keySPACE.isDown) {
+      console.log(this.body.position)
     }
 
     if (this.scene.keySPACE.isDown && this.attack_enable && this.has_bow) {

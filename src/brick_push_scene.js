@@ -81,13 +81,13 @@ class brick_push_scene extends Phaser.Scene {
 
 
         this.R0.on('pointerup', function (pointer) {
-            this.scene.start('phase_01', {'movingWall_sts': 2});
+            this.scene.start('Fase_01', {'movingWall_sts': 2});
         }, this);
         this.R1.on('pointerup', function (pointer) {
-            this.scene.start('phase_01', {'movingWall_sts': 2});
+            this.scene.start('Fase_01', {'movingWall_sts': 2});
         }, this);
         this.R2.on('pointerup', function (pointer) {
-            this.scene.start('phase_01', {'movingWall_sts': 1});
+            this.scene.start('Fase_01', {'movingWall_sts': 1});
         }, this);
         /*
         this.input.on('pointerup', function (pointer) {

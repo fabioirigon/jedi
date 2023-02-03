@@ -27,7 +27,7 @@ class Fase_05 extends Phaser.Scene
     this.load.spritesheet('forest_sp', 'assets/images/fase_05/forest.png', { frameWidth: 16, frameHeight: 16 });
 
     // carregando mapa (json) e gráficos do mapa
-    this.load.image('tiles_estruturas1', 'assets/images/fase_05/estruturas1.png');
+    this.load.image('tiles_estruturas1_5', 'assets/images/fase_05/estruturas1.png');
     this.load.image('tiles_forest', 'assets/images/fase_05/forest.png');
     this.load.image('tiles_ground', 'assets/images/fase_05/ground.png');
     this.load.image('tiles_navioEjaulas', 'assets/images/fase_05/navioEjaulas.png');
@@ -35,7 +35,7 @@ class Fase_05 extends Phaser.Scene
     this.load.image('tiles_vila1', 'assets/images/fase_05/vila1.png');
     this.load.image('tiles_vila2', 'assets/images/fase_05/vila2.png');
     this.load.image('tiles_vila3', 'assets/images/fase_05/vila3.png');
-    this.load.tilemapTiledJSON('themap', 'assets/maps/map_phase_05.json');
+    this.load.tilemapTiledJSON('themap_5', 'assets/maps/map_phase_05.json');
     console.log('LoadTiles');
 
   }
@@ -44,8 +44,8 @@ class Fase_05 extends Phaser.Scene
   {
 
     // criação do mapa e ligação com a imagem (tilesheet)
-    this.map = this.make.tilemap({ key: 'themap', tileWidth: 16, tileHeight: 16 });
-    this.tileset1 = this.map.addTilesetImage('estruturas1', 'tiles_estruturas1');
+    this.map = this.make.tilemap({ key: 'themap_5', tileWidth: 16, tileHeight: 16 });
+    this.tileset1 = this.map.addTilesetImage('estruturas1_5', 'tiles_estruturas1_5');
     this.tileset2 = this.map.addTilesetImage('forest', 'tiles_forest');
     this.tileset3 = this.map.addTilesetImage('ground', 'tiles_ground');
     this.tileset4 = this.map.addTilesetImage('navioEjaulas', 'tiles_navioEjaulas');
@@ -55,7 +55,7 @@ class Fase_05 extends Phaser.Scene
     this.tileset8 = this.map.addTilesetImage('vila3', 'tiles_vila3');
     console.log('CreateTiles');
 
-    var tilesets = ['estruturas1','forest','ground','navioEjaulas','navioEjaulas','tapetes','vila1','vila2','vila3'];
+    var tilesets = ['estruturas1_5','forest','ground','navioEjaulas','navioEjaulas','tapetes','vila1','vila2','vila3'];
 
     // criação das camadas
     this.groundLayer1 = this.map.createLayer('Ground', tilesets);
@@ -767,7 +767,7 @@ class Fase_05 extends Phaser.Scene
     this.a2.setVisible(false);
     this.a3.setVisible(false);
     this.orcG.play('orc_guarda_death');
-    this.orcG.body.enable = false;
+    this.orcG.body.setEnable(false);
   }
 
   insideOrcXzone(){

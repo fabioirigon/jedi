@@ -108,6 +108,7 @@ class Fase_03 extends Phaser.Scene {
 
     // Criação do personagem principal
     this.player = new player(this, 25, 735, 'playerbow_sp', 26);
+    //this.player = new player(this, 850, 100, 'playerbow_sp', 26);
     this.player.setScale(0.4);
     this.player.setSize(32, 32);
     this.player.setOffset(16, 32);
@@ -166,8 +167,6 @@ class Fase_03 extends Phaser.Scene {
     this.invisible.body.moves = false;
     this.invisible.setSize(16, 40);
 
-
-
     // camera seguindo o jogador
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
     this.cameras.main.setZoom(2);
@@ -204,6 +203,7 @@ class Fase_03 extends Phaser.Scene {
     this.physics.add.collider(this.player, this.houseLayer);
     this.physics.add.collider(this.player.arrows, this.houseLayer, projectilHitWall, null, this);
 
+      
     this.physics.add.collider(this.player, this.robin);
     this.physics.add.collider(this.player, this.bruxa);
 
@@ -229,21 +229,37 @@ class Fase_03 extends Phaser.Scene {
   create_tweens(){
 
     // Falas da primeira cena
-      var t0 = this.add.text(975, 675, "Está perdido?\n Não se pode atravessar o Rio das Flores", {
+//      var t88 = this.add.text(600, 450, "testando", {
+//          font: "15px Arial",
+//          fill: "#674ea7",
+//          align: "center"
+//      });        
+    var px = this.cameras.main.width*0.35;
+    var py = 2*this.cameras.main.height/3
+    console.log(this.cameras.main.width, this.cameras.main.height, px, py);
+    this.dialog_bg =  this.add.rectangle(this.cameras.main.width*0.5, this.cameras.main.height*0.65, 
+      this.cameras.main.width*0.4, this.cameras.main.height*0.2, 0x000000);
+    this.dialog_bg.setScrollFactor(0);
+    this.dialog_bg.setVisible(false);
+
+
+      var t0 = this.add.text(px, py, "Está perdido?\n Não se pode atravessar o Rio das Flores", {
           font: "15px Arial",
           fill: "#674ea7",
           align: "center"
       });        
-      var t1 = this.add.text(975, 675, "Siga para cima.\n As árvores te mostrarão o caminho", {
+      var t1 = this.add.text(px, py, "Siga para cima.\n As árvores te mostrarão o caminho", {
           font: "15px Arial",
           fill: "#674ea7",
           align: "center"
       });
-      var t2 = this.add.text(975, 675, "Obrigada bela bruxa!", {
+      var t2 = this.add.text(px, py, "Obrigada bela bruxa!", {
         font: "15px Arial",
         fill: "#DC143C",
         align: "center"
       });        
+
+      //t88.setScrollFactor(0);
 
       t0.setScrollFactor(0);
       t1.setScrollFactor(0);
@@ -257,14 +273,17 @@ class Fase_03 extends Phaser.Scene {
       // timeline: sequência
       this.timeline = this.tweens.createTimeline({paused: true});
 
-      // primeira fala - bruxinha
+      // primeira fssss     sssala - bruxinha
       this.timeline.add({
           targets: t0,
           alpha: 1,
           ease: 'linear',
           duration: 1000, 
           yoyo: true,
-          hold: 3000
+          hold: 3000,
+          onStart: this.showDlg, 
+          onStartParams: [this.dialog_bg]
+
       });
 
       // segunda fala - bruxinha
@@ -284,25 +303,29 @@ class Fase_03 extends Phaser.Scene {
         ease: 'linear',
         duration: 1000,
         yoyo: true,
-        hold: 3000
+        hold: 3000,
+        onComplete: this.hideDlg, 
+        onCompleteParams: [this.dialog_bg, this.player]
+
       });
       
   // ----------------------------------------------------------------
   // Falas da segunda cena
+
   
-    var t3 = this.add.text(975, 675, "Olá, o senhor sabe como atravessar o rio?", {
+    var t3 = this.add.text(px, py, "Olá, o senhor sabe como atravessar o rio?", {
       font: "15px Arial",
-      fill: "#DC143C",
-      align: "center"
+      fill: "#DC143C"
+      //align: "center"
     });   
          
-    var t4 = this.add.text(975, 675, "Oque me diz de uma troca justa?\n Uma resposta por outra.", {
+    var t4 = this.add.text(px, py, "O que me diz de uma troca justa?\n Uma resposta por outra.", {
         font: "15px Arial",
         fill: "#744700",
         align: "center"
     });
     
-    var t5 = this.add.text(975, 675, "Manda ver!", {
+    var t5 = this.add.text(px, py, "Manda ver!", {
       font: "15px Arial",
       fill: "#DC143C",
       align: "center"
@@ -318,6 +341,7 @@ class Fase_03 extends Phaser.Scene {
 
     // timeline: sequência
     this.timelineRobin = this.tweens.createTimeline({paused: true});
+    this.timelineRobin.setCallback('onComplete', this.pergunta, null, this);
 
     // primeira fala - aventureira
     this.timelineRobin.add({
@@ -326,7 +350,9 @@ class Fase_03 extends Phaser.Scene {
         ease: 'linear',
         duration: 1000, 
         yoyo: true,
-        hold: 3000
+        hold: 3000,
+        onStart: this.showDlg, 
+        onStartParams: [this.dialog_bg]
     });
 
     // segunda fala - Robin Rock
@@ -352,25 +378,25 @@ class Fase_03 extends Phaser.Scene {
     // ----------------------------------------------------------------
     // Continuação da segunda cena
 
-    var t6 = this.add.text(975, 675, "Impressionante! Tome este arco!", {
+    var t6 = this.add.text(px, py, "Impressionante! Tome este arco!", {
       font: "15px Arial",
       fill: "#744700",
       align: "center"
     });   
          
-    var t7 = this.add.text(975, 675, "Para atravessar o rio, atire nos cristais\nde número primo que estão na outra margem.", {
+    var t7 = this.add.text(px, py, "Para atravessar o rio, atire nos cristais\nde número primo que estão na outra margem.", {
         font: "15px Arial",
         fill: "#744700",
         align: "center"
     });
     
-    var t8 = this.add.text(975, 675, "Assim a ponte será revelada!", {
+    var t8 = this.add.text(px, py, "Assim a ponte será revelada!", {
       font: "15px Arial",
       fill: "#744700",
       align: "center"
     });       
 
-    var t9 = this.add.text(975, 675, "Valeu meu consagrado!", {
+    var t9 = this.add.text(px, py, "Valeu meu consagrado!", {
       font: "15px Arial",
       fill: "#DC143C",
       align: "center"
@@ -426,7 +452,10 @@ class Fase_03 extends Phaser.Scene {
       ease: 'linear',
       duration: 1000,
       yoyo: true,
-      hold: 3000
+      hold: 3000,
+      onComplete: this.hideDlg, 
+      onCompleteParams: [this.dialog_bg, this.player]
+
     });
   }
 
@@ -479,6 +508,8 @@ class Fase_03 extends Phaser.Scene {
     this.keyW = this.input.keyboard.addKey("W");
     this.keyS = this.input.keyboard.addKey("S");
     this.keySPACE = this.input.keyboard.addKey("Space");
+    this.keyN = this.input.keyboard.addKey("N");
+    this.keyEsc = this.input.keyboard.addKey("ESC");
     this.game_over = false;
 
     this.bruxa.play('witch_idle')
@@ -501,6 +532,23 @@ class Fase_03 extends Phaser.Scene {
       this.ponte = false;
     }
 
+    if (this.keyN.isDown) {
+        this.scene.start('Fase_05')
+    }
+    if (this.keyEsc.isDown) {
+        console.log('esc');
+        if (this.timeline.isPlaying()){
+          this.timeline.setTimeScale(100);
+        }
+        if (this.timelineRobin.isPlaying()){
+          this.timelineRobin.setTimeScale(100);
+        }
+        if (this.timelineRobin2.isPlaying()){
+          this.timelineRobin2.setTimeScale(100);
+        }
+    }
+
+
     if (this.game_over){
       if (this.keySPACE.isDown) {
           this.scene.restart();
@@ -510,7 +558,7 @@ class Fase_03 extends Phaser.Scene {
 }
 
   onZoneSaida(){
-    console.log("saiu")
+    this.scene.start('Fase_05')
   }
 
   // a função limpa a flag 'zoneDialog' para executar o diálogo (tween) uma vez só
@@ -521,17 +569,17 @@ class Fase_03 extends Phaser.Scene {
       this.player.move_enable = false;
       this.player.anims.stop();
       
-      this.player.setVelocityX(0);
-      this.player.setVelocityY(0);
+      //this.player.setVelocityX(0);
+      //this.player.setVelocityY(0);
 
       this.dlgBox.setVisible(true)
       this.timeline.play();
 
-      setTimeout(() => {
-        this.dlgBox.setVisible(false)
-        this.player.move_enable = true;
-
-      }, 15000);
+      //setTimeout(() => {
+      //  this.dlgBox.setVisible(false)
+      //  this.player.move_enable = true;
+      //
+      //}, 15000);
 
       this.zoneDialog = false;
 
@@ -555,58 +603,111 @@ class Fase_03 extends Phaser.Scene {
       this.player.setVelocityX(0);
       this.player.setVelocityY(0);
 
-      setTimeout(() => {
+//      setTimeout(() => {
+//
+//        // pergunta: 
+//        this.quest = this.add.text(975, 660, "Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?", {
+//          font: "15px Arial",
+//          fill: "#744700",
+//          align: "center"
+//        });
+//
+//        this.a0 = this.add.text(1010, 735, "◯ 3589 livros", {
+//            font: "15px Arial",
+//            fill: "#744700",
+//            align: "center"
+//        });
+//
+//        this.a1 = this.add.text(1135, 735, "◯ 3859 livros", {
+//            font: "15px Arial",
+//            fill: "#744700",
+//            align: "center"
+//        });
+//
+//        this.a2 = this.add.text(1010, 765, "◯ 30859 livros", {
+//            font: "15px Arial",
+//            fill: "#744700",
+//            align: "center"
+//        });
+//
+//        this.a3 = this.add.text(1135, 765, "◯ 38590 livros", {
+//          font: "15px Arial",
+//          fill: "#744700",
+//          align: "center"
+//      });
 
-        // pergunta: 
-        this.quest = this.add.text(975, 660, "Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?", {
-          font: "15px Arial",
-          fill: "#744700",
-          align: "center"
-        });
+//      this.quest.setScrollFactor(0);
+//      this.a0.setScrollFactor(0);
+//      this.a1.setScrollFactor(0);
+//      this.a2.setScrollFactor(0);
+//      this.a3.setScrollFactor(0);
 
-        this.a0 = this.add.text(1010, 735, "◯ 3589 livros", {
-            font: "15px Arial",
-            fill: "#744700",
-            align: "center"
-        });
+ //     // deixa clicar e liga com a função
+ //     this.a0.setInteractive();
+ //     this.a0.on('pointerdown', this.errou, this);
+ //     this.a1.setInteractive();
+ //     this.a1.on('pointerdown', this.acertou, this);
+ //     this.a2.setInteractive();
+ //     this.a2.on('pointerdown', this.errou, this);
+ //     this.a3.setInteractive();
+ //     this.a3.on('pointerdown', this.errou, this);
+ //     
+ //   }, 15000);
+//
+    }
+  }
 
-        this.a1 = this.add.text(1135, 735, "◯ 3859 livros", {
-            font: "15px Arial",
-            fill: "#744700",
-            align: "center"
-        });
+  pergunta(){
+    var px = this.cameras.main.width*0.4
+    var py = this.cameras.main.height*0.6
+    console.log('pergunta', px, py);
 
-        this.a2 = this.add.text(1010, 765, "◯ 30859 livros", {
-            font: "15px Arial",
-            fill: "#744700",
-            align: "center"
-        });
-
-        this.a3 = this.add.text(1135, 765, "◯ 38590 livros", {
-          font: "15px Arial",
-          fill: "#744700",
-          align: "center"
+    // pergunta: 
+    this.quest = this.add.text(px, py-25, "Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?", {
+      font: "15px Arial",
+      fill: "#744700",
+      align: "center"
       });
 
-      this.quest.setScrollFactor(0);
-      this.a0.setScrollFactor(0);
-      this.a1.setScrollFactor(0);
-      this.a2.setScrollFactor(0);
-      this.a3.setScrollFactor(0);
+    this.a0 = this.add.text(px-40, py+45, "◯ 3589 livros", {
+      font: "15px Arial",
+      fill: "#744700",
+      align: "center"
+    });
 
-      // deixa clicar e liga com a função
-      this.a0.setInteractive();
-      this.a0.on('pointerdown', this.errou, this);
-      this.a1.setInteractive();
-      this.a1.on('pointerdown', this.acertou, this);
-      this.a2.setInteractive();
-      this.a2.on('pointerdown', this.errou, this);
-      this.a3.setInteractive();
-      this.a3.on('pointerdown', this.errou, this);
-      
-    }, 15000);
+    this.a1 = this.add.text(px+120, py+45, "◯ 3859 livros", {
+      font: "15px Arial",
+      fill: "#744700",
+      align: "center"
+    });
 
-    }
+    this.a2 = this.add.text(px-40, py+65, "◯ 30859 livros", {
+      font: "15px Arial",
+      fill: "#744700",
+      align: "center"
+    });
+
+    this.a3 = this.add.text(px+120, py+65, "◯ 38590 livros", {
+    font: "15px Arial",
+    fill: "#744700",
+    align: "center"
+    });
+    this.quest.setScrollFactor(0);
+    this.a0.setScrollFactor(0);
+    this.a1.setScrollFactor(0);
+    this.a2.setScrollFactor(0);
+    this.a3.setScrollFactor(0);
+    // deixa clicar e liga com a função
+    this.a0.setInteractive();
+    this.a0.on('pointerdown', this.errou, this);
+    this.a1.setInteractive();
+    this.a1.on('pointerdown', this.acertou, this);
+    this.a2.setInteractive();
+    this.a2.on('pointerdown', this.errou, this);
+    this.a3.setInteractive();
+    this.a3.on('pointerdown', this.errou, this);
+
+
   }
 
   // função erro e acerto
@@ -657,6 +758,16 @@ class Fase_03 extends Phaser.Scene {
     var txt_cfg = {font: "15px Arial",fill: "#F0F000", align: "center"}
     console.log(this.player.x, this.player.y, txt_cfg)
     var t0 = this.add.text(this.player.x, this.player.y, "Pressione Espaço para reiniciar", txt_cfg);
+  }
+
+  hideDlg(tween, targets, gameObject, player){
+    gameObject.setVisible(false);
+    player.move_enable = true;
+  }
+
+  showDlg(tween, targets, gameObject){
+    console.log(gameObject)
+    gameObject.setVisible(true);
   }
 
 }

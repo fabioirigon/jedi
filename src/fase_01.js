@@ -1,10 +1,10 @@
 // cada cena do jogo é uma classe que extende a classe base Phaser.Scene
-class phase_01 extends Phaser.Scene
+class Fase_01 extends Phaser.Scene
 {
     // O construtor registra o nome da cena
     constructor ()
     {
-        super('phase_01'); 
+        super('Fase_01'); 
     }
 
     // esta função é usada para receber dados, no caso o status da parede
@@ -94,6 +94,8 @@ class phase_01 extends Phaser.Scene
         this.cameras.main.setZoom(1.5)   
 
         this.stairs = this.physics.add.sprite(98*16, 58*16, 'tiles_sp', 357);
+        //this.stairs = this.physics.add.sprite(200, 200, 'tiles_sp', 357);
+        this.stairs.enableBody = true;
         this.stairs.setScale(2);
 
     }
@@ -163,6 +165,9 @@ class phase_01 extends Phaser.Scene
         
         // colisão com armadilhas
         this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
+
+        // colisão com escada
+        this.physics.add.overlap(this.player, this.stairs, this.endFase, null, this);
         
     }
 
@@ -261,6 +266,7 @@ class phase_01 extends Phaser.Scene
         this.keyW = this.input.keyboard.addKey('W');
         this.keyS = this.input.keyboard.addKey('S');
         this.keySPACE = this.input.keyboard.addKey('SPACE');
+        this.keyN = this.input.keyboard.addKey('N');
         this.game_over = false;
 
 
@@ -317,7 +323,10 @@ class phase_01 extends Phaser.Scene
 
             if (dx*dx + dy *dy > 500*500){
                 blt.setVisible(false);
-                blt.setActive(false)
+                blt.setActive(false);
+                blt.setPosition(-10, -10);
+                blt.body.setVelocity(0, 0);
+
             }
         }, this);
 
@@ -325,6 +334,9 @@ class phase_01 extends Phaser.Scene
             if (this.keySPACE.isDown) {
                 this.scene.restart();
             }            
+        }
+        if (this.keyN.isDown) {
+            this.scene.start('Fase_03')
         }
 
     }
@@ -335,8 +347,6 @@ class phase_01 extends Phaser.Scene
     }
 
     enemyHit (player, enemy){
-        //player.disableBody(true, false);
-        //console.log("enemy hit", player);
         player.getDamage(3);
         if (player.getHPValue() == 0){
             player.die();
@@ -360,6 +370,10 @@ class phase_01 extends Phaser.Scene
         if (player.getHPValue() == 0){
             player.die();
         }
+    }
+
+    endFase(player, stairs){
+        this.scene.start('Fase_03')
     }
 
 

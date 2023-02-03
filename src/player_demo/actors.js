@@ -21,8 +21,8 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
       if ((this.hp - value) > 0)
           this.hp = this.hp - value
       else {
+        //this.hp = 100;
         this.hp = 0;
-        //this.disableBody(true, true);
         this.bar_fg.setVisible(false)
         this.bar_bg.setVisible(false)
       }

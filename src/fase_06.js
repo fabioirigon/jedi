@@ -1,9 +1,9 @@
-class Phase_01 extends Phaser.Scene
+class Fase_06 extends Phaser.Scene
 {
     // O construtor registra o nome da cena
     constructor ()
     {
-        super('Phase_01');
+        super('Fase_06');
     }
 
     // esta função é usada para receber dados, no caso o status da parede

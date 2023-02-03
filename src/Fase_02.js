@@ -76,7 +76,35 @@ class Fase_02 extends Phaser.Scene
             fill: "#ffffff",
             align: "center"
         });
-        t0.alpha = 0
+
+        this.quest = this.add.text(323.2 , 2463.1, "O que é, o que é? É tão frágil que,\n só de mencioná-lo, ele se quebra?", {
+            font: "18px Arial",
+            fill: "#ffffff",
+            align: "centedr"
+        });
+        this.a0 = this.add.text(323.2, 2593.1, "Agua", {
+            font: "18px Arial",
+            fill: "#ffffff",
+            align: "centedr"
+        });
+        this.a1 = this.add.text(323.2, 2613.1, "Vidro", {
+            font: "18px Arial",
+            fill: "#ffffff",
+            align: "centedr"
+        });
+        this.a2 = this.add.text(323.2, 2633.1, "Silêncio", {
+            font: "18px Arial",
+            fill: "#ffffff",
+            align: "centedr"
+        });
+
+
+        t0.alpha = 1;
+        this.quest.alpha = 0;
+        this.a0.alpha = 0;
+        this.a1.alpha = 0;
+        this.a2.alpha = 0;
+
         this.timeline = this.tweens.createTimeline(); // sequencias
         this.timeline.add({ // colocando a fala
             targets: t0,
@@ -94,6 +122,15 @@ class Fase_02 extends Phaser.Scene
             duration: 1000,
             yoyo: true,
             duration: 1000,
+        });
+
+        this.a2_anim = this.tweens.add({
+            targets: this.a2,
+            ease: 'linear',
+            alpha: 1,
+            paused: true,
+            duaration:1000,
+            delay: 10000,
         });
 
         this.mageAnin = this.tweens.add({
@@ -187,26 +224,11 @@ class Fase_02 extends Phaser.Scene
             this.zoneDialog = false;
             //this.cameras.
             // pergunta: 
-            this.quest = this.add.text(323.2 , 2463.1, "O que é, o que é? É tão frágil que,\n só de mencioná-lo, ele se quebra?", {
-                font: "18px Arial",
-                fill: "#ffffff",
-                align: "centedr"
-            });
-            this.a0 = this.add.text(323.2, 2493.1, "Agua", {
-                font: "18px Arial",
-                fill: "#ffffff",
-                align: "centedr"
-            });
-            this.a1 = this.add.text(323.2, 2513.1, "Vidro", {
-                font: "18px Arial",
-                fill: "#ffffff",
-                align: "centedr"
-            });
-            this.a2 = this.add.text(323.2, 2533.1, "FALTA DECLARAR", {
-                font: "18px Arial",
-                fill: "#ffffff",
-                align: "centedr"
-            });
+            this.quest.alpha = 1;
+            this.a0.alpha = 1;
+            this.a1.alpha = 1;
+            this.a2_anim.play();
+
 
             // deixa clicar e liga com a função
             this.a0.setInteractive();
