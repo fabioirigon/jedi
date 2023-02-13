@@ -15,6 +15,9 @@ class Fase_02 extends Phaser.Scene
         this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('mage_sp', 'assets/spritesheets/Mage.png', { frameWidth:48, frameHeight: 48});
         this.load.spritesheet('mage_sp2', 'assets/spritesheets/Mage.png', { frameWidth:48, frameHeight: 48});
+        
+        this.load.image('bullet', 'assets/images/bullet.png');
+
         // carregando mapa (json) e gráficos do mapa
         this.load.image('tiles', 'assets/images/dungeon2.png');
         console.log('load map');

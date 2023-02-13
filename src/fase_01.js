@@ -23,10 +23,13 @@ class Fase_01 extends Phaser.Scene
         this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('wizardIdle_sp', 'assets/spritesheets/wizard_idle.png', { frameWidth: 80, frameHeight: 80});
         this.load.spritesheet('tiles_sp', 'assets/images/dungeon-16-16.png', { frameWidth: 16, frameHeight: 16});
+        this.load.spritesheet('lightning_sp', 'assets/spritesheets/lightning.png', { frameWidth: 32, frameHeight: 32});
         
         // carregando mapa (json) e gráficos do mapa
         this.load.image('tiles', 'assets/images/dungeon-16-16.png');
         this.load.tilemapTiledJSON('themap', 'assets/maps/map_phase_01.json');
+
+        this.load.audio('surf', ['assets/sound/Surf Rock Loop.ogg']);
     }
 
     create_map(){
@@ -60,6 +63,7 @@ class Fase_01 extends Phaser.Scene
         this.player = new player(this, 250, 75, 'player_sp', 0);
         this.player.setScale(0.6);
         this.player.has_bow = false;
+        this.player.hp = parseInt(localStorage.getItem('hp')) || 100;
 
         // criação dos inimigos
         this.enemy_0  = this.physics.add.sprite(38*16, 1*16, 'tiles_sp', 638)
@@ -73,6 +77,8 @@ class Fase_01 extends Phaser.Scene
         this.enemy_0.setScale(2);this.enemy_1.setScale(2);this.enemy_2.setScale(2);
         this.enemy_3.setScale(2);this.enemy_4.setScale(2);this.enemy_5.setScale(2);
         this.enemy_6.setScale(2);
+
+        this.heart_0  = this.physics.add.sprite(100, 600, 'tiles_sp', 530)
 
         this.bullets  = this.physics.add.group();
         for (let i=0; i<=5; i++){
@@ -107,6 +113,14 @@ class Fase_01 extends Phaser.Scene
             frames: this.anims.generateFrameNumbers('wizardIdle_sp', {frames: [0, 1, 2, 3, 4, 5, 6, 7, 8,9, 8, 7, 6, 5, 4, 3, 2, 1]}),
             frameRate: 6,
             repeat: -1
+            });
+
+        this.anims.create({
+            key: 'lightning_anim',
+            frames: this.anims.generateFrameNumbers('lightning_sp', {}),
+            frameRate: 30,
+            hideOnComplete: true,
+            repeat: 1
             });
 
         this.anims.create({
@@ -165,6 +179,8 @@ class Fase_01 extends Phaser.Scene
         
         // colisão com armadilhas
         this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
+
+        this.physics.add.overlap(this.player, this.heart_0, this.getHeart, null, this);
 
         // colisão com escada
         this.physics.add.overlap(this.player, this.stairs, this.endFase, null, this);
@@ -266,6 +282,7 @@ class Fase_01 extends Phaser.Scene
         this.keyW = this.input.keyboard.addKey('W');
         this.keyS = this.input.keyboard.addKey('S');
         this.keySPACE = this.input.keyboard.addKey('SPACE');
+        this.keyEsc = this.input.keyboard.addKey("ESC");
         this.keyN = this.input.keyboard.addKey('N');
         this.game_over = false;
 
@@ -274,7 +291,7 @@ class Fase_01 extends Phaser.Scene
         this.cur_wlk = 0
         if (this.movingWall_sts == 0)
         {
-            //this.timeline.play();
+            this.timeline.play();
             this.mage.play('mage_idle')
         }
         else{
@@ -286,7 +303,24 @@ class Fase_01 extends Phaser.Scene
         this.enemy_4.play('enemy_1_anim');
         this.enemy_5.play('enemy_1_anim');
         this.enemy_6.play('enemy_6_anim');
-        
+
+        if (this.movingWall_sts == 2){
+            this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
+            this.light.setScale(2);
+            this.light.play("lightning_anim");
+            this.player.getDamage(25);
+            if (this.player.getHPValue() == 0){
+                localStorage.setItem('hp',100);
+                this.player.die();
+            }
+        }
+        this.player.getDamage(0);
+        //this.music = this.sound.add('surf');
+        //this.music.play();
+
+        this.score = this.add.text(300, 150, "score: " + 0, {font: "15px Arial",fill: "#FFFFFF", align: "center"});
+        this.score.setScrollFactor(0);
+
     }
 
 
@@ -329,10 +363,19 @@ class Fase_01 extends Phaser.Scene
 
             }
         }, this);
+    
+        if (this.keyEsc.isDown) {
+            if (this.timeline.isPlaying()){
+              this.timeline.setTimeScale(100);
+            }
+        }
+
 
         if (this.game_over){
             if (this.keySPACE.isDown) {
-                this.scene.restart();
+                //this.movingWall_sts = 0;
+                //this.scene.restart();
+                this.scene.start('Fase_01', {'movingWall_sts': 0});
             }            
         }
         if (this.keyN.isDown) {
@@ -343,12 +386,14 @@ class Fase_01 extends Phaser.Scene
 
     trataPorta (porta, player){
         console.log("porta");
+        localStorage.setItem('hp',this.player.hp);
         this.scene.start('brick_push_scene');
     }
 
     enemyHit (player, enemy){
         player.getDamage(3);
         if (player.getHPValue() == 0){
+            localStorage.setItem('hp',100);
             player.die();
         }
     }
@@ -358,16 +403,26 @@ class Fase_01 extends Phaser.Scene
         {
             player.getDamage(5);
             if (player.getHPValue() == 0){
+                localStorage.setItem('hp',100);
                 player.die();
             }
         }
-        
     }
+
+    getHeart(player, heart){
+        console.log("getheart");
+        player.hp = (player.hp + 20 > 100? 100: player.hp + 20);
+        player.getDamage(0);
+        heart.setVisible(false);
+        heart.disableBody();
+    }
+
     bulletHit(player, bullet){
         player.getDamage(20);
         bullet.setActive(false);
         bullet.setVisible(false);
         if (player.getHPValue() == 0){
+            localStorage.setItem('hp',100);
             player.die();
         }
     }

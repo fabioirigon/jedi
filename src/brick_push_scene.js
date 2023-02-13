@@ -24,7 +24,11 @@ class brick_push_scene extends Phaser.Scene {
         this.tsp.setTileScale(4);
 
         // adiciona  a pergunta
-        this.text = this.add.text(300, 75, "120 - 80 ?", {
+        const arg1 = Phaser.Math.Between(100, 200);
+        const arg2 = Phaser.Math.Between(50, 90);
+        const err1 = Phaser.Math.Between(1, 15);
+        const err2 = Phaser.Math.Between(1, 15);
+        this.text = this.add.text(300, 75, arg1 + " - " + arg2 + " ?", {
             font: "35px Arial",
             fill: "#202020",
             align: "center"
@@ -34,7 +38,7 @@ class brick_push_scene extends Phaser.Scene {
         this.resp0.setOrigin(0,0)
         this.resp0.setScale(4)
         this.resp0.alpha=0
-        this.resp1 = this.add.sprite(32*10, 200+32*6,'bricks', 1);
+        this.resp1 = this.add.sprite(32*10, 200+32*2,'bricks', 1);
         this.resp1.setOrigin(0,0)
         this.resp1.setScale(4)
         this.resp1.alpha=0
@@ -47,18 +51,21 @@ class brick_push_scene extends Phaser.Scene {
         //this.locker = this.physics.add.sprite(500, 100, 'items_sp', 5)
         //this.locker.setScale(6);
 
-        this.R0 = this.add.text(32*4+100, 200+32*4+75, "20", {
+        //this.R0 = this.add.text(32*10+100, 200+32*6+75, "30", {
+        this.R0 = this.add.text(32*4+100, 200+32*4+75, arg1 - arg2 + err1, {
             font: "40px Arial",
             fill: "#200040",
             align: "center"
         });        
-        this.R1 = this.add.text(32*10+100, 200+32*6+75, "30", {
+        //this.R1 = this.add.text(32*10+100, 200+32*6+75, "30", {
+        this.R1 = this.add.text(32*10+100, 200+32*2+75, arg1 - arg2 - err2, {
             font: "40px Arial",
             fill: "#550044",
             align: "center"
         });        
 
-        this.R2 = this.add.text(32*16+100, 200+32*4+75, "40", {
+        this.R2 = this.add.text(32*16+100, 200+32*4+75, arg1 - arg2, {
+        //this.R2 = this.add.text(32*10+100, 200+32*6+75, "30", {
             font: "40px Arial",
             fill: "#550044",
             align: "center"

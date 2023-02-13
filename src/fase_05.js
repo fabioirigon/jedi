@@ -25,6 +25,7 @@ class Fase_05 extends Phaser.Scene
     this.load.spritesheet('orc_macho_lanca_sp', 'assets/spritesheets/orc_macho_lanca.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('orc_macho_machado_sp', 'assets/spritesheets/orc_macho_machado.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('forest_sp', 'assets/images/fase_05/forest.png', { frameWidth: 16, frameHeight: 16 });
+      this.load.spritesheet('lightning_sp', 'assets/spritesheets/lightning.png', { frameWidth: 32, frameHeight: 32});
 
     // carregando mapa (json) e gráficos do mapa
     this.load.image('tiles_estruturas1_5', 'assets/images/fase_05/estruturas1.png');
@@ -175,7 +176,11 @@ class Fase_05 extends Phaser.Scene
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
     this.cameras.main.setZoom(1.5)
 
+    this.textPx = this.cameras.main.width*0.35;
+    this.textPy = 2*this.cameras.main.height/3
+
     console.log('CreateActors');
+
   }
 
   create_animations()
@@ -197,13 +202,13 @@ class Fase_05 extends Phaser.Scene
     this.anims.create({
       key: 'orc_guarda_death',
       frames: this.anims.generateFrameNumbers('orc_guarda_sp', {frames: [260,261,262,263,264,265]}),
-      frameRate: 2,
+      frameRate: 10,
       repeat: 0
     });
     this.anims.create({
       key: 'orc_xama_death',
       frames: this.anims.generateFrameNumbers('orc_xama_sp', {frames: [260,261,262,263,264,265]}),
-      frameRate: 2,
+      frameRate: 10,
       repeat: 0
     });
     this.anims.create({
@@ -212,6 +217,13 @@ class Fase_05 extends Phaser.Scene
       frameRate: 10,
       repeat: 0
     });
+    this.anims.create({
+        key: 'lightning_anim',
+        frames: this.anims.generateFrameNumbers('lightning_sp', {}),
+        frameRate: 30,
+        hideOnComplete: true,
+        repeat: 1
+        });
 
     console.log('CreateAnimations');
   }
@@ -317,6 +329,11 @@ class Fase_05 extends Phaser.Scene
   create_tweens()
   {
 
+    this.dialog_bg =  this.add.rectangle(this.cameras.main.width*0.5, this.cameras.main.height*0.65, 
+      this.cameras.main.width*0.4, this.cameras.main.height*0.2, 0x000000);
+    this.dialog_bg.setScrollFactor(0);
+    this.dialog_bg.setVisible(false);
+
     // Estilos de texto
     var orcE_txt_cfg = {font: "15px Arial",fill: "#00FFFF", align: "center", stroke: "#000000", strokeThickness: 3};
     var orcG_txt_cfg = {font: "15px Arial",fill: "#A3A2A0", align: "center", stroke: "#000000", strokeThickness: 3};
@@ -325,10 +342,12 @@ class Fase_05 extends Phaser.Scene
     var pixie_txt_cfg = {font: "15px Arial",fill: "#39FF14", align: "center", stroke: "#000000", strokeThickness: 3};
 
     // Dialogo inicial da fase com o orc expulso
-    var doe0 = this.add.text(25,770,"Não vá atras do chefe,\nele tem um artefato",orcE_txt_cfg);
+    var doe0 = this.add.text(this.textPx+30,this.textPy-60,"Não vá atras do chefe,\nele tem um artefato",orcE_txt_cfg);
+    doe0.setScrollFactor(0);
     doe0.alpha = 0;
 
-    var doe1 = this.add.text(25,770,"Eu avisei,\nfui!", orcE_txt_cfg);
+    var doe1 = this.add.text(this.textPx+30,this.textPy-60,"Eu avisei,\nfui!", orcE_txt_cfg);
+    doe1.setScrollFactor(0);
     doe1.alpha = 0;
 
     this.orcEdialog = this.tweens.createTimeline();
@@ -340,6 +359,8 @@ class Fase_05 extends Phaser.Scene
       duration: 1000,
       yoyo: true,
       hold: 3000,
+      onStart: showDlg, 
+      onStartParams: [this.dialog_bg, this.player]
     });
 
     this.orcEdialog.add({
@@ -349,6 +370,8 @@ class Fase_05 extends Phaser.Scene
       duration: 1000,
       yoyo: true,
       hold: 3000,
+      onComplete: hideDlg, 
+      onCompleteParams: [this.dialog_bg, this.player]
     });
 
     this.orcEdialog.add({
@@ -359,7 +382,8 @@ class Fase_05 extends Phaser.Scene
     });
 
     // Dialogo com a pixie antes de matar o chefe
-    var dp0 = this.add.text(80,1270,"Aqui é perigoso!,\nFuja enquanto pode.",pixie_txt_cfg);
+    var dp0 = this.add.text(this.textPx+30,this.textPy-80,"Aqui é perigoso!,\nFuja enquanto pode.",pixie_txt_cfg);
+    dp0.setScrollFactor(0);
     dp0.alpha = 0;
 
     this.pixieDialog1 = this.tweens.createTimeline();
@@ -370,17 +394,24 @@ class Fase_05 extends Phaser.Scene
       ease: 'linear',
       duration: 1000,
       yoyo: true,
-      hold: 3000
+      hold: 3000,
+
+      onStart: showDlg, 
+      onStartParams: [this.dialog_bg, this.player],
+
+      onComplete: hideDlg, 
+      onCompleteParams: [this.dialog_bg, this.player]
 
     });
 
     // Dialogo com a pixie depois de matar o chefe
-
-    var dp1 = this.add.text(80,1270,"Nossa, você derrotou\naquele brutamontes!.",pixie_txt_cfg);
+    var dp1 = this.add.text(this.textPx+30,this.textPy-60,"Nossa, você derrotou\naquele brutamontes!.",pixie_txt_cfg);
+    dp1.setScrollFactor(0);
     dp1.alpha = 0;
 
-    var dp2 = this.add.text(80,1270,"Mas ainda há esse cadeado,\n"+
+    var dp2 = this.add.text(this.textPx+30,this.textPy-60,"Mas ainda há esse cadeado,\n"+
     "o Xamã o enfeitiçou, sem saber magia\n você não conseguirá abrí-lo...",pixie_txt_cfg);
+    dp2.setScrollFactor(0);
     dp2.alpha = 0;
 
     this.pixieDialog2 = this.tweens.createTimeline();
@@ -391,8 +422,9 @@ class Fase_05 extends Phaser.Scene
       ease: 'linear',
       duration: 1000,
       yoyo: true,
-      hold: 3000
-
+      hold: 3000,
+      onStart: showDlg, 
+      onStartParams: [this.dialog_bg, this.player]
     });
 
     this.pixieDialog2.add({
@@ -407,12 +439,14 @@ class Fase_05 extends Phaser.Scene
 
     // Dialogo pixie apos abrir o cadeado
 
-    var dp3 = this.add.text(80,1270,"Você não deixa de me surpreender!"+
+    var dp3 = this.add.text(this.textPx+30,this.textPy-60,"Você não deixa de me surpreender!"+
     "\nMuio obrigada por me libertar!",pixie_txt_cfg);
+    dp3.setScrollFactor(0);
     dp3.alpha = 0;
 
-    var dp4 = this.add.text(80,1270,"Se não me engano a passagem\n"+
+    var dp4 = this.add.text(this.textPx+30,this.textPy-60,"Se não me engano a passagem\n"+
     "está bloqueada. Vou abrir ela\npara você como agradecimento!",pixie_txt_cfg);
+    dp4.setScrollFactor(0);
     dp4.alpha = 0;
 
     this.pixieDialog3 = this.tweens.createTimeline();
@@ -423,7 +457,9 @@ class Fase_05 extends Phaser.Scene
       ease: 'linear',
       duration: 1000,
       yoyo: true,
-      hold: 3000
+      hold: 3000,
+      onStart: showDlg, 
+      onStartParams: [this.dialog_bg, this.player]
 
     });
 
@@ -433,12 +469,14 @@ class Fase_05 extends Phaser.Scene
       ease: 'linear',
       duration: 1000,
       yoyo: true,
-      hold: 3000
-
+      hold: 3000,
+      onComplete: hideDlg, 
+      onCompleteParams: [this.dialog_bg, this.player]
     });
 
     // Dialogo inicial com o guarda
-    var dog0 = this.add.text(495,198,"Você não é digno!,\nTerá que passar no \nmeu teste primeiro.", orcG_txt_cfg);
+    var dog0 = this.add.text(this.textPx+30,this.textPy-60,"Você não é digno!,\nTerá que passar no \nmeu teste primeiro.", orcG_txt_cfg);
+    dog0.setScrollFactor(0);
     dog0.alpha = 0;
 
     this.orcGdialog = this.tweens.createTimeline();
@@ -449,12 +487,15 @@ class Fase_05 extends Phaser.Scene
       ease: 'linear',
       duration: 1000,
       yoyo: true,
-      hold: 3000
+      hold: 3000,
+      onStart: showDlg, 
+      onStartParams: [this.dialog_bg, this.player]
 
     });
 
     // Dialogo inicial com o xama
-    var dox0 = this.add.text(905,220,"Uma nova cobaia!\nChegue mais, quero fazer\nuns experimentos, hehehe",orcX_txt_cfg);
+    var dox0 = this.add.text(this.textPx-50, this.textPy-70,"Uma nova cobaia!\nChegue mais, quero fazer\nuns experimentos, hehehe",orcX_txt_cfg);
+    dox0.setScrollFactor(0);
     dox0.alpha = 0;
 
     this.orcXdialog = this.tweens.createTimeline();
@@ -465,15 +506,19 @@ class Fase_05 extends Phaser.Scene
       ease: 'linear',
       duration: 1000,
       yoyo: true,
-      hold: 3000
+      hold: 3000,
+      onStart: showDlg, 
+      onStartParams: [this.dialog_bg, this.player]
 
     });
 
     // Dialogo inicial com o chefe
-    var doc0 = this.add.text(1190,565,"Você deve ser um pouco\nforte para ter chegado aqui.", orcC_txt_cfg);
+    var doc0 = this.add.text(this.textPx+30,this.textPy-60,"Você deve ser um pouco\nforte para ter chegado aqui.", orcC_txt_cfg);
+    doc0.setScrollFactor(0);
     doc0.alpha = 0;
 
-    var doc1 = this.add.text(1190,565,"Isso me deixa ansioso para\nver o seu dessespero quando\nfor derrotado!", orcC_txt_cfg);
+    var doc1 = this.add.text(this.textPx+30,this.textPy-60,"Isso me deixa ansioso para\nver o seu dessespero quando\nfor derrotado!", orcC_txt_cfg);
+    doc1.setScrollFactor(0);
     doc1.alpha = 0;
 
     this.orcCdialog = this.tweens.createTimeline();
@@ -484,7 +529,9 @@ class Fase_05 extends Phaser.Scene
       ease: 'linear',
       duration: 1000,
       yoyo: true,
-      hold: 3000
+      hold: 3000,
+      onStart: showDlg, 
+      onStartParams: [this.dialog_bg, this.player]
 
     });
 
@@ -494,8 +541,9 @@ class Fase_05 extends Phaser.Scene
       ease: 'linear',
       duration: 1000,
       yoyo: true,
-      hold: 3000
-
+      hold: 3000,
+      onStart: hideDlg, 
+      onStartParams: [this.dialog_bg, this.player]
     });
 
   }
@@ -521,6 +569,7 @@ class Fase_05 extends Phaser.Scene
     this.zoneDialog = true;
 
     this.pixieZone = this.add.zone(70, 1310).setSize(150, 150);
+    this.pixieZoneDlg = true;
     this.physics.world.enable(this.pixieZone);
     this.physics.add.overlap(this.player, this.pixieZone, this.insidePixieZone, null, this);
 
@@ -548,7 +597,8 @@ class Fase_05 extends Phaser.Scene
     this.cur_wlk = 0
     this.pixie.play('pixie_stand');
     this.orcE.play('orc_exp_stand');
-    this.orcEdialog.play();
+    //this.orcEdialog.play();
+    //this.insidePixieZone();
 
     console.log('Create');
   }
@@ -669,12 +719,13 @@ class Fase_05 extends Phaser.Scene
   }
 
   insidePixieZone(){
-    if(this.pixieZone){
-      this.pixieZone = false;
+    if(this.pixieZoneDlg){
+      this.pixieZoneDlg = false;
       if(this.orcChefeDerrotado){
         this.pixieDialog2.play();
         this.pixieDialog2.on('complete',this.questaoCadeado,this);
       }else{
+        console.log('dlg1')
         this.pixieDialog1.play();
       }
     }
@@ -683,8 +734,9 @@ class Fase_05 extends Phaser.Scene
   questaoCadeado(){
     // pergunta:
     var orcX_txt_cfg = {font: "15px Arial",fill: "#9400D3", align: "center", stroke: "#FFFFFF", strokeThickness: 3};
-    this.quest = this.add.text(15,1100, "A magia que tranca o cadeado apresenta 1780\n caracteres mágicos."+
+    this.quest0 = this.add.text(this.textPx-50,this.textPy-100, "A magia que tranca o cadeado apresenta 1780\n caracteres mágicos."+
     "Para quebrar tal feitiço,\né possível decompor esse número\nde caracteres em:", orcX_txt_cfg);
+    this.quest.setScrollFactor(0);
     this.a0 = this.add.text(15, 1180, "(A) 1 unidade de milhar,  7 dezenas e 8 unidades.", orcX_txt_cfg);
     this.a1 = this.add.text(15, 1200, "(B) 1 unidade de milhar, 70 unidades.", orcX_txt_cfg);
     this.a2 = this.add.text(15, 1220, "(C) 1 unidade de milhar, 7 centenas e 8 dezenas.", orcX_txt_cfg);
@@ -699,7 +751,6 @@ class Fase_05 extends Phaser.Scene
     this.a2.on('pointerdown', this.acertouCadeado, this);
     this.a3.setInteractive();
     this.a3.on('pointerdown', this.errou, this);
-
   }
 
   acertouCadeado(){
@@ -712,6 +763,7 @@ class Fase_05 extends Phaser.Scene
     this.pixie.body.reset(70,1260);
     this.pixieDialog3.play();
     this.pixieDialog3.on('complete',this.liberaProximaFase,this);
+    hideDlg(null, null, this.dialog_bg, this.player);
   }
 
   liberaProximaFase(){
@@ -739,13 +791,18 @@ class Fase_05 extends Phaser.Scene
   questaoOrcG(){
     // pergunta:
     var orcG_txt_cfg = {font: "15px Arial",fill: "#A3A2A0", align: "center", stroke: "#000000", strokeThickness: 3};
-    this.quest = this.add.text(290, 198, "Para um evento de caça, o período de caça\n"+
-    "começava às 9 horas e durava por 9 horas e meia."+
-    "\nFulano chegou só no final da competição, que horas ele chegou?", orcG_txt_cfg);
-    this.a0 = this.add.text(320, 268, "(A) 16h30", orcG_txt_cfg);
-    this.a1 = this.add.text(320, 298, "(B) 17h30", orcG_txt_cfg);
-    this.a2 = this.add.text(430, 268, "(C) 17h45", orcG_txt_cfg);
-    this.a3 = this.add.text(430, 298, "(D) 18h30", orcG_txt_cfg);
+    this.quest = this.add.text(this.textPx-50, this.textPy-80, "Um evento de caça começava às 9 horas e durava\n9 horas e meia. "+
+    "João chegou no final da competição. \nQue horas ele chegou?", orcG_txt_cfg);
+    this.quest.setScrollFactor(0);
+    this.a0 = this.add.text(this.textPx, this.textPy, "(A) 16h30", orcG_txt_cfg);
+    this.a1 = this.add.text(this.textPx+110, this.textPy, "(B) 17h30", orcG_txt_cfg);
+    this.a2 = this.add.text(this.textPx, this.textPy+30, "(C) 17h45", orcG_txt_cfg);
+    this.a3 = this.add.text(this.textPx+110, this.textPy+30, "(D) 18h30", orcG_txt_cfg);
+
+    this.a0.setScrollFactor(0);
+    this.a1.setScrollFactor(0);
+    this.a2.setScrollFactor(0);
+    this.a3.setScrollFactor(0);
 
     // deixa clicar e liga com a função
     this.a0.setInteractive();
@@ -768,6 +825,7 @@ class Fase_05 extends Phaser.Scene
     this.a3.setVisible(false);
     this.orcG.play('orc_guarda_death');
     this.orcG.body.setEnable(false);
+    hideDlg(null, null, this.dialog_bg, this.player);
   }
 
   insideOrcXzone(){
@@ -782,11 +840,16 @@ class Fase_05 extends Phaser.Scene
   questaoOrcX(){
     // pergunta:
     var orcX_txt_cfg = {font: "15px Arial",fill: "#9400D3", align: "center", stroke: "#FFFFFF", strokeThickness: 3};
-    this.quest = this.add.text(710, 188, "Qual frase contem uma ideia de tempo?\n", orcX_txt_cfg);
-    this.a0 = this.add.text(700, 240, "(A) “O Chefe Orc tornou-se chefe nesse ano”", orcX_txt_cfg);
-    this.a1 = this.add.text(700, 260, "(B) “O Chefe Orc estabeleceu-se nessa vila”", orcX_txt_cfg);
-    this.a2 = this.add.text(700, 280, "(C) “O Chefe Orc nasceu aqui”", orcX_txt_cfg);
-    this.a3 = this.add.text(700, 300, "(D) “O Chefe Orc expandiu seu território pelo campo”", orcX_txt_cfg);
+    this.quest2 = this.add.text(this.textPx+50, this.textPy-50, "Qual frase contem uma ideia de tempo?\n", orcX_txt_cfg);
+    this.quest2.setScrollFactor(0);
+    this.a0 = this.add.text(this.textPx, this.textPy-30, "(A) “O Chefe Orc tornou-se chefe nesse ano”", orcX_txt_cfg);
+    this.a1 = this.add.text(this.textPx, this.textPy-10, "(B) “O Chefe Orc estabeleceu-se nessa vila”", orcX_txt_cfg);
+    this.a2 = this.add.text(this.textPx, this.textPy+10, "(C) “O Chefe Orc nasceu aqui”", orcX_txt_cfg);
+    this.a3 = this.add.text(this.textPx, this.textPy+30, "(D) “O Chefe Orc expandiu seu território pelo campo”", orcX_txt_cfg);
+    this.a0.setScrollFactor(0);
+    this.a1.setScrollFactor(0);
+    this.a2.setScrollFactor(0);
+    this.a3.setScrollFactor(0);
 
     // deixa clicar e liga com a função
     this.a0.setInteractive();
@@ -797,23 +860,24 @@ class Fase_05 extends Phaser.Scene
     this.a2.on('pointerdown', this.errou, this);
     this.a3.setInteractive();
     this.a3.on('pointerdown', this.errou, this);
-
   }
 
   acertouX(){
     console.log("acertouX");
-    this.quest.setVisible(false);
+    this.quest2.setVisible(false);
     this.a0.setVisible(false);
     this.a1.setVisible(false);
     this.a2.setVisible(false);
     this.a3.setVisible(false);
     this.player.move_enable = true;
     this.orcX.play('orc_xama_death');
+    hideDlg(null, null, this.dialog_bg, this.player);
   }
 
   insideOrcCzone(){
     if(this.orcCzone){
       this.orcCzone = false;
+      this.pixieZoneDlg = true;
       this.player.move_enable = false;
       this.orcCdialog.play();
       this.orcCdialog.on('complete',this.comecaCombateComChefao,this);
@@ -829,7 +893,11 @@ class Fase_05 extends Phaser.Scene
 
   errou(){
     console.log("errou");
-    this.player.getDamage(10);
+    this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
+    //this.light.setScale(2);
+    this.light.play("lightning_anim");
+    this.player.getDamage(25);
+    //this.player.getDamage(10);
     if(this.player.getHPValue() <=0){
       this.player.die();
     }
@@ -870,3 +938,14 @@ function projectilHitWall(projectil, wall){
     projectil.setVelocity(0, 0);
     projectil.body.reset(-10, -10);
   }
+
+function hideDlg(tween, targets, dlg_bg, player){
+    console.log(dlg_bg)
+    dlg_bg.setVisible(false);
+    player.move_enable = true;
+}
+
+function showDlg(tween, targets, dlg_bg, player){
+    dlg_bg.setVisible(true);
+    player.move_enable = false;
+}

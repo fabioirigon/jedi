@@ -69,7 +69,7 @@ class orc extends Actor {
     this.anims.create({
       key: 'orc_death',
       frames: this.anims.generateFrameNumbers(texture_idle, {start: 260, end: 265}),
-      frameRate: 2,
+      frameRate: 10,
       repeat: 0,
 
     });

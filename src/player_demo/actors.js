@@ -16,10 +16,12 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
   }
 
   getDamage(value){
-      // console.log("dmg.")
-      this.bar_fg.width =  80*this.hp/100;
-      if ((this.hp - value) > 0)
+      //console.log("dmg: ", value)
+      this.bar_fg.width =  100*this.hp/100;
+      if ((this.hp - value) > 0){
           this.hp = this.hp - value
+          this.bar_fg.width =  100*this.hp/100;
+        }
       else {
         //this.hp = 100;
         this.hp = 0;
