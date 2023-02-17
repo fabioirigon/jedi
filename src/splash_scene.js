@@ -58,6 +58,8 @@ class splash_scene extends Phaser.Scene {
         this.R0.on('pointerup', function (pointer) {
             localStorage.setItem('hp', 100);
             localStorage.setItem('fase', 'Fase_01');
+            localStorage.setItem('px', 250);
+            localStorage.setItem('py', 50);
             this.scene.start('Fase_01', {'movingWall_sts': 0});
         }, this);
         this.R1.on('pointerup', function (pointer) {

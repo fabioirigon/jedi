@@ -60,7 +60,13 @@ class Fase_01 extends Phaser.Scene
 
         // criação do jogador
         //this.player = this.physics.add.sprite(250, 75, 'player_sp', 0)
-        this.player = new player(this, 250, 75, 'player_sp', 0);
+        var px = parseInt(localStorage.getItem('px')) || 250;
+        var py = parseInt(localStorage.getItem('py')) || 50;
+        if (py > 150){
+            this.movingWall_sts = 1;
+        }
+
+        this.player = new player(this, px, py, 'player_sp', 0);
         this.player.setScale(0.6);
         this.player.has_bow = false;
         this.player.hp = parseInt(localStorage.getItem('hp')) || 100;
@@ -411,6 +417,9 @@ class Fase_01 extends Phaser.Scene
 
     getHeart(player, heart){
         console.log("getheart");
+        localStorage.setItem('px', heart.x);
+        localStorage.setItem('py', heart.y);
+
         player.hp = (player.hp + 20 > 100? 100: player.hp + 20);
         player.getDamage(0);
         heart.setVisible(false);

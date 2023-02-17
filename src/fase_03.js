@@ -379,7 +379,7 @@ class Fase_03 extends Phaser.Scene {
     // ----------------------------------------------------------------
     // Continuação da segunda cena
 
-    var t6 = this.add.text(px, py, "Impressionante! Tome este arco!", {
+    var t6 = this.add.text(px, py, "Impressionante! Tome este arco!\n pressione ESPAÇO para atirar!", {
       font: "15px Arial",
       fill: "#744700",
       align: "center"
@@ -462,6 +462,7 @@ class Fase_03 extends Phaser.Scene {
 
   // função para criação dos elementos
   create() {
+    localStorage.setItem('fase', 'Fase_03');
 
     this.create_map();
     this.create_actors();
@@ -469,10 +470,10 @@ class Fase_03 extends Phaser.Scene {
     this.create_collisions();
 
     // Fundo para os dialogos
-    this.dlgBox = this.add.rectangle(1050, 750, 1250, 210, 0x000000);
-    this.dlgBox.setScrollFactor(0);
-    this.dlgBox.setVisible(false)
-    this.dialogActive = false;
+    //this.dlgBox = this.add.rectangle(1050, 750, 1250, 210, 0x000000);
+    //this.dlgBox.setScrollFactor(0);
+    //this.dlgBox.setVisible(false)
+    //this.dialogActive = false;
 
     this.create_tweens();
 
@@ -573,7 +574,7 @@ class Fase_03 extends Phaser.Scene {
       //this.player.setVelocityX(0);
       //this.player.setVelocityY(0);
 
-      this.dlgBox.setVisible(true)
+      //this.dlgBox.setVisible(true)
       this.timeline.play();
 
       //setTimeout(() => {
@@ -594,7 +595,7 @@ class Fase_03 extends Phaser.Scene {
       this.zoneDialog = false;
       this.zoneDialog2 = false;
 
-      this.dlgBox.setVisible(true)
+      //this.dlgBox.setVisible(true)
       this.timelineRobin.play();
        
       // impede o movimento
@@ -728,7 +729,7 @@ class Fase_03 extends Phaser.Scene {
       this.timelineRobin2.play();
       setTimeout(() => {
         this.player.move_enable = true;
-        this.dlgBox.setVisible(false)
+        //this.dlgBox.setVisible(false)
       }, 20000);
 
     

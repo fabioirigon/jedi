@@ -551,6 +551,8 @@ class Fase_05 extends Phaser.Scene
   // função para criação dos elementos
   create ()
   {
+    localStorage.setItem('fase', 'Fase_05');
+
     this.create_map();
 
     this.create_actors();
@@ -599,6 +601,7 @@ class Fase_05 extends Phaser.Scene
     this.orcE.play('orc_exp_stand');
     //this.orcEdialog.play();
     //this.insidePixieZone();
+    this.questaoCadeado()
 
     console.log('Create');
   }
@@ -733,14 +736,18 @@ class Fase_05 extends Phaser.Scene
 
   questaoCadeado(){
     // pergunta:
-    var orcX_txt_cfg = {font: "15px Arial",fill: "#9400D3", align: "center", stroke: "#FFFFFF", strokeThickness: 3};
+    var orcX_txt_cfg = {font: "15px Arial",fill: "#9400D3", align: "center", stroke: "#FFFF00", strokeThickness: 2};
     this.quest0 = this.add.text(this.textPx-50,this.textPy-100, "A magia que tranca o cadeado apresenta 1780\n caracteres mágicos."+
-    "Para quebrar tal feitiço,\né possível decompor esse número\nde caracteres em:", orcX_txt_cfg);
-    this.quest.setScrollFactor(0);
-    this.a0 = this.add.text(15, 1180, "(A) 1 unidade de milhar,  7 dezenas e 8 unidades.", orcX_txt_cfg);
-    this.a1 = this.add.text(15, 1200, "(B) 1 unidade de milhar, 70 unidades.", orcX_txt_cfg);
-    this.a2 = this.add.text(15, 1220, "(C) 1 unidade de milhar, 7 centenas e 8 dezenas.", orcX_txt_cfg);
-    this.a3 = this.add.text(15, 1240, "(D) 1 unidade de milhar, 80 unidades.", orcX_txt_cfg);
+    "Para quebrar tal feitiço,\né possível decompor esse número de caracteres em:", orcX_txt_cfg);
+    this.quest0.setScrollFactor(0);
+    this.a0 = this.add.text(this.textPx-20,this.textPy-30, "(A) 1 unidade de milhar,  7 dezenas e 8 unidades.", orcX_txt_cfg);
+    this.a1 = this.add.text(this.textPx-20,this.textPy-10, "(B) 1 unidade de milhar, 70 unidades.", orcX_txt_cfg);
+    this.a2 = this.add.text(this.textPx-20,this.textPy+10, "(C) 1 unidade de milhar, 7 centenas e 8 dezenas.", orcX_txt_cfg);
+    this.a3 = this.add.text(this.textPx-20,this.textPy+30, "(D) 1 unidade de milhar, 80 unidades.", orcX_txt_cfg);
+    this.a0.setScrollFactor(0);
+    this.a1.setScrollFactor(0);
+    this.a2.setScrollFactor(0);
+    this.a3.setScrollFactor(0);
 
     // deixa clicar e liga com a função
     this.a0.setInteractive();
@@ -755,7 +762,7 @@ class Fase_05 extends Phaser.Scene
 
   acertouCadeado(){
     console.log("acertouCadeado");
-    this.quest.setVisible(false);
+    this.quest0.setVisible(false);
     this.a0.setVisible(false);
     this.a1.setVisible(false);
     this.a2.setVisible(false);
