@@ -24,8 +24,8 @@ class brick_push_scene extends Phaser.Scene {
         this.tsp.setTileScale(4);
 
         // adiciona  a pergunta
-        const arg1 = Phaser.Math.Between(100, 200);
-        const arg2 = Phaser.Math.Between(50, 90);
+        const arg1 = Phaser.Math.Between(41, 70);
+        const arg2 = Phaser.Math.Between(71, 90);
         const err1 = Phaser.Math.Between(1, 15);
         const err2 = Phaser.Math.Between(1, 15);
         this.text = this.add.text(300, 75, arg1 + " - " + arg2 + " ?", {

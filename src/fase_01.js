@@ -329,7 +329,6 @@ class Fase_01 extends Phaser.Scene
 
     }
 
-
     move_enemy(enemy){
         var dx = this.player.x-enemy.x;
         var dy = this.player.y-enemy.y;
