@@ -342,11 +342,11 @@ class Fase_05 extends Phaser.Scene
     var pixie_txt_cfg = {font: "15px Arial",fill: "#39FF14", align: "center", stroke: "#000000", strokeThickness: 3};
 
     // Dialogo inicial da fase com o orc expulso
-    var doe0 = this.add.text(this.textPx+30,this.textPy-60,"Não vá atras do chefe,\nele tem um artefato",orcE_txt_cfg);
+    var doe0 = this.add.text(this.textPx+30,this.textPy-60,"Cuidado com os Orcs,\neles são muito fortes, \nmas não tão espertos.",orcE_txt_cfg);
     doe0.setScrollFactor(0);
     doe0.alpha = 0;
 
-    var doe1 = this.add.text(this.textPx+30,this.textPy-60,"Eu avisei,\nfui!", orcE_txt_cfg);
+    var doe1 = this.add.text(this.textPx+30,this.textPy-60,"Não diga que eu não avisei...\nfui!", orcE_txt_cfg);
     doe1.setScrollFactor(0);
     doe1.alpha = 0;
 
@@ -599,9 +599,9 @@ class Fase_05 extends Phaser.Scene
     this.cur_wlk = 0
     this.pixie.play('pixie_stand');
     this.orcE.play('orc_exp_stand');
-    //this.orcEdialog.play();
+    this.orcEdialog.play();
     //this.insidePixieZone();
-    this.questaoCadeado()
+    //this.questaoCadeado()
 
     console.log('Create');
   }

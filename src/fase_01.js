@@ -106,10 +106,18 @@ class Fase_01 extends Phaser.Scene
         this.cameras.main.setZoom(1.5)   
 
         this.stairs = this.physics.add.sprite(98*16, 58*16, 'tiles_sp', 357);
-        //this.stairs = this.physics.add.sprite(200, 200, 'tiles_sp', 357);
+        
+        var text_cfg = {font: "30px Arial",fill: "#00C040",align: "center"}
+        var tip_cfg = {font: "15px Arial",fill: "#00C040",align: "center"}
+        //this.T1 = this.add.text(100, 750, "24", text_cfg);
+        this.T1 = this.add.text(1400, 750, "24", text_cfg);
+        this.T2 = this.add.text(1450, 750, "25", text_cfg);
+        this.T3 = this.add.text(1500, 750, "26", text_cfg);
+        this.tip = this.add.text(90, 860, "O ponto fraco do monstro são os múltiplos de 3.", tip_cfg);
+        this.tip.setVisible(false);
+
         this.stairs.enableBody = true;
         this.stairs.setScale(2);
-
     }
 
     create_animations()
@@ -190,7 +198,11 @@ class Fase_01 extends Phaser.Scene
 
         // colisão com escada
         this.physics.add.overlap(this.player, this.stairs, this.endFase, null, this);
-        
+
+        console.log(this.physics.add)
+        this.physics.world.enable([this.T1, this.T2, this.T3])
+        //this.game.physics.arcade.enable([this.T1]);
+        this.physics.add.overlap(this.player, this.T1, this.onTextCorr, null, this);
     }
 
     create_tweens()
@@ -423,6 +435,7 @@ class Fase_01 extends Phaser.Scene
         player.getDamage(0);
         heart.setVisible(false);
         heart.disableBody();
+        this.tip.setVisible(true);
     }
 
     bulletHit(player, bullet){
@@ -474,4 +487,19 @@ class Fase_01 extends Phaser.Scene
         var t0 = this.add.text(this.player.x, this.player.y, "Pressione Espaço para reiniciar", txt_cfg);
         //t0.setScrollFactor(0);
     }
+
+    onTextCorr(scene, text){
+        text.body.enable=false;
+        const ml = this.add.sprite(this.enemy_6.x, this.enemy_6.y, 'lightning_sp')
+        ml.setScale(2);
+        ml.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
+            console.log('done');
+            this.timer.remove(false);
+            this.enemy_6.setVisible(false);
+        }, this);
+        ml.play("lightning_anim");
+    }
+
 }
+
+

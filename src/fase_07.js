@@ -174,7 +174,7 @@ class Fase_07 extends Phaser.Scene
         this.enable_move = true;
 
         // inicia diálogo e anima o mago:
-        this.timeline.play();
+        //this.timeline.play();
         this.mage.play('mage_idle')
     }
 
