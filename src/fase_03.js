@@ -97,6 +97,8 @@ class Fase_03 extends Phaser.Scene {
       "bridge",
       [this.tileset1, this.tileset2, this.tileset3], 0, 0);
     this.bridgeLayer.setVisible(false);
+
+    console.log(_calculateWindowDimensions(this))
   }
 
   create_actors(){
@@ -108,7 +110,7 @@ class Fase_03 extends Phaser.Scene {
     this.robin.body.moves = false;
 
     // Criação do personagem principal
-    this.player = new player(this, 25, 735, 'playerbow_sp', 26);
+    this.player = new player(this, 825, 735, 'playerbow_sp', 26);
     //this.player = new player(this, 850, 100, 'playerbow_sp', 26);
     this.player.setScale(0.4);
     this.player.setSize(32, 32);
@@ -243,6 +245,12 @@ class Fase_03 extends Phaser.Scene {
     this.dialog_bg.setScrollFactor(0);
     this.dialog_bg.setVisible(false);
 
+      this.interact_txt = this.add.text(px, py, "Pressione E para interagir", {
+        font: "15px Arial",
+        fill: "#674ea7",
+        align: "center"
+    });
+
 
       var t0 = this.add.text(px, py, "Está perdido?\n Não se pode atravessar o Rio das Flores", {
           font: "15px Arial",
@@ -261,6 +269,8 @@ class Fase_03 extends Phaser.Scene {
       });        
 
       //t88.setScrollFactor(0);
+      this.interact_txt.setScrollFactor(0);
+      this.interact_txt.alpha = 0
 
       t0.setScrollFactor(0);
       t1.setScrollFactor(0);
@@ -269,6 +279,7 @@ class Fase_03 extends Phaser.Scene {
       t0.alpha = 0
       t1.alpha = 0
       t2.alpha = 0
+
 
       
       // timeline: sequência
@@ -527,6 +538,17 @@ class Fase_03 extends Phaser.Scene {
   // update é chamada a cada novo quadro
   update() {
 
+    this.player.body.debugBodyColor = this.player.body.touching.none ? 0x0099ff : 0xff9900;
+    //if (this.player.body.touching.none){
+    if (this.player.body.embedded){
+        this.interact_txt.alpha = 1;
+    }
+    else{
+      this.interact_txt.alpha = 0;
+    }
+
+
+
     if(this.crystal2 && this.crystal3 && this.crystal5 && this.crystal7 && this.ponte){
       this.bridgeLayer.setVisible(true);
       this.bridge2Layer.setActive(false);
@@ -567,23 +589,17 @@ class Fase_03 extends Phaser.Scene {
   onZone(){
     if (this.zoneDialog == true){
 
-      // impede o movimento
-      this.player.move_enable = false;
-      this.player.anims.stop();
-      
-      //this.player.setVelocityX(0);
-      //this.player.setVelocityY(0);
 
-      //this.dlgBox.setVisible(true)
-      this.timeline.play();
+      if (0){
+        // impede o movimento
+        this.player.move_enable = false;
+        this.player.anims.stop();
+        
+        //this.dlgBox.setVisible(true)
+        this.timeline.play();
 
-      //setTimeout(() => {
-      //  this.dlgBox.setVisible(false)
-      //  this.player.move_enable = true;
-      //
-      //}, 15000);
-
-      this.zoneDialog = false;
+        this.zoneDialog = false;
+      }
 
     }
   }
@@ -855,3 +871,28 @@ function projectilHitCrystal7(crystal, projectil){
   this.esfera7.tint = 0x3388ff;
 }
 
+function _calculateWindowDimensions(scene) {
+  var w_height = scene.sys.game.config.height;
+  var w_width = scene.sys.game.config.width;
+
+  var x = w_width/2;
+  var y = w_height*0.5 + 100;
+  var rectWidth = w_width - (32 * 8);
+  var rectHeight = 200;
+
+  console.log('w', scene.cameras.main.width, scene.cameras.main.height)
+  //const r2 = scene.add.rectangle(x, y, rectWidth, rectHeight, 0x9966ff);
+  //const r2 = scene.add.rectangle(700, 500, 600, 100, 0x9966ff);
+  const r2 = scene.add.rectangle(x, y, w_width*0.4, 100, 0x9966ff);
+  r2.setStrokeStyle(4, 0xefc53f);  
+  r2.setScrollFactor(0);
+  r2.setOrigin(0.5, 0.5);
+
+ 
+  return {
+    x,
+    y,
+    rectWidth,
+    rectHeight
+  };
+}
