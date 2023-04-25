@@ -44,6 +44,9 @@ class Fase_03 extends Phaser.Scene {
       margin: 16 
     });
 
+    this.load.spritesheet('elfa_bullet', 'assets/spritesheets/elfa_bullet.png', { frameWidth: 16, frameHeight: 16});
+    this.load.spritesheet('lightning_sp', 'assets/spritesheets/lightning.png', { frameWidth: 32, frameHeight: 32});
+
     this.load.image("tiles1", "assets/maps/first_asset.png");
     this.load.image("tiles2", "assets/maps/solaria.png");
     this.load.image('bullet', 'assets/images/bullet.png');
@@ -97,8 +100,6 @@ class Fase_03 extends Phaser.Scene {
       "bridge",
       [this.tileset1, this.tileset2, this.tileset3], 0, 0);
     this.bridgeLayer.setVisible(false);
-
-    console.log(_calculateWindowDimensions(this))
   }
 
   create_actors(){
@@ -110,12 +111,17 @@ class Fase_03 extends Phaser.Scene {
     this.robin.body.moves = false;
 
     // Criação do personagem principal
-    this.player = new player(this, 825, 735, 'playerbow_sp', 26);
-    //this.player = new player(this, 850, 100, 'playerbow_sp', 26);
+    this.player = new player(this, 815, 100, 'playerbow_sp', 26);
+    //this.player = new player(this, 40, 730, 'playerbow_sp', 26);
     this.player.setScale(0.4);
     this.player.setSize(32, 32);
     this.player.setOffset(16, 32);
     this.player.has_bow = false;
+
+    this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
+    this.light.setScale(2);
+    this.light.setVisible(false);
+  
     
     // Criação da Good Witch
     this.bruxa = this.physics.add.sprite(1032, 660, "witch_sp", 1);
@@ -173,7 +179,7 @@ class Fase_03 extends Phaser.Scene {
     // camera seguindo o jogador
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
     this.cameras.main.setZoom(2);
-
+    
   }
 
 
@@ -184,6 +190,15 @@ class Fase_03 extends Phaser.Scene {
       frameRate: 8,
       repeat: -1
       });
+
+      this.anims.create({
+        key: 'lightning_anim',
+        frames: this.anims.generateFrameNumbers('lightning_sp', {}),
+        frameRate: 30,
+        hideOnComplete: true,
+        repeat: 1
+        });
+
   }
 
 
@@ -247,11 +262,19 @@ class Fase_03 extends Phaser.Scene {
 
       this.interact_txt = this.add.text(px, py, "Pressione E para interagir", {
         font: "15px Arial",
-        fill: "#674ea7",
-        align: "center"
+        fill: "#A0A0A0",
+        align: "center", 
+        stroke: '#000000',
+        strokeThickness: 4,
     });
+    this.interact_txt.setScrollFactor(0)
+    this.interact_txt.alpha = 1
 
+    //text.stroke = '#000000';
+    //text.strokeThickness = 6;
+    //text.fill = '#43d637';
 
+    /*
       var t0 = this.add.text(px, py, "Está perdido?\n Não se pode atravessar o Rio das Flores", {
           font: "15px Arial",
           fill: "#674ea7",
@@ -269,8 +292,6 @@ class Fase_03 extends Phaser.Scene {
       });        
 
       //t88.setScrollFactor(0);
-      this.interact_txt.setScrollFactor(0);
-      this.interact_txt.alpha = 0
 
       t0.setScrollFactor(0);
       t1.setScrollFactor(0);
@@ -469,6 +490,7 @@ class Fase_03 extends Phaser.Scene {
       onCompleteParams: [this.dialog_bg, this.player]
 
     });
+    */
   }
 
   // função para criação dos elementos
@@ -479,12 +501,6 @@ class Fase_03 extends Phaser.Scene {
     this.create_actors();
     this.create_animations();
     this.create_collisions();
-
-    // Fundo para os dialogos
-    //this.dlgBox = this.add.rectangle(1050, 750, 1250, 210, 0x000000);
-    //this.dlgBox.setScrollFactor(0);
-    //this.dlgBox.setVisible(false)
-    //this.dialogActive = false;
 
     this.create_tweens();
 
@@ -520,6 +536,7 @@ class Fase_03 extends Phaser.Scene {
     this.keyD = this.input.keyboard.addKey("D");
     this.keyW = this.input.keyboard.addKey("W");
     this.keyS = this.input.keyboard.addKey("S");
+    this.keyE = this.input.keyboard.addKey("E");
     this.keySPACE = this.input.keyboard.addKey("Space");
     this.keyN = this.input.keyboard.addKey("N");
     this.keyEsc = this.input.keyboard.addKey("ESC");
@@ -533,20 +550,84 @@ class Fase_03 extends Phaser.Scene {
     this.crystal7 = false;
     this.ponte = true;
 
+    this.txts = [
+      ["Está perdido?\n Não se pode atravessar o Rio das Flores", "Siga para cima.\n As árvores te mostrarão o caminho", "Obrigada bela bruxa!"],
+      ["Olá, o senhor sabe como atravessar o rio?", "O que me diz de uma troca justa?\n Uma resposta por outra.", "Manda ver!"],
+      ["Impressionante! Tome este arco!", "Para atravessar o rio, atire nos cristais\nde número primo que estão na outra margem.\nPressione ESPAÇO para atirar!", "Assim a ponte será revelada!", "Valeu meu consagrado!"]
+      ]
+
+      this.Q0 =  ["Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?",
+      1, "◯ 3589 livros", "◯ 3859 livros",  "◯ 30859 livros",  "◯ 38590 livros"]
+      this.Q1 =  ["Tenho 6 caixas gigantes com 1000 livros cada!\nMais 4 caixas de 100 livros, mais 2 pacotes\nde 10 livros, e mais 3 livrinhos diversos.\nQuantos livros eu tenho?",
+      2, "◯ 6342 livros", "◯ 64230 livros",  "◯ 6423 livros",  "◯ 6430 livros"]
+      this.Q2 =  ["Tenho 4 caixas gigantes com 1000 livros cada!\nMais 7 caixas de 100 livros, mais 2 pacotes\nde 10 livros, e mais 5 livrinhos diversos.\nQuantos livros eu tenho?",
+      0, "◯ 4725 livros", "◯ 4752 livros",  "◯ 47250 livros",  "◯ 427 livros"]
+      this.questions = [this.Q0, this.Q1, this.Q2]
+
+    this.dialogs = new dialogs(this);   
+    this.dlgBox = true;
+    this.askQuestion = true;
+    //createQuestion(this);
+    //this.dialogs.makeQuestion(this.question, acertou2, errou2)
+    //makeQuestion(this);
+    this.interact_txt.alpha = 1;
+    this.create_elfa()
   }
  
   // update é chamada a cada novo quadro
   update() {
 
     this.player.body.debugBodyColor = this.player.body.touching.none ? 0x0099ff : 0xff9900;
-    //if (this.player.body.touching.none){
-    if (this.player.body.embedded){
+    if (this.player.body.embedded && this.dialogs.isActive==false){
         this.interact_txt.alpha = 1;
+        if (Phaser.Input.Keyboard.JustDown(this.keyE)){
+          if (this.physics.overlap(this.player, this.zone)){
+            if (this.dlgBox){
+              this.dialogs.updateDlgBox(this.txts[0]);
+              this.dlgBox = false;
+            }
+            else{
+              this.dialogs.updateDlgBox(this.txts[0], 1);
+            }
+          }
+          if (this.physics.overlap(this.player, this.zone2))
+          {
+            if (this.zoneDialog2)
+            {
+              this.zoneDialog2 = false;
+              this.dialogs.updateDlgBox(this.txts[1], 0, makeQuestion)
+            }
+            else if (this.askQuestion)
+            {
+              makeQuestion(this);
+            }
+            else{
+              this.dialogs.updateDlgBox(this.txts[2], 1, null);
+            }
+          }
+          //console.log("z2", Phaser.Geom.Rectangle.Overlaps(this.zone2, this.player));
+          //console.log(this.zone)
+        }
     }
     else{
       this.interact_txt.alpha = 0;
     }
 
+    if (Phaser.Input.Keyboard.JustDown(this.keySPACE)){
+      //console.log(this.player.anims)
+      //this.player.anims.play('attack_up')
+      console.log(this.player.x, this.player.y, this.player.has_bow, this.player.attack_enable)
+      if (this.dialogs.isActive){
+        this.dialogs.nextDlg();
+      }
+      
+      else if (this.player.attack_enable && this.player.has_bow){
+        this.player.attack_enable = true;
+        this.player.attack();
+      }
+      
+
+    }
 
 
     if(this.crystal2 && this.crystal3 && this.crystal5 && this.crystal7 && this.ponte){
@@ -559,19 +640,6 @@ class Fase_03 extends Phaser.Scene {
     if (this.keyN.isDown) {
         this.scene.start('Fase_05')
     }
-    if (this.keyEsc.isDown) {
-        console.log('esc');
-        if (this.timeline.isPlaying()){
-          this.timeline.setTimeScale(100);
-        }
-        if (this.timelineRobin.isPlaying()){
-          this.timelineRobin.setTimeScale(100);
-        }
-        if (this.timelineRobin2.isPlaying()){
-          this.timelineRobin2.setTimeScale(100);
-        }
-    }
-
 
     if (this.game_over){
       if (this.keySPACE.isDown) {
@@ -589,7 +657,6 @@ class Fase_03 extends Phaser.Scene {
   onZone(){
     if (this.zoneDialog == true){
 
-
       if (0){
         // impede o movimento
         this.player.move_enable = false;
@@ -605,7 +672,10 @@ class Fase_03 extends Phaser.Scene {
   }
 
   onZone2(){
-    if (this.zoneDialog2 == true){
+
+
+    //if (this.zoneDialog2 == true){
+    if (false){
 
 
       this.zoneDialog = false;
@@ -734,7 +804,8 @@ class Fase_03 extends Phaser.Scene {
        this.scene.restart();
   }
 
-  acertou(){
+  create_elfa(){
+      /*
       console.log("acertou");
       this.quest.setVisible(false);
       this.a0.setVisible(false);
@@ -748,9 +819,17 @@ class Fase_03 extends Phaser.Scene {
         //this.dlgBox.setVisible(false)
       }, 20000);
 
+    //this.dlgTxt.setVisible(false);
+    //this.r2.setVisible(false);
+
+    this.alternatives.getChildren().forEach(function(alter){
+      alter.setVisible(false);
+      alter.setInteractive(false);
+     });
+    */
     
     // Criação da Elfa
-    this.elfa = new Elfa(this, 225, 350, 'elfa', 26);
+    this.elfa = new Elfa(this, 225, 270, 'elfa', 26);
     this.elfa.setScale(0.4);
     this.elfa.setSize(32, 32);
     this.elfa.setOffset(16, 32);
@@ -871,28 +950,39 @@ function projectilHitCrystal7(crystal, projectil){
   this.esfera7.tint = 0x3388ff;
 }
 
-function _calculateWindowDimensions(scene) {
-  var w_height = scene.sys.game.config.height;
-  var w_width = scene.sys.game.config.width;
-
-  var x = w_width/2;
-  var y = w_height*0.5 + 100;
-  var rectWidth = w_width - (32 * 8);
-  var rectHeight = 200;
-
-  console.log('w', scene.cameras.main.width, scene.cameras.main.height)
-  //const r2 = scene.add.rectangle(x, y, rectWidth, rectHeight, 0x9966ff);
-  //const r2 = scene.add.rectangle(700, 500, 600, 100, 0x9966ff);
-  const r2 = scene.add.rectangle(x, y, w_width*0.4, 100, 0x9966ff);
-  r2.setStrokeStyle(4, 0xefc53f);  
-  r2.setScrollFactor(0);
-  r2.setOrigin(0.5, 0.5);
-
- 
-  return {
-    x,
-    y,
-    rectWidth,
-    rectHeight
-  };
+function makeQuestion(scene){
+  
+  var question = scene.questions[Math.floor(Math.random() * scene.questions.length)];
+  console.log('mkquestion', question);
+  //scene.dialogs.makeQuestion(question, acertou2, errou2)
+  scene.dialogs.makeQuestion(question, acertou2, errou2)
 }
+
+function acertou2(pointer){
+  console.log('acertou');
+  this.dialogs.hideBox();
+  this.askQuestion = false;
+  this.dialogs.updateDlgBox(this.txts[2], 0, give_bow);
+}
+
+function give_bow(scene){
+  scene.player.has_bow = true;
+  scene.player.attack_enable  = true;
+  scene.create_elfa()
+}
+
+function errou2(pointer){
+  console.log('errou');
+  //scene.light.setPosition(scene.player.x, scene.player.y);
+  this.dialogs.hideBox();
+  this.light.setPosition(this.player.x, this.player.y);
+  this.light.setVisible(true)
+  this.light.play("lightning_anim");
+  this.player.getDamage(25);
+  if (this.player.getHPValue() == 0){
+    this.player.die();
+  }
+}
+
+
+

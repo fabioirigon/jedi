@@ -6,6 +6,7 @@
     <title>Phase 1</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     <script src="src/player_demo/actors.js"></script> 
+    <script src="src/dialogs.js"></script> 
     <script src="src/player_demo/player.js"></script> 
     <script src="src/player_demo/wizard.js"></script> 
     <script src="src/player_demo/orc.js"></script> 
@@ -45,7 +46,7 @@ var config = {
     physics: {
           default: 'arcade',
           arcade: {
-              debug: false,
+              debug: true,
           },
     },
 
@@ -56,7 +57,7 @@ var config = {
     },
 
     // funções da classe scene:
-    scene: [splash_scene, Fase_01, Fase_03, brick_push_scene, Fase_05],
+    scene: [Fase_01, splash_scene, Fase_03, brick_push_scene, Fase_05],
 };
 
 // variáveis globais - jogo e jogador

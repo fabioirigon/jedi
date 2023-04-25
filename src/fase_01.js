@@ -66,7 +66,8 @@ class Fase_01 extends Phaser.Scene
             this.movingWall_sts = 1;
         }
 
-        this.player = new player(this, px, py, 'player_sp', 0);
+        //this.player = new player(this, px, py, 'player_sp', 0);
+        this.player = new player(this, 1480, 600, 'player_sp', 0);
         this.player.setScale(0.6);
         this.player.has_bow = false;
         this.player.hp = parseInt(localStorage.getItem('hp')) || 100;
@@ -83,19 +84,20 @@ class Fase_01 extends Phaser.Scene
         this.enemy_0.setScale(2);this.enemy_1.setScale(2);this.enemy_2.setScale(2);
         this.enemy_3.setScale(2);this.enemy_4.setScale(2);this.enemy_5.setScale(2);
         this.enemy_6.setScale(2);
+        this.enemy_3.setAlpha(0.7);this.enemy_4.setAlpha(0.7);this.enemy_5.setAlpha(0.7);
 
         this.heart_0  = this.physics.add.sprite(100, 600, 'tiles_sp', 530)
 
         this.bullets  = this.physics.add.group();
         for (let i=0; i<=5; i++){
-            var blt = this.add.sprite(-10, -10, 'tiles_sp', 658);
-            blt.setScale(1.5);
+            //var blt = this.add.sprite(-10, -10, 'tiles_sp', 658);
+            var blt = this.physics.add.sprite(-10, -10, 'tiles_sp', 658);
+            blt.setScale(3);
+            blt.setBodySize(5, 5)
             blt.setActive(false);
             blt.setVisible(false);
             this.bullets.add(blt);
         }
-        this.bullets.enableBody = true;
-        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
         this.timer = this.time.addEvent({ delay: Phaser.Math.Between(2000, 4000), callback: this.monster_shoot, callbackScope: this });
 
         this.mage  = this.physics.add.sprite(78, 128, 'wizardIdle_sp', 0);
@@ -116,8 +118,9 @@ class Fase_01 extends Phaser.Scene
         this.tip = this.add.text(90, 860, "O ponto fraco do monstro são os múltiplos de 3.", tip_cfg);
         this.tip.setVisible(false);
 
-        this.stairs.enableBody = true;
+        this.stairs.body.enable = false;
         this.stairs.setScale(2);
+        this.stairs.setVisible(false);
     }
 
     create_animations()
@@ -132,17 +135,17 @@ class Fase_01 extends Phaser.Scene
         this.anims.create({
             key: 'lightning_anim',
             frames: this.anims.generateFrameNumbers('lightning_sp', {}),
-            frameRate: 30,
+            frameRate: 20,
             hideOnComplete: true,
-            repeat: 1
+            repeat: 3
             });
 
         this.anims.create({
             key: 'trap_anim',
             frames: this.anims.generateFrameNumbers('tiles_sp', {frames: [353,354,355,356,356]}),
-            frameRate: 12,
+            frameRate: 18,
             repeat: -1,
-            repeatDelay: 500,
+            repeatDelay: 1000,
             yoyo: true
             });
 
@@ -203,6 +206,8 @@ class Fase_01 extends Phaser.Scene
         this.physics.world.enable([this.T1, this.T2, this.T3])
         //this.game.physics.arcade.enable([this.T1]);
         this.physics.add.overlap(this.player, this.T1, this.onTextCorr, null, this);
+        this.physics.add.overlap(this.player, this.T2, this.onTextErr, null, this);
+        this.physics.add.overlap(this.player, this.T3, this.onTextErr, null, this);
     }
 
     create_tweens()
@@ -236,6 +241,7 @@ class Fase_01 extends Phaser.Scene
         t0.alpha = 0
         t1.alpha = 0
         t2.alpha = 0
+        sortBoxes(this);
 
 
         this.timeline = this.tweens.createTimeline();
@@ -275,6 +281,15 @@ class Fase_01 extends Phaser.Scene
             duration: 1000,
         });
         //this.timeline.play();
+
+        this.mageDisapear = this.tweens.add({
+            targets: this.mage,
+            alpha: 0,
+            ease: 'linear',
+            duration: 1000,
+            paused: true,
+        });
+        
         console.log('tline');
     }
 
@@ -294,6 +309,9 @@ class Fase_01 extends Phaser.Scene
 
         this.create_tweens();
 
+        this.txtSeq = ["Vá se acostumando com este calabouço.\nVocê nunca verá o sol novamente!\n\n[ESPAÇO]", "Fala com a minha mãozinha...",  "Vai se arrepender disso uhahahaha"];
+        this.dialogs = new dialogs(this)
+
         // ligação das teclas de movimento
         this.keyA = this.input.keyboard.addKey('A');
         this.keyD = this.input.keyboard.addKey('D');
@@ -309,7 +327,8 @@ class Fase_01 extends Phaser.Scene
         this.cur_wlk = 0
         if (this.movingWall_sts == 0)
         {
-            this.timeline.play();
+            //this.timeline.play();
+            this.dialogs.updateDlgBox(this.txtSeq, 0, onEndDialog);
             this.mage.play('mage_idle')
         }
         else{
@@ -322,8 +341,15 @@ class Fase_01 extends Phaser.Scene
         this.enemy_5.play('enemy_1_anim');
         this.enemy_6.play('enemy_6_anim');
 
+        this.enemyHitCount = 0;
+
+        this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
+        this.light.setVisible(false);
+        this.light.setScale(1.6);
+
+
         if (this.movingWall_sts == 2){
-            this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
+            
             this.light.setScale(2);
             this.light.play("lightning_anim");
             this.player.getDamage(25);
@@ -339,12 +365,17 @@ class Fase_01 extends Phaser.Scene
         this.score = this.add.text(300, 150, "score: " + 0, {font: "15px Arial",fill: "#FFFFFF", align: "center"});
         this.score.setScrollFactor(0);
 
+        var question =  ["Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?",
+        1, "◯ 3589 livros", "◯ 3859 livros",  "◯ 30859 livros",  "◯ 38590 livros"]
+  
+
+        //this.dialogs.makeQuestion(question, acertou, errou)
     }
 
     move_enemy(enemy){
         var dx = this.player.x-enemy.x;
         var dy = this.player.y-enemy.y;
-        var scl = 160/Math.sqrt(dx*dx+dy*dy)
+        var scl = 130/Math.sqrt(dx*dx+dy*dy)
         if (dx*dx + dy*dy < 200*200 && scl>0){
             enemy.setVelocityX(dx*scl);
             enemy.setVelocityY(dy*scl);
@@ -358,8 +389,11 @@ class Fase_01 extends Phaser.Scene
     // update é chamada a cada novo quadro
     update ()
     {
-        if (this.keySPACE.isDown) {
+        if (Phaser.Input.Keyboard.JustDown(this.keySPACE)){
             console.log(this.player.x, this.player.y);
+            //onEndDialog(this)
+            if (this.dialogs.isActive)
+                this.dialogs.nextDlg();
         }
 
         // Movimento do inimigo
@@ -463,7 +497,7 @@ class Fase_01 extends Phaser.Scene
         var bullet = this.bullets.getFirstDead(false);
         var vx = this.player.x - this.enemy_6.x
         var vy = this.player.y - this.enemy_6.y
-        var scl = 300/Math.sqrt(vx*vx+vy*vy)
+        var scl = 270/Math.sqrt(vx*vx+vy*vy)
         //console.log('blt', bullet)
         if (bullet){
             bullet.body.reset(this.enemy_6.x, this.enemy_6.y);
@@ -489,17 +523,66 @@ class Fase_01 extends Phaser.Scene
     }
 
     onTextCorr(scene, text){
-        text.body.enable=false;
-        const ml = this.add.sprite(this.enemy_6.x, this.enemy_6.y, 'lightning_sp')
-        ml.setScale(2);
-        ml.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
-            console.log('done');
+        sortBoxes(this);
+        this.light.setVisible(true);
+        this.light.setPosition(this.enemy_6.x, this.enemy_6.y);
+        this.light.play("lightning_anim");
+        this.enemyHitCount = this.enemyHitCount +1;
+        if (this.enemyHitCount >3){
+            this.T1.body.enable=false;
+            this.T2.body.enable=false;
+            this.T3.body.enable=false;
+            this.T1.setVisible(false);
+            this.T2.setVisible(false);
+            this.T3.setVisible(false);
             this.timer.remove(false);
-            this.enemy_6.setVisible(false);
-        }, this);
-        ml.play("lightning_anim");
+            this.stairs.body.enable = true;
+            this.stairs.setVisible(true);
+    
+            this.light.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
+                console.log('done');
+                this.enemy_6.setVisible(false);
+            }, this);
+            
+        }
+    }
+
+    onTextErr(player, text){
+        //const idx = [0, 1, 2];
+        sortBoxes(this);
     }
 
 }
 
+function onEndDialog(scene){
+    scene.mageDisapear.play();
+}
+function acertou(pointer){
+    console.log('acertou');
+    this.dialogs.hideBox();
+}
+function errou(pointer){
+    console.log('errou', this);
+    this.dialogs.hideBox();
+}
 
+function sortBoxes(scene){
+
+    const pos = [1350, 1450, 1550]
+    pos.sort(() => Math.random() - 0.5)
+
+    const b1 =  Math.floor(Math.random()*8+2);
+    const b2 =  Math.floor(Math.random()*8+2);
+    const b3 =  Math.floor(Math.random()*8+2);
+    const ypos = (scene.T1.y == 600 ? 750 : 600);
+
+    console.log("err -- ..", scene.T1.y)
+
+    //this.T1.setPosition(1400, 600);
+    scene.T1.setPosition(pos[0], ypos);
+    scene.T2.setPosition(pos[1], ypos);
+    scene.T3.setPosition(pos[2], ypos);
+    scene.T1.text = parseInt(b1*3);
+    scene.T2.text = parseInt(b2*3+1);
+    scene.T3.text = parseInt(b3*3+2);
+}

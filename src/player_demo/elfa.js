@@ -16,7 +16,8 @@ class Elfa extends Actor {
   
       for (var i = 0; i < 5; i++)
       {
-          var bullet = this.bullets.create(-10,-10, 'bullet');
+          var bullet = this.bullets.create(-10,-10, 'elfa_bullet', 0);
+          bullet.setScale(0.5);
           bullet.setActive(false);
           bullet.setVisible(false);
       }
@@ -60,7 +61,15 @@ class Elfa extends Actor {
             repeat: 0
   
           });
-   
+
+          this.anims.create({
+            key: 'bullet_anim',
+            frames: this.anims.generateFrameNumbers('elfa_bullet', {start: 0, end: 3}),
+            frameRate: 10,
+            repeat: -1
+            });
+
+          
       this.anims.play('elfa_idle');
       this.timer = this.scene.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: this.attack, callbackScope: this });
     }
@@ -72,14 +81,16 @@ class Elfa extends Actor {
       }
       var vx = this.scene.player.x - this.x
       var vy = this.scene.player.y - this.y
+      var amp = Math.sqrt(vx*vx+vy*vy)
       var bullet = this.bullets.getFirstDead(false);
       if (bullet){
           bullet.body.reset(this.x, this.y);
+          bullet.anims.play('bullet_anim')
           bullet.setActive(true);
           bullet.setVisible(true);
   
-          bullet.setVelocityX(vx);
-          bullet.setVelocityY(vy);        
+          bullet.setVelocityX(160*vx/amp);
+          bullet.setVelocityY(160*vy/amp);        
       }
       this.timer = this.scene.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: this.attack, callbackScope: this });
 

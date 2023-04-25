@@ -12,6 +12,8 @@ class player extends Actor {
     //this.body.setCollideWorldBounds(true);
     this.setSize(this.width/2, 2*this.height/3, true);
     this.setOffset(this.width/4, this.height/3);
+    this.vx = 0;
+    this.vy = 0;
 
     this.arrows = scene.physics.add.group();
     this.arrows.enableBody = true;
@@ -91,26 +93,31 @@ class player extends Actor {
   }
 
   set_player_velocity(){
+    
     if (this.scene.keyD?.isDown) {
-        this.setVelocityX(210);
+        console.log(this.velocity)
+        this.vx = ((this.vx<210)?this.vx+20:210);
     }
     else if (this.scene.keyA?.isDown) {
-        this.setVelocityX(-210);
+      this.vx = ((this.vx>-210)?this.vx-20:-210);
     }
     else{
-        this.setVelocityX(0); 
+        this.vx=0;
     }
 
     // velocidade vertical
     if (this.scene.keyW.isDown) {
-        this.setVelocityY(-210);
+      this.vy = ((this.vy>-210)?this.vy-20:-210);
     }
     else if (this.scene.keyS.isDown) {
-        this.setVelocityY(210);
+        this.vy = ((this.vy<210)?this.vy+20:210);
     }
     else{
-        this.setVelocityY(0); 
+        this.vy=0;
     }    
+    this.setVelocityX(this.vx); 
+    this.setVelocityY(this.vy); 
+
   }
 
   set_walk_animation(){
@@ -136,18 +143,20 @@ class player extends Actor {
   }
 
   attack(){ 
-    //console.log('attack', this.facing, this.arrows.countActive(false));
+    
+    console.log('attack', this.facing, this.arrows.countActive(false));
+    this.anims.stop();
     this.attack_enable = false;
     this.move_enable = false;
     this.on('animationcomplete', this.re_enable);
-      if (this.facing[0] == 1)
-        this.anims.play('attack_right');
-      else if (this.facing[0] == -1)
-        this.anims.play('attack_left');
-      else if (this.facing[1] == 1)
-        this.anims.play('attack_down');
-      else
-        this.anims.play('attack_up');
+    if (this.facing[0] == 1)
+      this.anims.play('attack_right');
+    else if (this.facing[0] == -1)
+      this.anims.play('attack_left');
+    else if (this.facing[1] == 1)
+      this.anims.play('attack_down');
+    else
+      this.anims.play('attack_up');
 
   }
 
@@ -185,7 +194,7 @@ class player extends Actor {
   preUpdate (time, delta)
   {
     super.preUpdate(time, delta);
-
+  
     if (this.move_enable){
       this.set_player_velocity();
       this.set_walk_animation();
@@ -194,13 +203,16 @@ class player extends Actor {
       this.setVelocityX(0); 
       this.setVelocityY(0); 
     }
-    if (this.scene.keySPACE.isDown) {
+    //if (this.scene.keySPACE.justDown()) {
+  /*  
+    if (Phaser.Input.Keyboard.JustDown(this.scene.keySPACE)){
       console.log(this.body.position)
     }
+    */
 
-    if (this.scene.keySPACE.isDown && this.attack_enable && this.has_bow) {
-      this.attack();
-    }
+    //if (this.scene.keySPACE.isDown && this.attack_enable && this.has_bow) {
+    //  this.attack();
+    //}
   }
 
   die(){
