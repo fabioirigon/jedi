@@ -51,6 +51,35 @@ class Fase1 extends Phaser.Scene{
         this.keyD = this.input.keyboard.addKey('D');
         this.keyW = this.input.keyboard.addKey('W');
         this.keyS = this.input.keyboard.addKey('S');
+        this.keyE = this.input.keyboard.addKey('E');
+        this.keySPACE = this.input.keyboard.addKey('SPACE');
+
+
+        this.zone = this.add.zone(30, 200).setSize(100, 100);
+        this.physics.world.enable(this.zone);
+        this.physics.add.overlap(this.player, this.zone);
+
+        // criação da mensagem "pressione E para interagir"
+        var px = this.cameras.main.width*0.35;  // pos horizontal
+        var py = 2*this.cameras.main.height/3;  // pos vertical
+        console.log('pp', px, py)
+        this.interact_txt = this.add.text(px, py, "Pressione E para interagir", {
+            font: "15px Arial",
+            fill: "#A0A0A0",
+            align: "center", 
+            stroke: '#000000',
+            strokeThickness: 4,
+        });
+        this.interact_txt.setScrollFactor(0);  // deixa em posição relativa à camera (e não ao mapa)
+        this.interact_txt.setVisible(false);   // deixa invisível
+
+        // criação de lista de textos (diálogs) e do objeto dialog
+        this.txtLst = ["Eu estava te esperando! Seja bem vindo, jogador. Meu nome é Knaíffes, mas pode me chamar de facas.", "Daqui em diante aparecerão inimigos que voce precisará derrotar e perguntas que voce precisará responder.", "Ao responder corretamente, o muro se abrirá e você receberá mais inimigos.", "Porém, cuidado. Ao final desse desafio estará um ser de força incomum. Esteja preparado."];
+        this.dialogs = new dialogs(this);   
+
+        // flag para responder uma única vez à tecla pressionada
+        this.spacePressed = false;
+
 
         this.anims.create({
             key: 'run',
@@ -58,22 +87,41 @@ class Fase1 extends Phaser.Scene{
             frameRate: 10,
             repeat: 0
             });
+        this.anims.create({
+            key: 'talk_knaiffs',
+                frames: this.anims.generateFrameNumbers('knaiffs_sp', {frames: [28,29]}),
+                frameRate: 10,
+                repeat: 0
+                });
+
 
         }
 
 
 // update é chamada a cada novo quadro
-    update ()
+    update (){
+
+        this.checkActiveZone();
+        if(this.dialogs.isActive){
+            this.player.anims.play('talk_knaiffs', true);
+        }
+        // verifica se precisa avançar no diálogo
+        if (this.dialogs.isActive && !this.spacePressed && this.keySPACE.isDown){
+            this.dialogs.nextDlg();
+            this.spacePressed = true;   // seta flag para false para esperar a tecla espaço ser levantada
+        }
+        // se tecla solta, limpa a flag
+        if (!this.keySPACE.isDown){
+            this.spacePressed = false;
+        }
         {
-            let direction 
+
          
             if (this.keyD?.isDown) {
-                direction = 'right'
                 this.player.setVelocityX(210);
                 this.player.anims.play('run', true);
         }
         else if (this.keyA?.isDown) {
-            direction = 'left'
             this.player.setVelocityX(-210);
             this.player.anims.play('run', true);
         }
@@ -94,8 +142,21 @@ class Fase1 extends Phaser.Scene{
             this.player.setVelocityY(0); 
         }
         }
-
-
         
     }
+    checkActiveZone(){
+        // se jogador dentro de zona e o diálogo não está ativo
+        if (this.player.body.embedded && !this.dialogs.isActive){
+            // mostra a mensagem e verifica a tecla pressionada
+            this.interact_txt.setVisible(true);
+            if (this.keyE.isDown){
+                this.dialogs.updateDlgBox(this.txtLst);
+            } 
+        }
+        // se diálogo ativo ou fora da zona, esconde a msg
+        else{
+            this.interact_txt.setVisible(false);
+        }
+    }
+}
 
