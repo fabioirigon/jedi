@@ -1,85 +1,40 @@
-<!doctype html> 
-    <!-- HTML Padrão -->
-<html lang="en"> 
-<head> 
-    <meta charset="UTF-8" />
-    <title>Super knaifes</title>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
-    <!--<script src="src\Fase1.js"></script>-->
-    <style type="text/css">
-        body {
-            margin: 0;
-        }
-    </style>
-</head>
-<body>
+// Configuração do jogo
 
-    <!-- código javascript -->
-<script type="text/javascript">
-
-    // Configuração do jogo
-    var config = {
-        type: Phaser.AUTO,
-
-        // resolução e sistema de colisão.
-        width: 800,
-        height: 800,
-        physics: {
-              default: 'arcade',
-              arcade: {
-                  debug: true,
-              },
-        },
-
-        // tratamento dos gráficos: pixelado
-        render: {
-          antialiasGL: false,
-          pixelArt: true,
-        },
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
-        }
-
-        // funções da classe scene:
-        
-    };
-
-    // variáveis globais - jogo e jogador
-    console.log('start--');
-    var game = new Phaser.Game(config);
-    //var player;
-
-    function preload ()
+//var player;
+console.log("WHISTLE BABY");
+class Fase1 extends Phaser.Scene{
+    
+    preload ()
     {
         console.log('load spritesheet');
         this.load.spritesheet('player_sp', 'assets/spritesheets/player.png', { frameWidth: 32, frameHeight: 32 });
         console.log('load tile sheet');
         this.load.image('tiles', 'assets/maps/tilesheet.png');
         console.log('load map');
-        this.load.tilemapTiledJSON('themap', 'assets/maps/mapa2.json');
+        this.load.tilemapTiledJSON('themap', 'assets/maps/Mapa.json');
     }
 
 // função para criação dos elementos
-    function create ()
+     create ()
     {
 
         // criação do mapa e ligação com a imagem (tilesheet)
         this.map = this.make.tilemap({ key: 'themap', tileWidth: 16, tileHeight: 16 });
-        this.tileset = this.map.addTilesetImage('Minifantasy_ForgottenPlainsTiles', 'tiles');
+        this.tileset = this.map.addTilesetImage('tileset', 'tiles');
 
         // criação das camadas
         this.groundLayer = this.map.createDynamicLayer('Chao', this.tileset, 0, 0);
         this.wallsLayer = this.map.createDynamicLayer('Parede', this.tileset, 0, 0);
-            
         
+
         // criação do rei
-        this.player = this.physics.add.sprite(65, 750, 'player_sp', 0);
+        this.player = this.physics.add.sprite(100, 300, 'player_sp', 0);
         this.player.body.width = 20;
 
-        this.wallsLayer.setCollisionBetween(65, 750, true);
-        this.physics.add.collider(this.player, this.wallsLayer);
+        this.wallsLayer.setCollisionBetween(60, 80, true);
+        this.physics.add.collider(this.player, this.wallsLayer, function(){
+            console.log("Colissssion!");
+        });
         
         
         this.keyA = this.input.keyboard.addKey('A');
@@ -98,9 +53,10 @@
 
 
 // update é chamada a cada novo quadro
-    function update ()
+     update ()
         {
-            if (this.keyD?.isDown) {
+        // velocidade horizontal
+        if (this.keyD?.isDown) {
             this.player.setVelocityX(210);
             this.player.anims.play('run', true);
         }
@@ -125,10 +81,5 @@
             this.player.setVelocityY(0); 
         }
         }
+    }
 
-
-        
-</script>
-
-</body>
-</html>
