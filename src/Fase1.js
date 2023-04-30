@@ -1,7 +1,7 @@
 // Configuração do jogo
 
 //var player;
-console.log("WHISTLE BABY");
+
 class Fase1 extends Phaser.Scene{
     
     preload ()
@@ -47,6 +47,7 @@ class Fase1 extends Phaser.Scene{
         this.physics.add.collider(this.player, this.wallsLayer);
         
         
+        
         this.keyA = this.input.keyboard.addKey('A');
         this.keyD = this.input.keyboard.addKey('D');
         this.keyW = this.input.keyboard.addKey('W');
@@ -89,7 +90,7 @@ class Fase1 extends Phaser.Scene{
             });
         this.anims.create({
             key: 'talk_knaiffs',
-                frames: this.anims.generateFrameNumbers('knaiffs_sp', {frames: [28,29]}),
+                frames: this.anims.generateFrameNumbers('knaiffs_sp', {frames: [91, 92, 93, 94, 95, 91]}),
                 frameRate: 10,
                 repeat: 0
                 });
@@ -103,7 +104,7 @@ class Fase1 extends Phaser.Scene{
 
         this.checkActiveZone();
         if(this.dialogs.isActive){
-            this.player.anims.play('talk_knaiffs', true);
+            this.naiffsNPC.anims.play('talk_knaiffs', true);
         }
         // verifica se precisa avançar no diálogo
         if (this.dialogs.isActive && !this.spacePressed && this.keySPACE.isDown){
