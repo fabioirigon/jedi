@@ -40,11 +40,19 @@ class Fase1 extends Phaser.Scene{
         this.naiffsNPC = this.physics.add.sprite(65, 200, 'knaiffs_sp', 0);
         //reduzindo a escala do npc(era muito grande)
         this.naiffsNPC.setScale(0.5);
-        this.naiffsNPC.body.width = 20;
+        
+        this.naiffsNPC.body.setSize(20, 50);
+
         this.naiffsNPC.setFrame(27);
 
         this.wallsLayer.setCollisionBetween(65, 750, true);
+
         this.physics.add.collider(this.player, this.wallsLayer);
+        this.physics.add.collider(this.player, this.naiffsNPC, function(player, naiffsNPC){
+            naiffsNPC.setVelocity(0);
+            naiffsNPC.body.setImmovable(true);
+            
+        });
         
         
         
