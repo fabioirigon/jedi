@@ -1,90 +1,41 @@
-// cada cena do jogo é uma classe que extende a classe base Phaser.Scene
-class phase_01_question extends Phaser.Scene
-{
-    // O construtor registra o nome da cena
-    constructor ()
-    {
-        super('phase_01_question');
-        console.log('phase_01_question')
-    }
+class fase_01_question extends Phaser.Scene {
+
 
     // função para carregamento de assets
     preload ()
     {
-        // carregando spritesheets
-        this.load.spritesheet('player_sp', 'assets/spritesheets/dante_1.png', { frameWidth: 48, frameHeight: 48 });
-        this.load.spritesheet('wizardIdle_sp', 'assets/spritesheets/wizard_idle.png', { frameWidth: 80, frameHeight: 80});
-        this.load.spritesheet('tiles_sp', 'assets/images/dungeon-16-16.png', { frameWidth: 16, frameHeight: 16});
-        
-        // carregando mapa (json) e gráficos do mapa
-        this.load.image('tiles', 'assets/images/dungeon-16-16.png');
-        this.load.tilemapTiledJSON('themap', 'assets/maps/map_phase_01.json');
+        //load spritesheet
+        this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
+
+        // load tile sheet
+        this.load.image('tiles', 'assets/maps/dungeon-16-16.png');
+
+        // load map
+        this.load.tilemapTiledJSON('themap', 'assets/maps/the_map.json');
+
+        this.load.spritesheet('swordSwing_sp', 'assets/spritesheets/sw_swing.png', { frameWidth: 16, frameHeight: 16});
     }
 
-    create_map(){
-        // criação do mapa e ligação com a imagem (tilesheet)
+    // função para criação dos elementos
+    create ()
+    {
+
+        // criação do mapa (json) e ligação com a imagem (tilesheet)
         this.map = this.make.tilemap({ key: 'themap', tileWidth: 16, tileHeight: 16 });
         this.tileset = this.map.addTilesetImage('dungeon_ts', 'tiles');
 
         // criação das camadas
         this.groundLayer = this.map.createLayer('ground', this.tileset, 0, 0);
         this.wallsLayer = this.map.createLayer('walls', this.tileset, 0, 0);
-    }
 
-    create_actors()
-    {
-        // criação do jogador
-        this.player = this.physics.add.sprite(250, 75, 'player_sp', 0)
-        this.player.setScale(0.6)
+        // criação jogador
+        this.player = new player(this, 100, 100, 'player_sp', 0);
+        this.player.setScale(0.6);
+        this.player.has_bow = false;    // previne de atirar flechas
 
-        // camera seguindo o jogador
-        this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
-        this.cameras.main.setZoom(1.5)   
-
-    }
-
-    create_animations()
-    {
-
-    }
-
-    create_collisions()
-    {
-
-        // criação da colisão com paredes
+        // criação da colisão com camadas
         this.wallsLayer.setCollisionBetween(30, 40, true)
         this.physics.add.collider(this.player, this.wallsLayer);
-
-        // colisão com armadilhas
-        this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
-    }
-
-    // criação do diálogo
-    create_tweens()
-    {
-    }
-
-    // função para criação dos elementos
-    create ()
-    {
-        console.log("create sc 1")
-
-        this.create_map();
-
-        this.create_actors();
-
-        this.create_collisions();
-
-        this.create_animations();
-
-        this.create_tweens();
-
-        // adicionando uma zona com gatilho, quando entrar aciona a função onZone
-        this.zoneDialog = true;
-        this.zone = this.add.zone(500, 100).setSize(100, 100);
-        this.physics.world.enable(this.zone);
-        this.physics.add.overlap(this.player, this.zone, this.onZone, null, this);
-
 
         // ligação das teclas de movimento
         this.keyA = this.input.keyboard.addKey('A');
@@ -93,100 +44,108 @@ class phase_01_question extends Phaser.Scene
         this.keyS = this.input.keyboard.addKey('S');
         this.keySPACE = this.input.keyboard.addKey('SPACE');
 
-        // habilita movimento
-        this.enable_move = true;
+        this.keyE = this.input.keyboard.addKey('E');
 
+        // definição de zoom da câmera e comando para seguir jogador
+        this.cameras.main.setZoom(1.9);
+        this.cameras.main.startFollow(this.player, true, 0.2, 0.2)
+
+        // criação das zonas
+        this.zone_dlg = this.add.zone(100, 200).setSize(70, 100);
+        this.physics.world.enable(this.zone_dlg);
+        this.physics.add.overlap(this.player, this.zone_dlg);
+
+        this.zone_ques = this.add.zone(220, 200).setSize(70, 100);
+        this.physics.world.enable(this.zone_ques);
+        this.physics.add.overlap(this.player, this.zone_ques);
+
+        // criação da mensagem "pressione E para interagir"
+        var px = this.cameras.main.width/2;  // pos horizontal
+        var ch = this.cameras.main.height
+        var py = ch/2 + 0.2*ch/this.cameras.main.zoom;  // pos vertical
+        console.log('pp', px, py)
+        this.interact_txt = this.add.text(px, py, "Pressione E para interagir", {
+            font: "15px Arial",
+            fill: "#A0A0A0",
+            align: "center", 
+            stroke: '#000000',
+            strokeThickness: 4,
+        });
+        this.interact_txt.setScrollFactor(0);  // deixa em posição relativa à camera (e não ao mapa)
+        this.interact_txt.setVisible(false);   // deixa invisível
+
+        // criação de lista de textos (diálogs) e do objeto dialog
+        this.txtLst_0 = ["Olá turma!\n Vamos criar alguns diálogos?", "Só se for agora", "Então tá"];
+        this.txtLst_1 = ["Aí já cansei de falar contigo..."];
+        this.quest_0 =  ["Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?",
+        1, "◯ 3589 livros", "◯ 3859 livros",  "◯ 30859 livros",  "◯ 38590 livros"]
+  
+        this.firstDialog = true;
+        this.dialogs = new dialogs(this);   
+
+        // flag para responder uma única vez à tecla pressionada
+        this.spacePressed = false;
+
+        console.group(this.player.body)
+        console.log(this.physics)
     }
 
 
     // update é chamada a cada novo quadro
     update ()
     {
-        // variável enaable move controla o movimento
-        if (this.enable_move){
-            // testa se tecla pressionada e seta a velocidade do jogador 
-            if (this.keyD?.isDown) {
-                this.player.setVelocityX(210);
-            }
-            else if (this.keyA?.isDown) {
-                this.player.setVelocityX(-210);
-            }
-            else{
-                this.player.setVelocityX(0); 
-            }
+        // verifica e trata se jogador em zona ativa
+        this.checkActiveZone();
 
-            // velocidade vertical
-            if (this.keyW.isDown) {
-                this.player.setVelocityY(-210);
-            }
-            else if (this.keyS.isDown) {
-                this.player.setVelocityY(210);
-            }
-            else{
-                this.player.setVelocityY(0); 
-            }
+        // verifica se precisa avançar no diálogo
+        if (this.dialogs.isActive && !this.spacePressed && this.keySPACE.isDown){
+            this.dialogs.nextDlg();
+            this.spacePressed = true;   // seta flag para false para esperar a tecla espaço ser levantada
         }
+        // se tecla solta, limpa a flag
+        if (!this.keySPACE.isDown){
+            this.spacePressed = false;
+        }
+    }
+
+    // trata zona ativa
+    checkActiveZone(){
+        // se jogador dentro de zona e o diálogo não está ativo
+        if (this.player.body.embedded && !this.dialogs.isActive){
+            // mostra a mensagem e verifica a tecla pressionada
+            this.interact_txt.setVisible(true);
+            if (this.keyE.isDown){
+                this.startDialogOrQuestion();
+            } 
+        }
+        // se diálogo ativo ou fora da zona, esconde a msg
         else{
-                this.player.setVelocity(0, 0); 
+            this.interact_txt.setVisible(false);
         }
     }
 
-    // ###################################################################
-    // cria os textos
-    onZone(){
-        if (this.zoneDialog){
-            this.zoneDialog = false;
-
-            // pergunta: 
-            this.quest = this.add.text(400, 100, "Meu avô tem 5 filhos, cada filho tem 3 filhos.\n Quantos primos eu tenho?", {
-                font: "15px Arial",
-                fill: "#20C020",
-                align: "centedr"
-            });
-            this.a0 = this.add.text(400, 150, "15 primos", {
-                font: "15px Arial",
-                fill: "#20C020",
-                align: "centedr"
-            });
-            this.a1 = this.add.text(400, 175, "12 primos", {
-                font: "15px Arial",
-                fill: "#20C020",
-                align: "centedr"
-            });
-            this.a2 = this.add.text(400, 200, "14 primos", {
-                font: "15px Arial",
-                fill: "#20C020",
-                align: "centedr"
-            });
-
-            // deixa clicar e liga com a função
-            this.a0.setInteractive();
-            this.a0.on('pointerdown', this.errou, this);
-            this.a1.setInteractive();
-            this.a1.on('pointerdown', this.errou, this);
-            this.a2.setInteractive();
-            this.a2.on('pointerdown', this.acertou, this);
-
-            // impede o movimento
-            this.enable_move = false;
+    startDialogOrQuestion(){
+        if (this.physics.overlap(this.player, this.zone_dlg)){
+            if (this.firstDialog){
+                this.dialogs.updateDlgBox(this.txtLst_0);
+                this.firstDialog = false;
+            }
+            else{
+                this.dialogs.updateDlgBox(this.txtLst_1);
+            }
         }
-
+        if (this.physics.overlap(this.player, this.zone_ques)){
+            this.dialogs.scene.dialogs.makeQuestion(this.quest_0, acertou_fcn, errou_fcn);
+        }
     }
+}
 
-    // função erro e acerto
-    errou(){
-        console.log("errou");
-         this.scene.restart();
-    }
+function acertou_fcn(ptr){
+    console.log("acertou");
+    this.dialogs.hideBox();
+}
 
-    acertou(){
-        console.log("acertou");
-         this.enable_move = true;
-         this.quest.setVisible(false);
-         this.a0.setVisible(false);
-         this.a1.setVisible(false);
-         this.a2    .setVisible(false);
-    }
-
-
+function errou_fcn(ptr){
+    console.log("errou")
+    this.dialogs.hideBox();
 }
