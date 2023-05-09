@@ -69,7 +69,7 @@ class Fase1 extends Phaser.Scene{
         this.physics.world.enable(this.zone_dlg);
         this.physics.add.overlap(this.player, this.zone_dlg);
 
-        this.zone_ques = this.add.zone(30,400).setSize(100,100);
+        this.zone_ques = this.add.zone(200,80).setSize(100,70);
         this.physics.world.enable(this.zone_ques);
         this.physics.add.overlap(this.player, this.zone_ques);
 
@@ -89,8 +89,8 @@ class Fase1 extends Phaser.Scene{
 
         // criação de lista de textos (diálogs) e do objeto dialogs
         this.txtLst_0 = ["Eu estava te esperando! Seja bem vindo, jogador. Meu nome é Knaíffes, mas pode me chamar de facas.", "Daqui em diante aparecerão inimigos que voce precisará derrotar e perguntas que voce precisará responder.", "Ao responder corretamente, o muro se abrirá e você receberá mais inimigos.", "Porém, cuidado. Ao final desse desafio estará um ser de força incomum. Esteja preparado."];
-        this.quest_0 = ["Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?",
-        1, "◯ 3589 livros", "◯ 3859 livros",  "◯ 30859 livros",  "◯ 38590 livros"]
+        this.quest_0 = ["Para produzir bolos, uma fábrica utiliza 5 bandejas de ovos por dia. Sabendo que em uma bandeja tem 30 ovos, quantos ovos serão necessários para produção de bolos no período de 15 dias?",
+        1, "◯ 75", "◯ 150",  "◯ 450",  "◯ 2250"]
         
         
         this.dialogs = new dialogs(this);   
