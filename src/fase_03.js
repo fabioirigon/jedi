@@ -12,6 +12,11 @@ class Fase_03 extends Phaser.Scene {
       frameWidth: 64,
       frameHeight: 64,
     });
+    // 
+    this.load.spritesheet("spider_sp", "assets/spritesheets/spider11.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
     // Elfa
     this.load.spritesheet("elfa", "assets/spritesheets/elfa.png", {
       frameWidth: 64,
@@ -46,6 +51,7 @@ class Fase_03 extends Phaser.Scene {
 
     this.load.spritesheet('elfa_bullet', 'assets/spritesheets/elfa_bullet.png', { frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('lightning_sp', 'assets/spritesheets/lightning.png', { frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('swordSwing_sp', 'assets/spritesheets/sw_swing.png', { frameWidth: 16, frameHeight: 16});
 
     this.load.image("tiles1", "assets/maps/first_asset.png");
     this.load.image("tiles2", "assets/maps/solaria.png");
@@ -117,6 +123,10 @@ class Fase_03 extends Phaser.Scene {
     this.player.setSize(32, 32);
     this.player.setOffset(16, 32);
     this.player.has_bow = false;
+
+    this.spider = this.physics.add.sprite(810, 140, 'spider_sp', 0);
+    this.spider.setScale(0.5)
+    this.spider.body.setSize(this.spider.width*0.5, this.spider.height*0.5)
 
     this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
     this.light.setScale(2);
@@ -568,14 +578,15 @@ class Fase_03 extends Phaser.Scene {
     this.dlgBox = true;
     this.askQuestion = true;
     //createQuestion(this);
-    //this.dialogs.makeQuestion(this.question, acertou2, errou2)
-    //makeQuestion(this);
+    //this.dialogs.makeQuestion(this.Q0, acertou2, errou2)
     this.interact_txt.alpha = 1;
     this.create_elfa()
   }
  
   // update é chamada a cada novo quadro
   update() {
+
+    this.spider.setRotation(Math.atan2(this.player.x-this.spider.x, -this.player.y+this.spider.y))
 
     this.player.body.debugBodyColor = this.player.body.touching.none ? 0x0099ff : 0xff9900;
     if (this.player.body.embedded && this.dialogs.isActive==false){

@@ -24,6 +24,7 @@ class Fase_01 extends Phaser.Scene
         this.load.spritesheet('wizardIdle_sp', 'assets/spritesheets/wizard_idle.png', { frameWidth: 80, frameHeight: 80});
         this.load.spritesheet('tiles_sp', 'assets/images/dungeon-16-16.png', { frameWidth: 16, frameHeight: 16});
         this.load.spritesheet('lightning_sp', 'assets/spritesheets/lightning.png', { frameWidth: 32, frameHeight: 32});
+        this.load.spritesheet('swordSwing_sp', 'assets/spritesheets/sw_swing.png', { frameWidth: 16, frameHeight: 16});
         
         // carregando mapa (json) e gráficos do mapa
         this.load.image('tiles', 'assets/images/dungeon-16-16.png');
@@ -497,7 +498,7 @@ class Fase_01 extends Phaser.Scene
         var bullet = this.bullets.getFirstDead(false);
         var vx = this.player.x - this.enemy_6.x
         var vy = this.player.y - this.enemy_6.y
-        var scl = 270/Math.sqrt(vx*vx+vy*vy)
+        var scl = 170/Math.sqrt(vx*vx+vy*vy)
         //console.log('blt', bullet)
         if (bullet){
             bullet.body.reset(this.enemy_6.x, this.enemy_6.y);

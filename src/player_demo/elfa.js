@@ -85,7 +85,7 @@ class Elfa extends Actor {
       var bullet = this.bullets.getFirstDead(false);
       if (bullet){
           bullet.body.reset(this.x, this.y);
-          bullet.anims.play('bullet_anim')
+          //bullet.anims.play('bullet_anim')
           bullet.setActive(true);
           bullet.setVisible(true);
   
