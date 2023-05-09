@@ -34,7 +34,7 @@ class player extends Actor {
     this.facing = [0, 1];
     this.create_animations(texture);
 
-    this.has_sword = true;
+    this.has_sword = false;
     this.swingZone =  this.scene.add.zone(-50, -50).setSize(25, 25);
     this.swing = this.scene.add.sprite(this.x, this.y, 'swordSwing_sp', 0)
     this.swing.setVisible(false);

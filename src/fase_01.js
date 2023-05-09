@@ -68,7 +68,7 @@ class Fase_01 extends Phaser.Scene
         }
 
         //this.player = new player(this, px, py, 'player_sp', 0);
-        this.player = new player(this, 1480, 600, 'player_sp', 0);
+        this.player = new player(this, 100, 40, 'player_sp', 0);
         this.player.setScale(0.6);
         this.player.has_bow = false;
         this.player.hp = parseInt(localStorage.getItem('hp')) || 100;
