@@ -104,7 +104,7 @@ class dialogs {
 
           t0.setScrollFactor(0);
           //t0.setOrigin(0, 0)
-          if (i-2 == correct)
+          if (i-4 == correct)
               t0.on('pointerdown', acertou, this.scene);
           else
               t0.on('pointerdown', errou, this.scene);
