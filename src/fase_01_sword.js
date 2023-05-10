@@ -73,7 +73,7 @@ class fase_01_sword extends Phaser.Scene {
         var ch = this.cameras.main.height
         var py = ch/2 + 0.2*ch/this.cameras.main.zoom;  // pos vertical
         console.log('pp', px, py)
-        this.interact_txt = this.add.text(px, py, "Pressione E para interagir", {
+        this.interact_txt = this.add.text(px, py, "Pressione E para interagir !!!", {
             font: "15px Arial",
             fill: "#A0A0A0",
             align: "center", 
