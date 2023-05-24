@@ -249,6 +249,7 @@ function onZone_2(){
 
 function onZone_3(){
     if (this.create_dialog){
+         this.create_dialog = false;
         this.dialog.makeQuestion(this.quest_0, acertou_fcn, errou_fcn);
     }
 }
