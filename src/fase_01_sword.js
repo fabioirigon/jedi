@@ -14,6 +14,7 @@ class fase_01_sword extends Phaser.Scene {
         this.load.tilemapTiledJSON('themap', 'assets/maps/the_map.json');
 
         this.load.spritesheet('swordSwing_sp', 'assets/spritesheets/sw_swing.png', { frameWidth: 16, frameHeight: 16});
+        this.load.spritesheet('bullet', 'assets/spritesheets/elfa_bullet.png', { frameWidth: 16, frameHeight: 16});
 
         this.load.spritesheet("spider_sp", "assets/spritesheets/spider11.png", {
             frameWidth: 64,
@@ -39,6 +40,13 @@ class fase_01_sword extends Phaser.Scene {
         this.player.setScale(0.6);
         this.player.has_bow = false;    // previne de atirar flechas
 
+    
+        this.shooting_spider = this.physics.add.sprite(80, 540, 'spider_sp', 1);
+        this.spider_bullet = this.physics.add.sprite(-10, -10, 'bullet', 0);
+        this.spider_bullet.setActive(false);
+        this.spider_bullet.setVisible(false);
+        this.shoot_timer = this.time.addEvent({ delay: Phaser.Math.Between(2000, 4000), callback: spider_shoot, callbackScope: this });
+
         // criação da colisão com camadas
         this.wallsLayer.setCollisionBetween(30, 40, true)
         this.physics.add.collider(this.player, this.wallsLayer);
@@ -53,7 +61,7 @@ class fase_01_sword extends Phaser.Scene {
         this.keyE = this.input.keyboard.addKey('E');
 
         // definição de zoom da câmera e comando para seguir jogador
-        this.cameras.main.setZoom(1.9);
+        this.cameras.main.setZoom(1.5);
         this.cameras.main.startFollow(this.player, true, 0.2, 0.2)
 
         // criação das zonas
@@ -94,8 +102,8 @@ class fase_01_sword extends Phaser.Scene {
 
         // flag para responder uma única vez à tecla pressionada
         this.spacePressed = false;
-        this.spawn_timer = this.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: spawn, callbackScope: this });
 
+        this.spawn_timer = this.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: spawn, callbackScope: this });
         this.spiders = this.physics.add.group();
         this.spiders.enableBody = true;
         this.spiders.physicsBodyType = Phaser.Physics.ARCADE;
@@ -105,7 +113,9 @@ class fase_01_sword extends Phaser.Scene {
             spider.body.setSize(10, 10);
             spider.setActive(false);
             spider.setVisible(false);
-        }    
+        }
+
+
     }
 
 
@@ -198,3 +208,22 @@ function spawn(){
     this.spawn_timer = this.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: spawn, callbackScope: this });
 }
 
+function spider_shoot(){
+    console.log('shoot')
+    if (this.spider_bullet.isActive){
+        console.log('bullet active')
+    }
+    else{
+
+        this.spider_bullet.setActive(true);
+        this.spider_bullet.setVisible(true);
+        this.spider_bullet.setPosition(80, 550);
+        var dx, dy, ampl;
+        dx = this.player.x-80
+        dy = this.player.y-550
+        ampl = Math.sqrt(dx*dx + dy*dy)
+        this.spider_bullet.setVelocity(180*dx/ampl, 180*dy/ampl);
+    }
+
+    this.shoot_timer = this.time.addEvent({ delay: Phaser.Math.Between(3000, 5000), callback: spider_shoot, callbackScope: this });
+}
