@@ -148,33 +148,36 @@ class Enemy extends Actor {
   }
 
   setEnemyMovement(){
-    this.vX = player.x - this.x;
-    this.vX2 = this.vX*this.vX;
-    this.vY = player.y - this.y;
-    this.vY2 = this.vY * this.vY;
-    if(this.walkEnable == 1){
-      if(this.vX2+this.vY2 > 0){
-        this.body.setVelocityX(40);
-        this.body.setVelocityY(40);
+    var vX = player.x - this.x;
+    var vX2 = this.vX*this.vX;
+    var vY = player.y - this.y;
+    var vY2 = this.vY * this.vY;
+    //if(this.walkEnable == 1){
+      if(vX2+vY2 != 0){
+        console.log("Aqui");
+        this.setVelocityX(-20);
+        this.setVelocityY(-20);
       }else{
-        this.body.setVelocityX(0);
-        this.body.setVelocityY(0);
+        console.log("Aqui2");
+        this.setVelocityX(0);
+        this.setVelocityY(0);
       }
-    }
+    //}
   }
 
   preUpdate (time, delta)
   {
     super.preUpdate(time, delta);
 
-    if (this.move_enable){
+    //if (this.move_enable){
+      //console.log("Aqui");
       this.setEnemyMovement();
       this.set_walk_animation();
-    }
-    else{
-      this.setVelocityX(0); 
-      this.setVelocityY(0); 
-    }
+   // }
+    //else{
+      //this.setVelocityX(0); 
+      //this.setVelocityY(0); 
+    //}
 
   }
 
