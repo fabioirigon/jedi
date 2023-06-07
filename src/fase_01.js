@@ -5,7 +5,7 @@ class Fase_01 extends Phaser.Scene
     constructor ()
     {
         super('Fase_01'); 
-    }
+    } 
 
     // esta função é usada para receber dados, no caso o status da parede
     init(data)
