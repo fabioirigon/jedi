@@ -77,18 +77,113 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
 
 }
 
+console.log("Criando inimigo");
 class Enemy extends Actor {
 
-  constructor(scene, x, y, texture, frame) {
-    super(scene, x, y, texture, frame);
+  constructor(scene, x, y, texture, frame, player) {
+    super(scene, x, y, texture, frame, player);
+    this.move_enable = true;
+    this.facing = [0, 1];
+    console.log("animation");
+    this.create_animations(texture);
+    this.walkEnable = 1;
+  }
+
+  create_animations(texture){
+    this.anims.create({
+        key: 'walk_up',
+        frames: this.anims.generateFrameNumbers(texture, {start: 9, end: 11}),
+        frameRate: 20,
+        repeat: -1
+        });
+    this.anims.create({
+        key: 'walk_left',
+        frames: this.anims.generateFrameNumbers(texture, {start: 13, end: 15}),
+        frameRate: 20,
+        repeat: -1
+        });
+    this.anims.create({
+        key: 'walk_down',
+        frames: this.anims.generateFrameNumbers(texture, {start: 1, end: 3}),
+        frameRate: 20,
+        repeat: -1
+        });
+    this.anims.create({
+        key: 'walk_right',
+        frames: this.anims.generateFrameNumbers(texture, {start: 4, end: 6}),
+        frameRate: 20,
+        repeat: -1
+        });
+
+
+    this.anims.create({
+        key: 'die',
+        frames: this.anims.generateFrameNumbers(texture, {start: 0, end: 0}),
+        frameRate: 20,
+        repeat: 0
+        });    
+  }
+
+  set_walk_animation(){
+    if (this.body.velocity.x > 0){
+      this.anims.play('walk_right', true);
+      this.facing = [1, 0];
+    }
+    else if (this.body.velocity.x < 0){
+      this.anims.play('walk_left', true);
+      this.facing = [-1, 0];      
+    }
+    else if (this.body.velocity.y > 0){
+      this.anims.play('walk_down', true);
+      this.facing = [0, 1];
+    }
+    else if (this.body.velocity.y < 0){
+      this.anims.play('walk_up', true);
+      this.facing = [0, -1];
+    }
+    else{
+      this.anims.stop();
+    }
+
+  }
+
+  setEnemyMovement(){
+    this.vX = player.x - this.x;
+    this.vX2 = this.vX*this.vX;
+    this.vY = player.y - this.y;
+    this.vY2 = this.vY * this.vY;
+    if(this.walkEnable == 1){
+      if(this.vX2+this.vY2 > 0){
+        this.body.setVelocityX(40);
+        this.body.setVelocityY(40);
+      }else{
+        this.body.setVelocityX(0);
+        this.body.setVelocityY(0);
+      }
+    }
+  }
+
+  preUpdate (time, delta)
+  {
+    super.preUpdate(time, delta);
+
+    if (this.move_enable){
+      this.setEnemyMovement();
+      this.set_walk_animation();
+    }
+    else{
+      this.setVelocityX(0); 
+      this.setVelocityY(0); 
+    }
+
   }
 
 
-  update(player)
+  /*update(player)
   {
     var dx = player.x - this.x;
     var dy = player.y - this.y;
-    if (dx*dx + dy*dy < 150*150)
+    if (dx*dx + dy*dy > 0)
     {
         this.setVelocityX(dx);
         this.setVelocityY(dy);
@@ -97,5 +192,6 @@ class Enemy extends Actor {
         this.setVelocityX(0);
         this.setVelocityY(0);
     }
-  }
+  }*/
 }
+
