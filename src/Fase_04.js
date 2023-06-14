@@ -13,6 +13,7 @@ class Fase_04 extends Phaser.Scene{
         this.load.audio('snowy', ['assets/audio/snowy.mp3']);
         this.load.audio('baath', ['assets/audio/baath.mp3']);
         this.load.spritesheet('bat','assets/spritesheets/bat.png', {frameWidth: 32, frameHeight: 32});
+        this.load.spritesheet('boss', 'assets/spritesheets/boss.png', { frameWidth: 64, frameHeight: 64});
     }
 
     // criar elementos
@@ -41,6 +42,8 @@ class Fase_04 extends Phaser.Scene{
         this.bat4 = new Enemy(this, 850, 710, 'bat', 1, this.player);
         this.bat5 = new Enemy(this, 1055, 400, 'bat', 1, this.player);
         this.bat6 = new Enemy(this, 2000, 855, 'bat', 1, this.player);
+        //minha parte
+        this.enemy_6  = this.physics.add.sprite(250, 800, 'boss', 120);
         
 
         // criação da colisão
@@ -128,6 +131,7 @@ class Fase_04 extends Phaser.Scene{
         
         this.bgsong1.play(musicConfig);
                 
+        this.create_animations();
     }
     
     moveE(Enemy, speedX, speedY){
@@ -229,4 +233,55 @@ function BossMessage(){
 
 }
 
+// onTextCorr(scene, text){
+//     sortBoxes(this);
+//     this.light.setVisible(true);
+//     this.light.setPosition(this.enemy_6.x, this.enemy_6.y);
+//     this.light.play("lightning_anim");
+//     this.enemyHitCount = this.enemyHitCount +1;
+//     if (this.enemyHitCount >3){
+//         this.T1.body.enable=false;
+//         this.T2.body.enable=false;
+//         this.T3.body.enable=false;
+//         this.T1.setVisible(false);
+//         this.T2.setVisible(false);
+//         this.T3.setVisible(false);
+//         this.timer.remove(false);
+//         this.stairs.body.enable = true;
+//         this.stairs.setVisible(true);
 
+//         this.light.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
+//             console.log('done');
+//             this.enemy_6.setVisible(false);
+//         }, this);
+        
+//     }
+// }
+
+// onTextErr(player, text){
+//     //const idx = [0, 1, 2];
+//     sortBoxes(this);
+// }
+
+// }
+
+// function sortBoxes(scene){
+
+//     const pos = [1350, 1450, 1550]
+//     pos.sort(() => Math.random() - 0.5)
+
+//     const b1 =  Math.floor(Math.random()*8+2);
+//     const b2 =  Math.floor(Math.random()*8+2);
+//     const b3 =  Math.floor(Math.random()*8+2);
+//     const ypos = (scene.T1.y == 600 ? 750 : 600);
+
+//     console.log("err -- ..", scene.T1.y)
+
+//     //this.T1.setPosition(1400, 600);
+//     scene.T1.setPosition(pos[0], ypos);
+//     scene.T2.setPosition(pos[1], ypos);
+//     scene.T3.setPosition(pos[2], ypos);
+//     scene.T1.text = parseInt(b1*3);
+//     scene.T2.text = parseInt(b2*3+1);
+//     scene.T3.text = parseInt(b3*3+2);
+// }
