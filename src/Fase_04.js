@@ -147,6 +147,27 @@ class Fase_04 extends Phaser.Scene{
         
     }
     
+    sortBoxes(scene){
+
+        const pos = [125, 225, 325]
+        pos.sort(() => Math.random() - 0.5)
+    
+        const b1 =  Math.floor(Math.random()*8+2);
+        const b2 =  Math.floor(Math.random()*8+2);
+        const b3 =  Math.floor(Math.random()*8+2);
+        const ypos = (scene.T1.y == 600 ? 750 : 600);
+    
+        console.log("err -- ..", scene.T1.y)
+    
+        //this.T1.setPosition(1400, 600);
+        scene.T1.setPosition(pos[0], ypos);
+        scene.T2.setPosition(pos[1], ypos);
+        scene.T3.setPosition(pos[2], ypos);
+        scene.T1.text = parseInt(b1*3);
+        scene.T2.text = parseInt(b2*3+1);
+        scene.T3.text = parseInt(b3*3+2);
+    }
+
     onTextCorr(scene, text){
         sortBoxes(this);
         this.light.setVisible(true);
@@ -172,26 +193,6 @@ class Fase_04 extends Phaser.Scene{
         }
     }
 
-     sortBoxes(scene){
-
-        const pos = [125, 225, 325]
-        pos.sort(() => Math.random() - 0.5)
-    
-        const b1 =  Math.floor(Math.random()*8+2);
-        const b2 =  Math.floor(Math.random()*8+2);
-        const b3 =  Math.floor(Math.random()*8+2);
-        const ypos = (scene.T1.y == 600 ? 750 : 600);
-    
-        console.log("err -- ..", scene.T1.y)
-    
-        //this.T1.setPosition(1400, 600);
-        scene.T1.setPosition(pos[0], ypos);
-        scene.T2.setPosition(pos[1], ypos);
-        scene.T3.setPosition(pos[2], ypos);
-        scene.T1.text = parseInt(b1*3);
-        scene.T2.text = parseInt(b2*3+1);
-        scene.T3.text = parseInt(b3*3+2);
-    }
 
     onTextErr(player, text){
         //const idx = [0, 1, 2];
