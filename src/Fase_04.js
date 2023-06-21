@@ -33,7 +33,7 @@ class Fase_04 extends Phaser.Scene{
         this.stairLayer = this.map.createLayer('escada', this.ObjTileset,0,0);
 
         // criação dos personagens
-        this.player = new player(this, 100, 100, 'player_sp', 0);
+        this.player = new player(this, 100, 800, 'player_sp', 0);
         this.player.setScale(0.6);
         this.player.walkEnable = 1;
         this.bat = new Enemy(this, 300, 300, 'bat', 1, this.player);
@@ -209,9 +209,10 @@ function sortBoxes(scene){
 
 function onTextCorr(scene, text){
     sortBoxes(this);
-    this.light.setVisible(true);
-    this.light.setPosition(this.enemy_6.x, this.enemy_6.y);
-    this.light.play("lightning_anim");
+    flashColor(scene.scene);
+    // this.light.setVisible(true);
+    // this.light.setPosition(this.enemy_6.x, this.enemy_6.y);
+    // this.light.play("lightning_anim");
     this.enemyHitCount = this.enemyHitCount +1;
     if (this.enemyHitCount >3){
         this.T1.body.enable=false;
@@ -232,6 +233,18 @@ function onTextCorr(scene, text){
     }
 }
 
+
+ 
+ function flashColor(scene) {
+    console.log(scene)
+    scene.enemy_6.setTint(0xFF0000);
+ 
+     scene.time.addEvent({
+            delay: 200,
+            callback: function(){ scene.enemy_6.clearTint(); },
+            callbackScope: this,
+         });
+ }
 
 function onTextErr(player, text){
     //const idx = [0, 1, 2];
