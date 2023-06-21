@@ -33,7 +33,7 @@ class Fase_04 extends Phaser.Scene{
         this.stairLayer = this.map.createLayer('escada', this.ObjTileset,0,0);
 
         // criação dos personagens
-        this.player = new player(this, 100, 800, 'player_sp', 0);
+        this.player = new player(this, 100, 100, 'player_sp', 0);
         this.player.setScale(0.6);
         this.player.walkEnable = 1;
         this.bat = new Enemy(this, 300, 300, 'bat', 1, this.player);
