@@ -141,72 +141,11 @@ class Fase_04 extends Phaser.Scene{
         //colisao minha parte
         console.log(this.physics.add)
         this.physics.world.enable([this.T1, this.T2, this.T3])
-        this.physics.add.overlap(this.player, this.T1, this.onTextCorr, null, this);
-        this.physics.add.overlap(this.player, this.T2, this.onTextErr, null, this);
-        this.physics.add.overlap(this.player, this.T3, this.onTextErr, null, this);
+        this.physics.add.overlap(this.player, this.T1, onTextCorr, null, this);
+        this.physics.add.overlap(this.player, this.T2, onTextErr, null, this);
+        this.physics.add.overlap(this.player, this.T3, onTextErr, null, this);
         
     }
-    
-    sortBoxes(scene){
-
-        const pos = [125, 225, 325]
-        pos.sort(() => Math.random() - 0.5)
-    
-        const b1 =  Math.floor(Math.random()*8+2);
-        const b2 =  Math.floor(Math.random()*8+2);
-        const b3 =  Math.floor(Math.random()*8+2);
-        const ypos = (scene.T1.y == 600 ? 750 : 600);
-    
-        console.log("err -- ..", scene.T1.y)
-    
-        //this.T1.setPosition(1400, 600);
-        scene.T1.setPosition(pos[0], ypos);
-        scene.T2.setPosition(pos[1], ypos);
-        scene.T3.setPosition(pos[2], ypos);
-        scene.T1.text = parseInt(b1*3);
-        scene.T2.text = parseInt(b2*3+1);
-        scene.T3.text = parseInt(b3*3+2);
-    }
-
-    onTextCorr(scene, text){
-        sortBoxes(this);
-        this.light.setVisible(true);
-        this.light.setPosition(this.enemy_6.x, this.enemy_6.y);
-        this.light.play("lightning_anim");
-        this.enemyHitCount = this.enemyHitCount +1;
-        if (this.enemyHitCount >3){
-            this.T1.body.enable=false;
-            this.T2.body.enable=false;
-            this.T3.body.enable=false;
-            this.T1.setVisible(false);
-            this.T2.setVisible(false);
-            this.T3.setVisible(false);
-            this.timer.remove(false);
-            this.stairs.body.enable = true;
-            this.stairs.setVisible(true);
-    
-            this.light.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
-                console.log('done');
-                this.enemy_6.setVisible(false);
-            }, this);
-            
-        }
-    }
-
-
-    onTextErr(player, text){
-        //const idx = [0, 1, 2];
-        sortBoxes(this);
-    }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -243,6 +182,60 @@ class Fase_04 extends Phaser.Scene{
         //this.moveE(this.bat, 50, 50);
     }
 
+}
+
+
+
+function sortBoxes(scene){
+
+    const pos = [125, 225, 325]
+    pos.sort(() => Math.random() - 0.5)
+
+    const b1 =  Math.floor(Math.random()*8+2);
+    const b2 =  Math.floor(Math.random()*8+2);
+    const b3 =  Math.floor(Math.random()*8+2);
+    const ypos = (scene.T1.y == 650 ? 850 : 650);
+
+    console.log("err -- ..", scene.T1.y)
+
+    //this.T1.setPosition(1400, 600);
+    scene.T1.setPosition(pos[0], ypos);
+    scene.T2.setPosition(pos[1], ypos);
+    scene.T3.setPosition(pos[2], ypos);
+    scene.T1.text = parseInt(b1*3);
+    scene.T2.text = parseInt(b2*3+1);
+    scene.T3.text = parseInt(b3*3+2);
+}
+
+function onTextCorr(scene, text){
+    sortBoxes(this);
+    this.light.setVisible(true);
+    this.light.setPosition(this.enemy_6.x, this.enemy_6.y);
+    this.light.play("lightning_anim");
+    this.enemyHitCount = this.enemyHitCount +1;
+    if (this.enemyHitCount >3){
+        this.T1.body.enable=false;
+        this.T2.body.enable=false;
+        this.T3.body.enable=false;
+        this.T1.setVisible(false);
+        this.T2.setVisible(false);
+        this.T3.setVisible(false);
+        this.timer.remove(false);
+        this.stairs.body.enable = true;
+        this.stairs.setVisible(true);
+
+        this.light.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
+            console.log('done');
+            this.enemy_6.setVisible(false);
+        }, this);
+        
+    }
+}
+
+
+function onTextErr(player, text){
+    //const idx = [0, 1, 2];
+    sortBoxes(this);
 }
 
 function Placa1(){
