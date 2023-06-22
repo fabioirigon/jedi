@@ -45,6 +45,13 @@ class Fase_04 extends Phaser.Scene{
 
         //minha parte
         this.enemy_boss  = this.physics.add.sprite(250, 750, 'boss', 120);
+        this.enemyHitCount = 0;
+        this.zoneExitBoss = this.add.zone(20, 880).setSize(32, 32);
+        this.physics.world.enable(this.zoneExitBoss);
+        this.physics.add.overlap(this.player, this.enemy_boss, this.playerOverlapEnemy, null, this);
+        // this.physics.add.overlap(this.player, this.enemyBoss, this.playerOverlapEnemy, null, this);
+
+
         
 
         // criação da colisão
@@ -118,6 +125,7 @@ class Fase_04 extends Phaser.Scene{
         this.zoneMusicBoss = this.add.zone(450, 830).setSize(64, 64);
         this.physics.world.enable(this.zoneMusicBoss);
         this.BossMessage1 = ["Se prepare para congelar o cérebro, tolo! Para Não congelar é preciso por multiplos de 3 caminhar"];
+        this.BossMessage2 = ["OH NÃO FUI DESCONGELADOOOO!"];
         this.physics.add.overlap(this.player, this.zoneMusicBoss, BossMessage, null, this);
 
         var musicConfig = {
@@ -145,6 +153,12 @@ class Fase_04 extends Phaser.Scene{
         this.physics.add.overlap(this.player, this.T2, onTextErr, null, this);
         this.physics.add.overlap(this.player, this.T3, onTextErr, null, this);
         
+        this.zoneExitBoss.body.setAllowGravity(false);
+        this.zoneExitBoss.body.setImmovable(true);
+        this.physics.add.collider(this.player, this.zoneExitBoss, this.playerCollideZone, null, this);
+        
+    
+    
     }
 
 
@@ -182,6 +196,27 @@ class Fase_04 extends Phaser.Scene{
         //this.moveE(this.bat, 50, 50);
     }
 
+    enemyHit (player, enemy){
+        player.getDamage(3);
+        if (player.getHPValue() == 0){
+            localStorage.setItem('hp',100);
+            player.die();
+        }
+    }
+
+    playerCollideZone(player, zone) {
+        // Ação a ser executada quando o jogador colide com a zona
+        console.log('O jogador colidiu com a zona!');
+        // this.dialog.updateDlgBox(["QUER SAIR? SÓ POR CIMA DO MEU CADAVER"]);
+        // ...resto do código para lidar com a colisão...
+      }
+
+      playerOverlapEnemy(player, enemy_boss) {
+        // Ação a ser executada quando o jogador sobrepor o inimigo
+        console.log('O jogador tomou dano!');
+        // ...resto do código para lidar com o dano ao jogador...
+      }
+
 }
 
 
@@ -208,27 +243,28 @@ function sortBoxes(scene){
 }
 
 function onTextCorr(scene, text){
+    console.log("hit enemy..",this.enemyHitCount)
     sortBoxes(this);
     flashColor(scene.scene);
     // this.light.setVisible(true);
     // this.light.setPosition(this.enemy_boss.x, this.enemy_boss.y);
     // this.light.play("lightning_anim");
     this.enemyHitCount = this.enemyHitCount +1;
-    if (this.enemyHitCount >3){
+    if (this.enemyHitCount >5){
+
         this.T1.body.enable=false;
         this.T2.body.enable=false;
         this.T3.body.enable=false;
         this.T1.setVisible(false);
         this.T2.setVisible(false);
         this.T3.setVisible(false);
-        this.timer.remove(false);
-        this.stairs.body.enable = true;
-        this.stairs.setVisible(true);
+        console.log('done');
+        this.dialog.updateDlgBox(this.BossMessage2);
+        this.enemy_boss.setVisible(false);
+        // Desabilitar a colisão entre o jogador e a zona
+        // Remover o collider entre o jogador e a zona
+        this.physics.world.removeCollider(this.player.body, this.zoneExitBoss.body);
 
-        this.light.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
-            console.log('done');
-            this.enemy_boss.setVisible(false);
-        }, this);
         
     }
 }

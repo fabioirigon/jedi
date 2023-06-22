@@ -23,3 +23,4 @@ class Elf extends Phaser.GameObjects.Sprite {
 
         this.timer = scene.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: this.fire, callbackScope: this });
     }
+}

@@ -154,7 +154,7 @@ class Enemy extends Actor {
     var vY2 = this.vY * this.vY;
     //if(this.walkEnable == 1){
       if(vX2+vY2 != 0){
-        console.log("Aqui");
+        // console.log("Aqui");
         this.setVelocityX(-20);
         this.setVelocityY(-20);
       }else{
