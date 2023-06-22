@@ -33,7 +33,7 @@ class Fase_04 extends Phaser.Scene{
         this.stairLayer = this.map.createLayer('escada', this.ObjTileset,0,0);
 
         // criação dos personagens
-        this.player = new player(this, 100, 100, 'player_sp', 0);
+        this.player = new player(this, 100, 700, 'player_sp', 0);
         this.player.setScale(0.6);
         this.player.walkEnable = 1;
         this.bat = new Enemy(this, 300, 300, 'bat', 1, this.player);
@@ -44,7 +44,7 @@ class Fase_04 extends Phaser.Scene{
         this.bat6 = new Enemy(this, 2000, 855, 'bat', 1, this.player);
 
         //minha parte
-        this.enemy_6  = this.physics.add.sprite(250, 750, 'boss', 120);
+        this.enemy_boss  = this.physics.add.sprite(250, 750, 'boss', 120);
         
 
         // criação da colisão
@@ -117,7 +117,7 @@ class Fase_04 extends Phaser.Scene{
         this.bgboss = false;
         this.zoneMusicBoss = this.add.zone(450, 830).setSize(64, 64);
         this.physics.world.enable(this.zoneMusicBoss);
-        this.BossMessage1 = ["Se prepare para congelar o cérebro, tolo!"];
+        this.BossMessage1 = ["Se prepare para congelar o cérebro, tolo! Para Não congelar é preciso por multiplos de 3 caminhar"];
         this.physics.add.overlap(this.player, this.zoneMusicBoss, BossMessage, null, this);
 
         var musicConfig = {
@@ -211,7 +211,7 @@ function onTextCorr(scene, text){
     sortBoxes(this);
     flashColor(scene.scene);
     // this.light.setVisible(true);
-    // this.light.setPosition(this.enemy_6.x, this.enemy_6.y);
+    // this.light.setPosition(this.enemy_boss.x, this.enemy_boss.y);
     // this.light.play("lightning_anim");
     this.enemyHitCount = this.enemyHitCount +1;
     if (this.enemyHitCount >3){
@@ -227,7 +227,7 @@ function onTextCorr(scene, text){
 
         this.light.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
             console.log('done');
-            this.enemy_6.setVisible(false);
+            this.enemy_boss.setVisible(false);
         }, this);
         
     }
@@ -237,11 +237,11 @@ function onTextCorr(scene, text){
  
  function flashColor(scene) {
     console.log(scene)
-    scene.enemy_6.setTint(0xFF0000);
+    scene.enemy_boss.setTint(0xFF0000);
  
      scene.time.addEvent({
             delay: 200,
-            callback: function(){ scene.enemy_6.clearTint(); },
+            callback: function(){ scene.enemy_boss.clearTint(); },
             callbackScope: this,
          });
  }
