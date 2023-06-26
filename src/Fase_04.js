@@ -47,15 +47,11 @@ class Fase_04 extends Phaser.Scene {
         this.bat6 = new Enemy(this, 2000, 855, 'bat', 1, this.player);
 
         //minha parte
-        this.enemy_boss = this.physics.add.sprite(250, 750, 'boss', 120);
+        // this.enemy_boss = this.physics.add.sprite(250, 750, 'boss', 120);
         this.enemyHitCount = 0;
         this.zoneExitBoss = this.add.zone(20, 880).setSize(32, 32);
         this.physics.world.enable(this.zoneExitBoss);
         this.physics.add.overlap(this.player, this.enemy_boss, this.playerOverlapEnemy, null, this);
-
-
-
-
 
         // criação da colisão
         this.wallsLayer.setCollisionBetween(0, 130, true);
@@ -160,17 +156,8 @@ class Fase_04 extends Phaser.Scene {
         this.zoneExitBoss.body.setImmovable(true);
 
         collisionZoneExit = this.physics.add.collider(this.player, this.zoneExitBoss, this.playerCollideZone, null, this);
-        // collisionZoneExit.destroy();
-        // collisionZoneExit = this.physics.add.overlap(this.player, this.zoneExitBoss, this.changeFase, null, this);
-
-
-
 
     }
-
-
-
-
 
     moveE(Enemy, speedX, speedY) {
         Enemy.x += speedX;
@@ -211,8 +198,7 @@ class Fase_04 extends Phaser.Scene {
     playerCollideZone(player, zone) {
         // Ação a ser executada quando o jogador colide com a zona
         console.log('O jogador colidiu com a zona!');
-        // this.dialog.updateDlgBox(["QUER SAIR? SÓ POR CIMA DO MEU CADAVER"]);
-        // ...resto do código para lidar com a colisão...
+        this.dialog.updateDlgBox(["QUER SAIR? SÓ POR CIMA DO MEU CADAVER"]);
     }
 
     playerOverlapEnemy(player, enemy_boss) {
@@ -254,9 +240,8 @@ function sortBoxes(scene) {
     const b3 = Math.floor(Math.random() * 8 + 2);
     const ypos = (scene.T1.y == 650 ? 850 : 650);
 
-    console.log("err -- ..", scene.T1.y)
+    console.log("err -- ..", scene.T1.y);
 
-    //this.T1.setPosition(1400, 600);
     scene.T1.setPosition(pos[0], ypos);
     scene.T2.setPosition(pos[1], ypos);
     scene.T3.setPosition(pos[2], ypos);
@@ -269,9 +254,6 @@ function onTextCorr(scene, text) {
     console.log("hit enemy..", this.enemyHitCount)
     sortBoxes(this);
     flashColor(scene.scene);
-    // this.light.setVisible(true);
-    // this.light.setPosition(this.enemy_boss.x, this.enemy_boss.y);
-    // this.light.play("lightning_anim");
     this.enemyHitCount = this.enemyHitCount + 1;
     if (this.enemyHitCount > 5) {
 
@@ -285,13 +267,6 @@ function onTextCorr(scene, text) {
         this.dialog.updateDlgBox(this.BossMessage2);
         this.enemy_boss.setVisible(false);
         this.deleteCollision();
-        // Desabilitar a colisão entre o jogador e a zona
-        // this.physics.world.disable(this.collisionZoneExit);
-        // this.scene.collisionZoneExit.destroy();
-        // this.scene.collisionZoneExit = this.physics.add.overlap(this.player, this.zoneExitBoss, this.changeFase, null, this);
-        // // Remover o collider entre o jogador e a zona
-        // this.physics.world.removeCollider(this.player.body, this.zoneExitBoss.body);
-
 
     }
 }
