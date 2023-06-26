@@ -49,7 +49,7 @@ class Fase_04 extends Phaser.Scene{
         this.zoneExitBoss = this.add.zone(20, 880).setSize(32, 32);
         this.physics.world.enable(this.zoneExitBoss);
         this.physics.add.overlap(this.player, this.enemy_boss, this.playerOverlapEnemy, null, this);
-        // this.physics.add.overlap(this.player, this.enemyBoss, this.playerOverlapEnemy, null, this);
+        
 
 
         
@@ -155,14 +155,20 @@ class Fase_04 extends Phaser.Scene{
         
         this.zoneExitBoss.body.setAllowGravity(false);
         this.zoneExitBoss.body.setImmovable(true);
-        this.physics.add.collider(this.player, this.zoneExitBoss, this.playerCollideZone, null, this);
         
-    
+        var collisionZoneExit = this.physics.add.collider(this.player, this.zoneExitBoss, this.playerCollideZone, null, this);
+        // collisionZoneExit.destroy();
+        // collisionZoneExit = this.physics.add.overlap(this.player, this.zoneExitBoss, this.changeFase, null, this);
+        
+
+     
     
     }
 
 
-
+    changeFase(){
+        console.log("Saiu da fase");
+    }
 
 
 
@@ -214,6 +220,7 @@ class Fase_04 extends Phaser.Scene{
       playerOverlapEnemy(player, enemy_boss) {
         // Ação a ser executada quando o jogador sobrepor o inimigo
         console.log('O jogador tomou dano!');
+        
         // ...resto do código para lidar com o dano ao jogador...
       }
 
@@ -262,6 +269,8 @@ function onTextCorr(scene, text){
         this.dialog.updateDlgBox(this.BossMessage2);
         this.enemy_boss.setVisible(false);
         // Desabilitar a colisão entre o jogador e a zona
+        collisionZoneExit.destroy();
+        collisionZoneExit = this.physics.add.overlap(this.player, this.zoneExitBoss, this.changeFase, null, this);
         // Remover o collider entre o jogador e a zona
         this.physics.world.removeCollider(this.player.body, this.zoneExitBoss.body);
 
@@ -285,6 +294,7 @@ function onTextCorr(scene, text){
 function onTextErr(player, text){
     //const idx = [0, 1, 2];
     sortBoxes(this);
+    console.log("erro jogador DAR DANO");
 }
 
 function Placa1(){

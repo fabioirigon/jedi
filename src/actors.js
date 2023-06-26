@@ -10,7 +10,7 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
     this.hp = 100;
     this.bar =  scene.add.rectangle(x, y-20, 80, 8, 0x000000);
     this.bar_bg =  scene.add.rectangle(x, y-20, 40, 6, 0x00ff00);
-    this.bar_bg.setOrigin(0.1, 0.5)
+    this.bar_bg.setOrigin(0.1, 0.5);
     //this.bar = new Phaser.GameObjects.Rectangle(scene, x, y, 100, 20, 0xff0000);
     //this.bar = new HealthBar(scene, x, y);
     this.draw_bar()
