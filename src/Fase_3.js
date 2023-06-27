@@ -5,6 +5,10 @@ class Fase_3 extends Phaser.Scene {
     preload ()
     {
         this.load.spritesheet('player_sp', "assets/spritesheets/player_sp.png", { frameWidth: 64, frameHeight: 64 });
+       
+        this.load.spritesheet('seuze_sp', "assets/spritesheets/seuze_sp.png", { frameWidth: 64, frameHeight: 64 });
+
+        this.load.spritesheet('ratoesqueleto_sp', "assets/spritesheets/ratoesqueleto_sp.png", { frameWidth: 64, frameHeight: 64 });
 
         this.load.image('tiles', "assets/maps/maptiles.png");
         this.load.image('tiles1', "assets/maps/props.png");
@@ -32,8 +36,13 @@ class Fase_3 extends Phaser.Scene {
         this.player.setScale(0.4);
         this.player.has_bow = false;    // previne de atirar flechas
 
-        this.mago =  this.physics.add.sprite(270, 250, 'player_sp', 29);
-        this.mago.setScale(0.4);
+        // Cria o seu zé (NPC amigo)
+        this.seuze =  this.physics.add.sprite(270, 250, 'seuze_sp', 52);
+        this.seuze.setScale(0.4);
+
+        // Cria o rato (Inimigo)
+        this.rato =  this.physics.add.sprite(600, 220, 'ratoesqueleto_sp', 57);
+        this.rato.setScale(0.4);
 
 
         // criação da colisão com camadas
