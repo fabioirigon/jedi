@@ -36,7 +36,7 @@ class Fase_04 extends Phaser.Scene {
         this.stairLayer = this.map.createLayer('escada', this.ObjTileset, 0, 0);
 
         // criação dos personagens
-        this.player = new player(this, 100, 700, 'player_sp', 0);
+        this.player = new player(this, 100, 100, 'player_sp', 0);
         this.player.setScale(0.6);
         this.player.walkEnable = 1;
         this.bat = new Enemy(this, 300, 300, 'bat', 1, this.player);
@@ -45,6 +45,7 @@ class Fase_04 extends Phaser.Scene {
         this.bat4 = new Enemy(this, 850, 710, 'bat', 1, this.player);
         this.bat5 = new Enemy(this, 1055, 400, 'bat', 1, this.player);
         this.bat6 = new Enemy(this, 2000, 855, 'bat', 1, this.player);
+        console.log("Bat criado");
 
         //minha parte
         this.enemy_boss = this.physics.add.sprite(250, 750, 'boss', 120);
@@ -76,43 +77,67 @@ class Fase_04 extends Phaser.Scene {
         this.cameras.main.setZoom(1.3);
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1, -200, -200);
 
-        this.zonePlaca1 = this.add.zone(32 * 12, 64 * 3).setSize(64, 64);
+        this.zonePlaca1 = this.add.zone(32*12, 64*3).setSize(64, 64);
         this.physics.world.enable(this.zonePlaca1);
         this.physics.add.overlap(this.player, this.zonePlaca1, Placa1, null, this);
 
         this.txtLst1 = ["Caminho congelando do conhecimento", "Para passar, responda as perguntas e cuidado para não escorregar"];
-        this.txtResposta1a = ["Caminho A: 81"];
-        this.txtResposta1b = ["Caminho B: 79"];
-        this.txtResposta1c = ["Caminho C: 77"];
+        this.txtResposta1a = ["Caminho A:"];
+        this.txtResposta1b = ["Caminho B:"];
+        this.txtResposta1c = ["Caminho C:"];
         this.dialog = new dialogs(this);
         this.create_dialog = false;
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-        this.zonePlaca1a = this.add.zone(32 * 38, 32 * 9).setSize(64, 64);
+        this.zoneEst1 = this.add.zone(16*65,32*5).setSize(32,64);
+        this.physics.world.enable(this.zoneEst1);
+        this.physics.add.overlap(this.player, this.zoneEst1, Questao1, null, this);
+
+        this.quest_0 =  ["O caminho que se deve pegar é a resposta para esta pergunta:\n 23 + 75 - 19 = ?",
+            1, "◯ 81",  "◯ 79",  "◯ 77"]
+        this.quest_1 =  ["O caminho que se deve pegar é a resposta para esta pergunta:\n 45 - 23 + 14 = ?",
+            1, "◯ 38",  "◯ 36",  "◯ 39"]
+        this.quest_2 =  ["O caminho que se deve pegar é a resposta para esta pergunta:\n 56 + 28 - 9 = ?",
+            1, "◯ 81",  "◯ 84",  "◯ 83"]
+
+        this.textQuestao1 = ["Agora escolha o caminho da sua resposta"];
+
+        this.zonePlaca1a = this.add.zone(32*38, 32*9).setSize(64, 64);
         this.physics.world.enable(this.zonePlaca1a);
         this.physics.add.overlap(this.player, this.zonePlaca1a, Placa1a, null, this);
 
-        this.zonePlaca1b = this.add.zone(32 * 41, 32 * 7).setSize(64, 64);
+        this.zonePlaca1b = this.add.zone(32*41, 32*7).setSize(64, 64);
         this.physics.world.enable(this.zonePlaca1b);
         this.physics.add.overlap(this.player, this.zonePlaca1b, Placa1b, null, this);
 
-        this.zonePlaca1c = this.add.zone(32 * 41, 32 * 2).setSize(64, 64);
+        this.zonePlaca1c = this.add.zone(32*41, 32*2).setSize(64, 64);
         this.physics.world.enable(this.zonePlaca1c);
         this.physics.add.overlap(this.player, this.zonePlaca1c, Placa1c, null, this);
 
-        this.txtResposta2a = ["Caminho A: 24"];
-        this.txtResposta2b = ["Caminho B: 22"];
-        this.txtResposta2c = ["Caminho C: 23"];
+        this.txtResposta2a = ["Caminho A:"];
+        this.txtResposta2b = ["Caminho B:"];
+        this.txtResposta2c = ["Caminho C:"];
 
-        this.zonePlaca2a = this.add.zone(32 * 39, 32 * 20).setSize(64, 64);
+        this.zoneEst2 = this.add.zone(16*95,32*26).setSize(32,64);
+        this.physics.world.enable(this.zoneEst2);
+        this.physics.add.overlap(this.player, this.zoneEst2, Questao2, null, this);
+
+        this.quest_3 = ["Para continuar sua jornada, outra resposta você deve responder:\n 3x9 - 5 = ?",
+	        1, "◯ 24",  "◯ 22",  "◯ 23"]  
+        this.quest_4 = ["Para continuar sua jornada, outra resposta você deve responder:\n 4x7 - 13 = ?",
+	        1, "◯ 17",  "◯ 15",  "◯ 16"]
+        this.quest_5 = ["Para continuar sua jornada, outra resposta você deve responder:\n 2x8 - 4 = ?",
+	        1, "◯ 14",  "◯ 12",  "◯ 11"]  
+
+        this.zonePlaca2a = this.add.zone(32*39, 32*20).setSize(64, 64);
         this.physics.world.enable(this.zonePlaca2a);
         this.physics.add.overlap(this.player, this.zonePlaca2a, Placa2a, null, this);
 
-        this.zonePlaca2b = this.add.zone(32 * 39, 32 * 23).setSize(64, 64);
+        this.zonePlaca2b = this.add.zone(32*39, 32*23).setSize(64, 64);
         this.physics.world.enable(this.zonePlaca2b);
         this.physics.add.overlap(this.player, this.zonePlaca2b, Placa2b, null, this);
 
-        this.zonePlaca2c = this.add.zone(32 * 39, 32 * 26).setSize(64, 64);
+        this.zonePlaca2c = this.add.zone(32*39, 32*26).setSize(64, 64);
         this.physics.world.enable(this.zonePlaca2c);
         this.physics.add.overlap(this.player, this.zonePlaca2c, Placa2c, null, this);
 
@@ -157,6 +182,9 @@ class Fase_04 extends Phaser.Scene {
 
         collisionZoneExit = this.physics.add.collider(this.player, this.zoneExitBoss, this.playerCollideZone, null, this);
 
+        this.physics.add.overlap(this.player, this.bat, damagePlayer, null, this);
+        this.physics.add.overlap(this.player.arrows, this.bat, damageEnemy(this.bat), null, this);
+
     }
 
     moveE(Enemy, speedX, speedY) {
@@ -183,8 +211,18 @@ class Fase_04 extends Phaser.Scene {
             this.player.walkEnable = 0;
         }
 
-        //this.moveE(this.bat, -50, -50);
-        //this.moveE(this.bat, 50, 50);
+        this.bat.update(this.player);
+        this.bat2.update(this.player);
+        this.bat3.update(this.player);
+        this.bat4.update(this.player);
+        this.bat5.update(this.player);
+        this.bat6.update(this.player);
+
+        if(this.player.dead == 1){
+            this.timedEvent = this.time.delayedCall(1500, resetFase, [], this);
+        }
+
+        
     }
 
     enemyHit(player, enemy) {
@@ -361,3 +399,72 @@ function BossMessage() {
     this.bssong1.play(musicConfig);
 
 }
+
+function Questao1(){
+    if(this.create_dialog){
+        var value = Phaser.Math.Between(1,3);
+        console.log(value);
+        if(value == 1){
+            this.dialog.makeQuestion(this.quest_0, acertou_fcn, errou_fcn);
+        } else if(value == 2){
+            this.dialog.makeQuestion(this.quest_1, acertou_fcn, errou_fcn);
+        } else {
+            this.dialog.makeQuestion(this.quest_2, acertou_fcn, errou_fcn);
+        }
+        this.create_dialog = false;
+    }
+}
+
+function Questao2(){
+    if(this.create_dialog){
+        var value = Phaser.Math.Between(1,3);
+        console.log(value);
+        if(value == 1){
+            this.dialog.makeQuestion(this.quest_3, acertou_fcn, errou_fcn);
+        } else if(value == 2){
+            this.dialog.makeQuestion(this.quest_4, acertou_fcn, errou_fcn);
+        } else {
+            this.dialog.makeQuestion(this.quest_5, acertou_fcn, errou_fcn);
+        }
+        this.create_dialog = false;
+    }
+}
+
+function acertou_fcn(ptr){
+    this.dialog.hideBox();
+    this.dialog.updateDlgBox(this.textQuestao1);
+}
+
+function errou_fcn(ptr){
+    this.dialog.updateDlgBox(this.textQuestao1);
+}
+
+function damagePlayer(){
+    //enemy.x = enemy.x-enemy.velocityX;
+    //enemy.y = enemy.y-enemy.velocityY;
+    this.player.getDamage(10);
+    if(this.player.direction == 0){
+        console.log("aqui");
+        this.player.x = this.player.x - 40;
+    }
+    if(this.player.direction == 1){
+        this.player.x = this.player.x + 40;
+    }
+    if(this.player.direction == 2){
+        this.player.y = this.player.y - 40;
+    }
+    if(this.player.direction == 3){
+        this.player.y = this.player.y + 40;
+    }
+}
+
+function damageEnemy(enemy){
+    console.log("dano inimigo");
+    enemy.getDamage(20);
+}
+
+function resetFase(){
+    this.bgsong1.stop();
+    this.scene.restart();
+}
+

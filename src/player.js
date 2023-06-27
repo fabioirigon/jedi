@@ -5,6 +5,8 @@ class player extends Actor {
   constructor(scene, x, y, texture, frame) {
     console.log("act 0", texture, frame)
     super(scene, x, y, texture, frame);
+    this.dead = 0;
+    this.direction = 0;
     console.log("2")
     this.scene = scene
     scene.add.existing(this);
@@ -16,7 +18,7 @@ class player extends Actor {
     this.arrows = scene.physics.add.group();
     this.arrows.enableBody = true;
     this.arrows.physicsBodyType = Phaser.Physics.ARCADE;
-    for (var i = 0; i < 5; i++){
+    for (var i = 0; i < 50; i++){
         var arrow = this.arrows.create(-10, -10, 'arrow');
         arrow.setScale(0.2);
         arrow.body.setSize(10, 10);
@@ -121,18 +123,22 @@ class player extends Actor {
     if (this.body.velocity.x > 0){
       this.anims.play('walk_right', true);
       this.facing = [1, 0];
+      this.direction = 0;
     }
     else if (this.body.velocity.x < 0){
       this.anims.play('walk_left', true);
       this.facing = [-1, 0];      
+      this.direction = 1;
     }
     else if (this.body.velocity.y > 0){
       this.anims.play('walk_down', true);
       this.facing = [0, 1];
+      this.direction = 2;
     }
     else if (this.body.velocity.y < 0){
       this.anims.play('walk_up', true);
       this.facing = [0, -1];
+      this.direction = 3;
     }
     else{
       this.anims.stop();
@@ -215,6 +221,9 @@ class player extends Actor {
     if (this.scene.keySPACE.isDown && this.attack_enable && this.has_bow) {
       this.attack();
     }
+    if(this.hp == 0){
+      this.die();
+    }
   }
 
   die(){
@@ -224,10 +233,14 @@ class player extends Actor {
     this.move_enable = false;
     console.log('c')
     this.body.enable=false;
-    console.log(this.scene.gameOver)
-    this.on('animationcomplete', this.scene.gameOver, this.scene);
+    //console.log(this.scene.gameOver)
+    //this.on('animationcomplete', this.scene.gameOver, this.scene);
     console.log('e')
-    this.anims.play('die');
+    if(this.dead == 0){
+      this.anims.play('die',true);
+      this.dead = 1;
+    }
+
   }
 
 }

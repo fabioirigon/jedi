@@ -8,15 +8,18 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
     this.body.setCollideWorldBounds(true);
     this.hp = 100;
-    this.bar =  scene.add.rectangle(x, y-20, 80, 8, 0x000000);
-    this.bar_bg =  scene.add.rectangle(x, y-20, 40, 6, 0x00ff00);
-    this.bar_bg.setOrigin(0.1, 0.5);
+    this.tam_rec=80;
+    this.bar =  scene.add.rectangle(x, y-20, this.tam_rec, 8, 0x000000);
+    this.bar_bg =  scene.add.rectangle(x, y-20, (this.hp/100)*this.tam_rec, 6, 0x00ff00);
+    this.bar_bg.setOrigin(0.5, 0.5);
     //this.bar = new Phaser.GameObjects.Rectangle(scene, x, y, 100, 20, 0xff0000);
     //this.bar = new HealthBar(scene, x, y);
-    this.draw_bar()
+    this.draw_bar();
   }
   getDamage(value){
-      this.hp = this.hp - value;
+    console.log("getDamage");
+    this.hp = this.hp - value;
+    this.bar_bg.width = (this.hp/100)*this.tam_rec;
   }
 
   getHPValue(){
@@ -83,6 +86,8 @@ class Enemy extends Actor {
   constructor(scene, x, y, texture, frame, player) {
     super(scene, x, y, texture, frame, player);
     this.move_enable = true;
+    this.velocityX = 0;
+    this.velocityY = 0;
     this.facing = [0, 1];
     console.log("animation");
     this.create_animations(texture);
@@ -125,19 +130,19 @@ class Enemy extends Actor {
   }
 
   set_walk_animation(){
-    if (this.body.velocity.x > 0){
+    if (this.body.velocity.x > 0 && this.body.velocity.x*this.body.velocity.x > this.body.velocity.y*this.body.velocity.y){
       this.anims.play('walk_right', true);
       this.facing = [1, 0];
     }
-    else if (this.body.velocity.x < 0){
+    else if (this.body.velocity.x < 0 && this.body.velocity.x*this.body.velocity.x > this.body.velocity.y*this.body.velocity.y){
       this.anims.play('walk_left', true);
       this.facing = [-1, 0];      
     }
-    else if (this.body.velocity.y > 0){
+    else if (this.body.velocity.y > 0 && this.body.velocity.y*this.body.velocity.y > this.body.velocity.x*this.body.velocity.x){
       this.anims.play('walk_down', true);
       this.facing = [0, 1];
     }
-    else if (this.body.velocity.y < 0){
+    else if (this.body.velocity.y < 0 && this.body.velocity.y*this.body.velocity.y > this.body.velocity.x*this.body.velocity.x){
       this.anims.play('walk_up', true);
       this.facing = [0, -1];
     }
@@ -147,54 +152,27 @@ class Enemy extends Actor {
 
   }
 
-  setEnemyMovement(){
-    var vX = player.x - this.x;
-    var vX2 = this.vX*this.vX;
-    var vY = player.y - this.y;
-    var vY2 = this.vY * this.vY;
-    //if(this.walkEnable == 1){
-      if(vX2+vY2 != 0){
-        // console.log("Aqui");
-        this.setVelocityX(-20);
-        this.setVelocityY(-20);
-      }else{
-        console.log("Aqui2");
+
+
+  update(player){
+    var dx = player.x - this.x;
+    var dy = player.y - this.y;
+    if(this.hp > 0){
+      if (dx*dx + dy*dy > 0){
+        this.velocityX = dx;
+        this.velocityY = dy;
+        this.setVelocityX(this.velocityX/10);
+        this.setVelocityY(this.velocityY/10);
+      }
+      else{
         this.setVelocityX(0);
         this.setVelocityY(0);
       }
-    //}
-  }
-
-  preUpdate (time, delta)
-  {
-    super.preUpdate(time, delta);
-
-    //if (this.move_enable){
-      //console.log("Aqui");
-      this.setEnemyMovement();
-      this.set_walk_animation();
-   // }
-    //else{
-      //this.setVelocityX(0); 
-      //this.setVelocityY(0); 
-    //}
-
-  }
-
-
-  /*update(player)
-  {
-    var dx = player.x - this.x;
-    var dy = player.y - this.y;
-    if (dx*dx + dy*dy > 0)
-    {
-        this.setVelocityX(dx);
-        this.setVelocityY(dy);
+    } else{
+      this.move_enable = false;
     }
-    else{
-        this.setVelocityX(0);
-        this.setVelocityY(0);
-    }
-  }*/
+    
+    this.set_walk_animation();
+  }
 }
 
