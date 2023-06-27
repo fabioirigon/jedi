@@ -47,7 +47,7 @@ class Fase_04 extends Phaser.Scene {
         this.bat6 = new Enemy(this, 2000, 855, 'bat', 1, this.player);
 
         //minha parte
-        // this.enemy_boss = this.physics.add.sprite(250, 750, 'boss', 120);
+        this.enemy_boss = this.physics.add.sprite(250, 750, 'boss', 120);
         this.enemyHitCount = 0;
         this.zoneExitBoss = this.add.zone(20, 880).setSize(32, 32);
         this.physics.world.enable(this.zoneExitBoss);
