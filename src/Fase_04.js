@@ -39,7 +39,8 @@ class Fase_04 extends Phaser.Scene {
         this.player = new player(this, 100, 100, 'player_sp', 0);
         this.player.setScale(0.6);
         this.player.walkEnable = 1;
-        this.bat = new Enemy(this, 300, 300, 'bat', 1, this.player);
+
+        this.bat = new Enemy(this, 100, 300, 'bat', 1, this.player);
         this.bat2 = new Enemy(this, 600, 350, 'bat', 1, this.player);
         this.bat3 = new Enemy(this, 200, 300, 'bat', 1, this.player);
         this.bat4 = new Enemy(this, 850, 710, 'bat', 1, this.player);
@@ -183,7 +184,18 @@ class Fase_04 extends Phaser.Scene {
         collisionZoneExit = this.physics.add.collider(this.player, this.zoneExitBoss, this.playerCollideZone, null, this);
 
         this.physics.add.overlap(this.player, this.bat, damagePlayer, null, this);
-        this.physics.add.overlap(this.player.arrows, this.bat, damageEnemy(this.bat), null, this);
+        this.physics.add.overlap(this.player, this.bat2, damagePlayer, null, this);
+        this.physics.add.overlap(this.player, this.bat3, damagePlayer, null, this);
+        this.physics.add.overlap(this.player, this.bat4, damagePlayer, null, this);
+        this.physics.add.overlap(this.player, this.bat5, damagePlayer, null, this);
+        this.physics.add.overlap(this.player, this.bat6, damagePlayer, null, this);
+
+        this.physics.add.overlap(this.player.arrows, this.bat, damageEnemy, null, this);
+        this.physics.add.overlap(this.player.arrows, this.bat2, damageEnemy, null, this);
+        this.physics.add.overlap(this.player.arrows, this.bat3, damageEnemy, null, this);
+        this.physics.add.overlap(this.player.arrows, this.bat4, damageEnemy, null, this);
+        this.physics.add.overlap(this.player.arrows, this.bat5, damageEnemy, null, this);
+        this.physics.add.overlap(this.player.arrows, this.bat6, damageEnemy, null, this);
 
     }
 
@@ -290,6 +302,7 @@ function sortBoxes(scene) {
 
 function onTextCorr(scene, text) {
     console.log("hit enemy..", this.enemyHitCount)
+    this.dialog.updateDlgBox(["OH NÃO VOCÊ ACERTOU"]);
     sortBoxes(this);
     flashColor(scene.scene);
     this.enemyHitCount = this.enemyHitCount + 1;
@@ -311,6 +324,7 @@ function onTextCorr(scene, text) {
 
 function changeFase() {
     console.log("Saiu da fase");
+    
 }
 
 function flashColor(scene) {
@@ -328,6 +342,8 @@ function onTextErr(player, text) {
     //const idx = [0, 1, 2];
     sortBoxes(this);
     console.log("erro jogador DAR DANO");
+    this.dialog.updateDlgBox(["ACHO QUE ERROU. HEHEHEHEH"]);
+
     this.enemyHit(this.player)
     console.log(this.player.getHPValue());
 }
@@ -440,8 +456,6 @@ function errou_fcn(ptr){
 }
 
 function damagePlayer(){
-    //enemy.x = enemy.x-enemy.velocityX;
-    //enemy.y = enemy.y-enemy.velocityY;
     this.player.getDamage(10);
     if(this.player.direction == 0){
         console.log("aqui");
@@ -460,7 +474,11 @@ function damagePlayer(){
 
 function damageEnemy(enemy){
     console.log("dano inimigo");
-    enemy.getDamage(20);
+    enemy.getDamage(3);
+    console.log(enemy.getHPValue())
+    if (enemy.getHPValue()<0) {
+        //matar inimigo
+    }
 }
 
 function resetFase(){
