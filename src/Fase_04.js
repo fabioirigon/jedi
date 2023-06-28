@@ -264,6 +264,7 @@ class Fase_04 extends Phaser.Scene {
         collisionZoneExit = this.physics.add.overlap(this.player, this.zoneExitBoss, this.changeFase, null, this);
     }
 
+
     changeFase() {
         console.log('Saindo da fase');
     }
@@ -477,7 +478,8 @@ function damageEnemy(enemy){
     enemy.getDamage(3);
     console.log(enemy.getHPValue())
     if (enemy.getHPValue()<0) {
-        //matar inimigo
+        console.log("Morcego morreu");
+        enemy.body.enable=false;
     }
 }
 
