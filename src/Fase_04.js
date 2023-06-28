@@ -95,11 +95,11 @@ class Fase_04 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.zoneEst1, Questao1, null, this);
 
         this.quest_0 =  ["O caminho que se deve pegar é a resposta para esta pergunta:\n 23 + 75 - 19 = ?",
-            1, "◯ 81",  "◯ 79",  "◯ 77"]
+            1, "A - ◯ 81",  "B - ◯ 79",  "C - ◯ 77"]
         this.quest_1 =  ["O caminho que se deve pegar é a resposta para esta pergunta:\n 45 - 23 + 14 = ?",
-            1, "◯ 38",  "◯ 36",  "◯ 39"]
+            1, "A - ◯ 38",  "B - ◯ 36",  "C - ◯ 39"]
         this.quest_2 =  ["O caminho que se deve pegar é a resposta para esta pergunta:\n 56 + 28 - 9 = ?",
-            1, "◯ 81",  "◯ 84",  "◯ 83"]
+            1, "A - ◯ 81",  "B - ◯ 75",  "C - ◯ 83"]
 
         this.textQuestao1 = ["Agora escolha o caminho da sua resposta"];
 
@@ -124,11 +124,11 @@ class Fase_04 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.zoneEst2, Questao2, null, this);
 
         this.quest_3 = ["Para continuar sua jornada, outra resposta você deve responder:\n 3x9 - 5 = ?",
-	        1, "◯ 24",  "◯ 22",  "◯ 23"]  
+	        1, "A - ◯ 24",  "B - ◯ 22",  "C - ◯ 23"]  
         this.quest_4 = ["Para continuar sua jornada, outra resposta você deve responder:\n 4x7 - 13 = ?",
-	        1, "◯ 17",  "◯ 15",  "◯ 16"]
+	        1, "A - ◯ 17",  "B - ◯ 15",  "C - ◯ 16"]
         this.quest_5 = ["Para continuar sua jornada, outra resposta você deve responder:\n 2x8 - 4 = ?",
-	        1, "◯ 14",  "◯ 12",  "◯ 11"]  
+	        1, "A - ◯ 14",  "B - ◯ 12",  "C - ◯ 11"]  
 
         this.zonePlaca2a = this.add.zone(32*39, 32*20).setSize(64, 64);
         this.physics.world.enable(this.zonePlaca2a);
@@ -217,10 +217,9 @@ class Fase_04 extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
             if (this.dialog.isActive) {
-
                 this.dialog.nextDlg()
             }
-            else {
+            else {      
                 this.create_dialog = true;
             }
         }

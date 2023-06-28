@@ -123,6 +123,9 @@ class dialogs {
       
       nextDlg(){
         console.log("nextDlg", this.txtIdx)
+        if (typeof this.txtSeq == 'undefined'){
+          return;
+        }
         this.txtIdx = this.txtIdx + 1;
         if (this.txtIdx < this.txtSeq.length)
         {
