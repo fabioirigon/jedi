@@ -71,6 +71,11 @@ class Fase_3 extends Phaser.Scene {
         this.physics.world.enable(this.zone_ques);
         this.physics.add.overlap(this.player, this.zone_ques);
 
+        // Criação da zona do esqueleto
+        this.zone_esqueleto = this.add.zone(525, 475).setSize(200, 200);
+        this.physics.world.enable(this.zone_esqueleto);
+
+
         // criação da mensagem "pressione E para interagir"
         var px = this.cameras.main.width*0.35;  // pos horizontal
         var py = 2*this.cameras.main.height/3;  // pos vertical
@@ -100,8 +105,42 @@ class Fase_3 extends Phaser.Scene {
 
         // flag para responder uma única vez à tecla pressionada
         this.spacePressed = false;
-    }
 
+        // Cria timer
+        this.spawn_timer = this.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: spawn, callbackScope: this });
+
+        // Cria grupo de esqueletos e inicia 5 itens
+        this.esqueleto = this.physics.add.group();
+        this.esqueleto.enableBody = true;
+        this.esqueleto.physicsBodyType = Phaser.Physics.ARCADE;
+        
+        for (var i = 0; i < 5; i++){
+            
+            var esqueleto = this.esqueleto.create(-10, -10, 'ratoesqueleto_sp', 0);
+            esqueleto.setScale(0.7);
+            esqueleto.body.setSize(10, 10);
+            esqueleto.setActive(false);
+            esqueleto.setVisible(false);
+            esqueleto.on(Phaser.Animations.Events.ANIMATION_COMPLETE, remove_esqueleto, this);
+
+        }
+
+        this.anims.create({
+            key: 'esqueleto_walk',
+            frames: this.anims.generateFrameNumbers('ratoesqueleto_sp', {frames: [51,52,53]}),
+            frameRate: 20,
+            repeat: -1
+            });
+        this.anims.create({
+            key: 'esqueleto_die',
+            frames: this.anims.generateFrameNumbers('ratoesqueleto_sp', {frames: [40,41,42,43]}),
+            frameRate: 3,
+            hideOnComplete: true,
+            onComplete: remove_esqueleto,
+            //onCompleteParams: [this],
+            repeat: 0
+            });    
+    }
 
     // update é chamada a cada novo quadro
     update ()
@@ -118,6 +157,13 @@ class Fase_3 extends Phaser.Scene {
         if (!this.keySPACE.isDown){
             this.spacePressed = false;
         }
+
+        for (let esqueleto of this.esqueleto.getMatching('active', true)){
+            esqueleto.setRotation(Math.atan2(this.player.x-esqueleto.x, -this.player.y+esqueleto.y))
+            //console.log(this.player.x - esqueleto.x, -this.player.y+esqueleto.y)
+            setEsqueletoSpeed(esqueleto, this.player);
+        }
+
     }
 
     // trata zona ativa
@@ -159,4 +205,46 @@ function acertou_fcn(ptr){
 function errou_fcn(ptr){
     console.log("errou")
     this.dialogs.hideBox();
+}
+/*function spawn(){
+    console.log('spawn');
+    this.spawn_timer = this.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: spawn, callbackScope: this });
+}*/
+
+function spawn(){
+    if (Phaser.Geom.Rectangle.Overlaps(this.zone_esqueleto.getBounds(), this.player.getBounds())){
+        console.log('spawn');
+        var esqueleto = this.esqueleto.getFirstDead(false);
+        if (esqueleto){    
+
+            esqueleto.body.reset(575, 450);
+            esqueleto.setActive(true);
+            esqueleto.setVisible(true);
+            //spider.play('spider_walk');
+        }
+    
+    }
+    this.spawn_timer = this.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: spawn, callbackScope: this });
+}
+
+function setEsqueletoSpeed(esqueleto, player){
+    //console.log(esqueleto)
+    /*
+    if (esqueleto.anims.currentAnim.key == 'esqueleto_die' ){
+        if (esqueleto.anims.isPlaying == false){
+            esqueleto.setActive(false);
+        }
+        return
+    }*/
+
+    var dx = player.x - esqueleto.x;
+    var dy = player.y - esqueleto.y;
+    var amp = Math.sqrt(dx*dx + dy*dy);
+    esqueleto.setVelocityX(30*dx/amp); 
+    esqueleto.body.setVelocityY(30*dy/amp);
+}
+
+function remove_esqueleto(par0){
+    console.log('rem', par0);
+    console.log(this);
 }
