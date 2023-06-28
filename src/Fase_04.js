@@ -184,7 +184,8 @@ class Fase_04 extends Phaser.Scene {
         collisionZoneExit = this.physics.add.collider(this.player, this.zoneExitBoss, this.playerCollideZone, null, this);
         this.anims.create({
             key: 'boss',
-            frames: this.anims.generateFrameNumbers('boss', {frames: [126, 131, 136, 141, 146,151,156,161,166,171,176,181,186,191]}),
+            //frames: this.anims.generateFrameNumbers('boss', {frames: [126, 131, 136, 141, 146,151,156,161,166,171,176,181,186,191]}),
+            frames: this.anims.generateFrameNumbers('boss', {frames: [50, 51, 52,53,54,101, 102]}),
             frameRate: 8,
             repeat: -1
             });
@@ -487,6 +488,9 @@ function damageEnemy(enemy){
     if (enemy.getHPValue()<0) {
         console.log("Morcego morreu");
         enemy.body.enable=false;
+        enemy.setVisible(false);
+        enemy.bar.setVisible(false);
+        enemy.bar_bg.setVisible(false);
     }
 }
 
