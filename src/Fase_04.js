@@ -182,6 +182,13 @@ class Fase_04 extends Phaser.Scene {
         this.zoneExitBoss.body.setImmovable(true);
 
         collisionZoneExit = this.physics.add.collider(this.player, this.zoneExitBoss, this.playerCollideZone, null, this);
+        this.anims.create({
+            key: 'boss',
+            frames: this.anims.generateFrameNumbers('boss', {frames: [126, 131, 136, 141, 146,151,156,161,166,171,176,181,186,191]}),
+            frameRate: 8,
+            repeat: -1
+            });
+        this.enemy_boss.play("boss");
 
         this.physics.add.overlap(this.player, this.bat, damagePlayer, null, this);
         this.physics.add.overlap(this.player, this.bat2, damagePlayer, null, this);
