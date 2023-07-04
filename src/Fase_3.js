@@ -7,7 +7,8 @@ class Fase_3 extends Phaser.Scene {
         this.load.spritesheet('player_sp', "assets/spritesheets/player_sp.png", { frameWidth: 64, frameHeight: 64 });
        
         this.load.spritesheet('seuze_sp', "assets/spritesheets/seuze_sp.png", { frameWidth: 64, frameHeight: 64 });
-
+        
+        this.load.spritesheet('esqueleto_sp', "assets/spritesheets/esqueleto_sp.png", { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('ratoesqueleto_sp', "assets/spritesheets/ratoesqueleto_sp.png", { frameWidth: 64, frameHeight: 64 });
 
         this.load.image('tiles', "assets/maps/maptiles.png");
@@ -42,7 +43,7 @@ class Fase_3 extends Phaser.Scene {
 
         // Cria o rato (Inimigo)
         this.rato =  this.physics.add.sprite(600, 220, 'ratoesqueleto_sp', 57);
-        this.rato.setScale(0.4);
+        this.rato.setScale(0.7);
 
 
         // criação da colisão com camadas
@@ -67,9 +68,13 @@ class Fase_3 extends Phaser.Scene {
         this.physics.world.enable(this.zone_dlg);
         this.physics.add.overlap(this.player, this.zone_dlg);
 
-        this.zone_ques = this.add.zone(600, 200).setSize(80, 0);
+        this.zone_ques = this.add.zone(600, 250).setSize(100, 100);
         this.physics.world.enable(this.zone_ques);
         this.physics.add.overlap(this.player, this.zone_ques);
+        
+        this.zone_dlg1 = this.add.zone(300, 450).setSize(100, 0);
+        this.physics.world.enable(this.zone_dlg1);
+        this.physics.add.overlap(this.player, this.zone_dlg1);
 
         // Criação da zona do esqueleto
         this.zone_esqueleto = this.add.zone(525, 475).setSize(200, 200);
@@ -91,10 +96,12 @@ class Fase_3 extends Phaser.Scene {
         this.interact_txt.setVisible(false);   // deixa invisível
 
         // criação de lista de textos (diálogs) e do objeto dialog
-        this.txtLst_0 = ["[SEU ZÉ]: Olá jovem guerreiro, O que faz por aqui, uai?\n","[GUERREIRO]: Eu preciso atravessar o cemitério para completar minha missão, porém há uma orda de esqueletos e não consigo pensar em como superá-los.", " Esse esqueletos são osso duro de roer, mas para sua sorte tenho algo que pode te ajudar.\n Tome aqui, esse é o arco lendário da matemática, criada por Tales de Mileto. Acredito que com ele você ira conseguir.", "[GUERREIRO]: Obrigado meu caro senhor, que Deus lhe pague."];
+        this.txtLst_0 = ["[SEU ZÉ]: Olá jovem guerreiro, O que faz por aqui, uai?\n","[GUERREIRO]: Eu preciso atravessar o cemitério para completar minha missão, porém há uma orda de esqueletos e não consigo pensar em como superá-los.", "[SEU ZÉ]: Esses cabeça de esqueleto são osso duro de roer, mas você pode correr pra conversar com o Mr. Stuart Mouse.", "[GUERREIRO]: Obrigado meu caro senhor, que Deus lhe pague."];
         this.txtLst_1 = ["Zé: Você agora tem oque é necessário."];
+        this.txtLst_2 = ["CUIDADO: A cidade está sitiada pelo o Rei do camundongos e seus servos os cabeça de caveira!\nCaso esteja perdido procure ajuda!"];
 
-        this.quest_0 =  ["Jogar baralho é uma atividade que estimula o raciocínio. Um jogo tradicional é a Paciência, que utiliza 52 cartas. Inicialmente são formadas sete colunas com as cartas. A primeira coluna tem uma carta, a segunda tem duas cartas,w e assim sucessivamente até a sétima coluna, a qual tem sete cartas, e o que sobra forma o monte, que são as cartas não utilizadas nas colunas.\nA quantidade de cartas que forma o monte é",
+        
+        this.quest_0 =  ["\n\n\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\n\n Jogar baralho é uma atividade que estimula o raciocínio. Um jogo tradicional é a Paciência, que utiliza 52 cartas. Inicialmente são formadas sete colunas com as cartas. A primeira coluna tem uma carta, a segunda tem duas cartas,w e assim sucessivamente até a sétima coluna, a qual tem sete cartas, e o que sobra forma o monte, que são as cartas não utilizadas nas colunas.\nA quantidade de cartas que forma o monte é",
         1, "◯ 21 cartas", "◯ 24 cartas",  "◯ 26 cartas",  "◯ 28 cartas"]
       
   
@@ -116,7 +123,7 @@ class Fase_3 extends Phaser.Scene {
         
         for (var i = 0; i < 5; i++){
             
-            var esqueleto = this.esqueleto.create(-10, -10, 'ratoesqueleto_sp', 0);
+            var esqueleto = this.esqueleto.create(-10, -10, 'esqueleto_sp', 31);
             esqueleto.setScale(0.7);
             esqueleto.body.setSize(10, 10);
             esqueleto.setActive(false);
@@ -127,13 +134,13 @@ class Fase_3 extends Phaser.Scene {
 
         this.anims.create({
             key: 'esqueleto_walk',
-            frames: this.anims.generateFrameNumbers('ratoesqueleto_sp', {frames: [51,52,53]}),
+            frames: this.anims.generateFrameNumbers('esqueleto_sp', {frames: [31]}),
             frameRate: 20,
             repeat: -1
             });
         this.anims.create({
             key: 'esqueleto_die',
-            frames: this.anims.generateFrameNumbers('ratoesqueleto_sp', {frames: [40,41,42,43]}),
+            frames: this.anims.generateFrameNumbers('esqueleto_sp', {frames: [40,41,42,43]}),
             frameRate: 3,
             hideOnComplete: true,
             onComplete: remove_esqueleto,
@@ -159,7 +166,7 @@ class Fase_3 extends Phaser.Scene {
         }
 
         for (let esqueleto of this.esqueleto.getMatching('active', true)){
-            esqueleto.setRotation(Math.atan2(this.player.x-esqueleto.x, -this.player.y+esqueleto.y))
+            //esqueleto.setRotation(Math.atan2(this.player.x-esqueleto.x, -this.player.y+esqueleto.y))
             //console.log(this.player.x - esqueleto.x, -this.player.y+esqueleto.y)
             setEsqueletoSpeed(esqueleto, this.player);
         }
@@ -191,8 +198,13 @@ class Fase_3 extends Phaser.Scene {
                 this.dialogs.updateDlgBox(this.txtLst_1);
             }
         }
+
         if (this.physics.overlap(this.player, this.zone_ques)){
             this.dialogs.scene.dialogs.makeQuestion(this.quest_0, acertou_fcn, errou_fcn);
+        }
+
+        if (this.physics.overlap(this.player, this.zone_dlg1)){
+            this.dialogs.updateDlgBox(this.txtLst_2);
         }
     }
 }
