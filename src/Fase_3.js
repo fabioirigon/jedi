@@ -67,7 +67,7 @@ class Fase_3 extends Phaser.Scene {
         this.physics.world.enable(this.zone_dlg);
         this.physics.add.overlap(this.player, this.zone_dlg);
 
-        this.zone_ques = this.add.zone(300, 450).setSize(80, 0);
+        this.zone_ques = this.add.zone(600, 200).setSize(80, 0);
         this.physics.world.enable(this.zone_ques);
         this.physics.add.overlap(this.player, this.zone_ques);
 
