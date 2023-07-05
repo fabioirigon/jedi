@@ -31,7 +31,8 @@ class Fase_04 extends Phaser.Scene {
         this.groundLayer = this.map.createLayer('chao', this.IceTileset, 0, 0);
         this.wallsLayer = this.map.createLayer('paredes', this.IceTileset, 0, 0);
         this.boardLayer = this.map.createLayer('placas', this.IceTileset, 0, 0);
-        this.iceLayer = this.map.createLayer('gelo', this.IceTileset, 0, 0);
+        this.iceLayerVert = this.map.createLayer('geloVertical', this.IceTileset, 0, 0);
+        this.iceLayerHor = this.map.createLayer('geloHorizontal', this.IceTileset, 0, 0);
         this.objLayer = this.map.createLayer('objetos', this.ObjTileset, 0, 0);
         this.stairLayer = this.map.createLayer('escada', this.ObjTileset, 0, 0);
 
@@ -224,11 +225,26 @@ class Fase_04 extends Phaser.Scene {
             }
         }
 
-        if (this.iceLayer.getTileAtWorldXY(this.player.x, this.player.y) == null) {
+        if (this.iceLayerVert.getTileAtWorldXY(this.player.x, this.player.y) == null && this.iceLayerHor.getTileAtWorldXY(this.player.x, this.player.y) == null) {
             this.player.walkEnable = 1;
         } else {
-            this.player.walkEnable = 0;
+            if(this.iceLayerVert.getTileAtWorldXY(this.player.x, this.player.y) != null){
+                this.player.walkEnable = 0;
+                if(this.player.facing[1] == -1){
+                    this.player.setVelocityY(-210);
+                } else if(this.player.facing[1] == 1) {
+                    this.player.setVelocityY(210);
+                }    
+            } else if(this.iceLayerHor.getTileAtWorldXY(this.player.x, this.player.y) != null){
+                this.player.walkEnable = 0;
+                if(this.player.facing[0] == -1){
+                    this.player.setVelocityX(-210);
+                } else if(this.player.facing[0] == 1) {
+                    this.player.setVelocityX(210);
+                }   
+            }
         }
+
 
         this.bat.update(this.player);
         this.bat2.update(this.player);
@@ -246,7 +262,7 @@ class Fase_04 extends Phaser.Scene {
 
     enemyHit(player, enemy) {
         player.getDamage(10);
-        if (player.getHPValue() == 0) {
+        if (player.getHPValue() <= 0) {
             // this.localStorage.setItem('hp', 100);
             player.die();
         }
