@@ -135,9 +135,9 @@ create_tweens()
         targets: t0,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
 
     // segunda fala
@@ -145,33 +145,33 @@ create_tweens()
         targets: t1,
         alpha: 1,
         ease: 'linear',
-        duration: 1000,
+        duration: 500,
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline.add({
         targets: t2,
         alpha: 1,
         ease: 'linear',
-        duration: 1000,
+        duration: 500,
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline.add({
         targets: t3,
         alpha: 1,
         ease: 'linear',
-        duration: 1000,
+        duration: 500,
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline.add({
         targets: t4,
         alpha: 1,
         ease: 'linear',
-        duration: 1000,
+        duration: 500,
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
 
     this.timeline2 = this.tweens.createTimeline({paused: true});
@@ -180,25 +180,25 @@ create_tweens()
         targets: t5,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline2.add({
         targets: t6,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline2.add({
         targets: t7,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
 
     this.timeline3 = this.tweens.createTimeline({paused: true});
@@ -207,17 +207,17 @@ create_tweens()
         targets: t8,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline3.add({
         targets: t9,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     
     this.timeline4 = this.tweens.createTimeline({paused: true});
@@ -225,49 +225,49 @@ create_tweens()
         targets: t10,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline4.add({
         targets: t11,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline4.add({
         targets: t12,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline4.add({
         targets: t13,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline4.add({
         targets: t14,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
     this.timeline4.add({
         targets: 15,
         alpha: 1,
         ease: 'linear',
-        duration: 1000, 
+        duration: 500, 
         yoyo: true,
-        hold: 3000
+        hold: 3500
     });
 }
 

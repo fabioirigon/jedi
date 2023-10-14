@@ -99,9 +99,9 @@ class Fase_07 extends Phaser.Scene
             targets: t0,
             alpha: 1,
             ease: 'linear',
-            duration: 1000, 
+            duration: 500, 
             yoyo: true,
-            hold: 3000
+            hold: 3500
         });
 
         // segunda fala
@@ -109,9 +109,9 @@ class Fase_07 extends Phaser.Scene
             targets: t1,
             alpha: 1,
             ease: 'linear',
-            duration: 1000,
+            duration: 500,
             yoyo: true,
-            hold: 3000
+            hold: 3500
         });
 
         // mago some
@@ -135,9 +135,9 @@ class Fase_07 extends Phaser.Scene
                 alpha: 1,
                 paused: true,
                 ease: 'Power1',
-                duration: 1000,
+                duration: 500,
                 yoyo: true,
-                duration: 1000,
+                duration: 500,
             });
     }
 

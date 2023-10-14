@@ -120,18 +120,18 @@ class Fase_06 extends Phaser.Scene
             targets: t0,
             alpha: 1,
             ease: 'linear',
-            duration: 1000, 
+            duration: 500, 
             yoyo: true,
-            hold: 3000
+            hold: 3500
         });
 
         this.timeline.add({
             targets: t1,
             alpha: 1,
             ease: 'linear',
-            duration: 1000,
+            duration: 500,
             yoyo: true,
-            hold: 3000
+            hold: 3500
         });
 
 
@@ -148,9 +148,9 @@ class Fase_06 extends Phaser.Scene
             targets: t3,
             alpha: 1,
             ease: 'linear',
-            duration: 1000, 
+            duration: 500, 
             yoyo: true,
-            hold: 3000
+            hold: 3500
         });
 
     }

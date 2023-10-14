@@ -2,8 +2,7 @@
 class Fase_02 extends Phaser.Scene
 {
     // O construtor registra o nome da cena
-    constructor ()
-    {
+    constructor (){
         super('Fase_02');
         //console.log('Fase_02')
     }
@@ -113,18 +112,18 @@ class Fase_02 extends Phaser.Scene
             targets: t0,
             alpha: 1,
             ease: 'linear',
-            duration: 1000, 
+            duration: 500, 
             yoyo: true,
-            hold: 3000
+            hold: 3500
         });
         this.tzone = this.tweens.add({
             targets: t0,
             alpha: 1,
             paused: true,
             ease: 'Power1',
-            duration: 1000,
+            duration: 500,
             yoyo: true,
-            duration: 1000,
+            duration: 500,
         });
 
         this.a2_anim = this.tweens.add({
