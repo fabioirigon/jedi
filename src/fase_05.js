@@ -390,7 +390,6 @@ class Fase_05 extends Phaser.Scene{
     this.orcEdialog = this.tweens.createTimeline();
 
     //dialogos dos orcs
-    /*
     this.orcEdialog.add({
       targets: doe0,
       alpha: 1,
@@ -410,7 +409,7 @@ class Fase_05 extends Phaser.Scene{
       hold: 3500,
       onComplete: hideDlg, 
       onCompleteParams: [this.dialog_bg, this.player]
-    });*/
+    });
     this.orcEdialog.add({
       targets: this.orcE,
       alpha: 0,
