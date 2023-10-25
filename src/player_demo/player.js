@@ -189,8 +189,8 @@ class player extends Actor {
 
   attack(){ 
     
-    console.log('attack', this.facing, this.arrows.countActive(false));
-    if (this.arrows.countActive(true) <= 0){
+    //console.log('attack', this.facing, this.arrows.countActive(false));
+    if (this.arrows.countActive(false) <= 0){
       return;
     }
 
