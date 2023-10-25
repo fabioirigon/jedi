@@ -1,4 +1,4 @@
-class Fase_01 extends Phaser.Scene {
+class Fase_08 extends Phaser.Scene {
   // função para carregamento de assets
   preload() {
     //load spritesheet
