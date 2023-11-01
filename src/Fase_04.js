@@ -210,10 +210,10 @@ class Fase_04 extends Phaser.Scene {
     }
 
     moveE(Enemy, speedX, speedY) {
-        Enemy.x += speedX;
-        Enemy.y += speedY;
+        Enemy.x += speedX*0.5;
+        Enemy.y += speedY*0.5;
     }
-
+    
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
             if (this.dialog.isActive) {
@@ -273,7 +273,6 @@ class Fase_04 extends Phaser.Scene {
             }
         }
     }
-       
 
     enemyHit(player, enemy) {
         player.getDamage(10);
@@ -282,7 +281,6 @@ class Fase_04 extends Phaser.Scene {
             player.die();
         }
     }
-
     playerCollideZone(player, zone) {
         // Ação a ser executada quando o jogador colide com a zona
         console.log('O jogador colidiu com a zona!');
@@ -307,16 +305,13 @@ class Fase_04 extends Phaser.Scene {
         console.log('Saindo da fase');
     }
 
-
     // createAnimation(){
     //     this.anims.create({
 
     //     });
     // }
 
-
 }
-
 
 
 function sortBoxes(scene) {
@@ -499,7 +494,7 @@ function damagePlayer() {
     if (!this.isInvulnerable) {
         this.player.getDamage(10);
         this.isInvulnerable = true;
-        this.invulnerabilityDuration = 500; // Duração em milissegundos
+        this.invulnerabilityDuration = 1500; // Duração em milissegundos
         this.invulnerabilityEndTime = this.time.now + this.invulnerabilityDuration;
 
         // Defina a duração da invulnerabilidade (por exemplo, 2 segundos)

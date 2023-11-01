@@ -152,8 +152,6 @@ class Enemy extends Actor {
 
   }
 
-
-
   update(player){
     var dx = player.x - this.x;
     var dy = player.y - this.y;
