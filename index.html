@@ -19,6 +19,7 @@
     <script src="src/fase_03.js"></script> 
     <script src="src/fase_05.js"></script> 
     <script src="src/fase_07.js"></script> 
+    <script src="src/fase_08.js"></script> 
 
     <!-- <script src="src/player_demo/fase_01_player.js"></script> -->
 
@@ -40,27 +41,25 @@
 var config = {
     type: Phaser.AUTO,
 
-    // resolução e sistema de colisão.
-    //width: 800,
-    //height: 600,
-    width: window.innerWidth,
-    height: window.innerHeight,
-    physics: {
-          default: 'arcade',
-          arcade: {
-              debug: true,
-          },
-    },
-  
-    // tratamento dos gráficos: pixelado
-    render: {
-      antialiasGL: false,
-      pixelArt: true,
-    }, 
+        // resolução e sistema de colisão.
+        width: 1584,
+        height: 1584,
+        physics: {
+              default: 'arcade',
+              arcade: {
+                  debug: true,
+              },
+        },
 
-    // funções da classe scene:
-    scene: [fase_01_map_overlap, Fase_03, splash_scene, Fase_01, brick_push_scene, Fase_05],
-};
+        // tratamento dos gráficos: pixelado
+        render: {
+          antialiasGL: false,
+          pixelArt: true,
+        },
+
+        // funções da classe scene:
+        scene: [Fase_04],
+    };
 
 // variáveis globais - jogo e jogador
 console.log('start*');
