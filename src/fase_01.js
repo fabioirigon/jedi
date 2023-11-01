@@ -550,7 +550,6 @@ class Fase_01 extends Phaser.Scene{
 function onEndDialog(scene){
     scene.mageDisapear.play();
 }
-
 function acertou(pointer){
     console.log('acertou');
     this.dialogs.hideBox();
