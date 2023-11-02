@@ -7,12 +7,13 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
     //this.body.setCollideWorldBounds(true);
     this.hp = 100;
-    this.bar_bg =  scene.add.rectangle(x, y-20, 105, 8, 0x000000);
-    this.bar_bg.setScale(0.8);
-    this.bar_fg =  scene.add.rectangle(x-32, y-20, 100, 6, 0x00ff00);
-    this.bar_fg.setScale(0.8);
-    this.bar_fg.setOrigin(0.1, 0.5)
-    this.draw_bar()
+    this.tam_rec=80;
+    this.bar =  scene.add.rectangle(x, y-20, this.tam_rec, 8, 0x000000);
+    this.bar_bg =  scene.add.rectangle(x, y-20, (this.hp/100)*this.tam_rec, 6, 0x00ff00);
+    this.bar_bg.setOrigin(0.5, 0.5);
+    //this.bar = new Phaser.GameObjects.Rectangle(scene, x, y, 100, 20, 0xff0000);
+    //this.bar = new HealthBar(scene, x, y);
+    this.draw_bar();
   }
 
   getDamage(value){
