@@ -1,7 +1,7 @@
 
 var collisionZoneExit;
 
-class Fase_05 extends Phaser.Scene {
+class Fase_06 extends Phaser.Scene {
 
 
     // Preload
@@ -13,7 +13,7 @@ class Fase_05 extends Phaser.Scene {
         this.load.image('ice_tiles', 'assets/maps/IceTileset.png');
         this.load.spritesheet('obj_tile_sp', 'assets/maps/[Base]BaseChip_pipo.png', { frameWidth: 32, frameHeight: 32, margin: 16 });
         this.load.image('obj_tiles', 'assets/maps/[Base]BaseChip_pipo.png')
-        this.load.tilemapTiledJSON('Mapa_Fase5', 'map_prj/Mapa_Fase5.json');
+        this.load.tilemapTiledJSON('Mapa_Fase6', 'map_prj/Mapa_Fase6.json');
         this.load.audio('snowy', ['assets/audio/snowy.mp3']);
         this.load.audio('baath', ['assets/audio/baath.mp3']);
         this.load.spritesheet('bat', 'assets/spritesheets/bat.png', { frameWidth: 32, frameHeight: 32 });
@@ -24,7 +24,7 @@ class Fase_05 extends Phaser.Scene {
     create() {
         console.log('Create map');
         // criação do mapa e ligação com as imagens
-        this.map = this.make.tilemap({ key: 'Mapa_Fase5', tileWidth: 32, tileHeight: 32 });
+        this.map = this.make.tilemap({ key: 'Mapa_Fase6', tileWidth: 32, tileHeight: 32 });
         this.IceTileset = this.map.addTilesetImage('IceTiled', 'ice_tiles');
         this.ObjTileset = this.map.addTilesetImage('Items2', 'obj_tiles');
 
