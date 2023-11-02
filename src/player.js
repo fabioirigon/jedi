@@ -40,6 +40,7 @@ class player extends Actor {
     this.has_sword = true;
     this.swingZone =  this.scene.add.zone(-50, -50).setSize(25, 25);
     this.swing = this.scene.add.sprite(this.x, this.y, 'swordSwing_sp', 0)
+    this.swing.setScale(1.5)
     this.swing.setVisible(false);
 
     this.scene.physics.world.enable(this.swingZone);
@@ -203,8 +204,8 @@ class player extends Actor {
 
   attack(){ 
     
-    console.log('attack', this.facing, this.arrows.countActive(false));
-    if (this.arrows.countActive(true) <= 0){
+    //console.log('attack', this.facing, this.arrows.countActive(false));
+    if (this.arrows.countActive(false) <= 0){
       return;
     }
 
@@ -230,12 +231,11 @@ class player extends Actor {
     this.move_enable = false;
     this.on('animationcomplete', this.swingFinished);
     if (this.facing[0] == 1){
-      console.log('left', this.body.x, this.body.y)
+      this.swing.setPosition(this.body.x+30, this.body.y+5);
       this.anims.play('swing_right');
       this.swing.setRotation(0);
       this.swing.flipX = false;
       this.swing.flipY = false;
-      this.swing.setPosition(this.body.x+20, this.body.y+5);
       this.swing.setVisible(true)
       this.swing.play("swordSwing")
       //this.swingZone.setPosition(this.body.x+25, this.body.y+5)
@@ -253,7 +253,7 @@ class player extends Actor {
     else if (this.facing[1] == 1){
       this.anims.play('swing_down');
       //this.swingZone.setPosition(this.body.x+5, this.body.y+25)
-      this.swing.setPosition(this.body.x+5, this.body.y+15);
+      this.swing.setPosition(this.body.x+10, this.body.y+30);
       this.swing.setRotation(3.14*0.5);
       this.swing.flipX = false;
       this.swing.flipY = false;
@@ -269,7 +269,11 @@ class player extends Actor {
       this.swing.setRotation(3.14*1.5);
       this.swing.setVisible(true)
       this.swing.play("swordSwing")
-
+    }
+    if (typeof this.scene.checkSwingOverlap == 'function')
+    {
+      console.log('its a func');
+      this.scene.checkSwingOverlap();
     }
     //console.log('ovlp ', Phaser.Geom.Intersects.RectangleToRectangle(this.scene.spider.body, this.swing))
   }
