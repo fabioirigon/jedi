@@ -15,12 +15,15 @@
     <script src="src/player_demo/wizard.js"></script> 
     <script src="src/player_demo/orc.js"></script> 
     <script src="src/player_demo/elfa.js"></script> 
-    <script src="src/splash_scene.js"></script> 
+    <!--<script src="src/splash_scene.js"></script> 
+    -->
+    <script src="src/brick_push_scene.js"></script> 
+    
+     
+    <script src="src/fase_03.js"></script> 
+/*
     <script src="src/fase_01.js"></script>
     <script src="src/fase_01_map_overlap.js"></script>
-     
-    <script src="src/brick_push_scene.js"></script> 
-    <script src="src/fase_03.js"></script> 
     <script src="src/fase_04.js"></script> 
     <script src="src/fase_05.js"></script> 
     <script src="src/Fase_06.js"></script> 
@@ -45,13 +48,8 @@
         type: Phaser.AUTO,
 
         // resolução e sistema de colisão.
-<<<<<<< HEAD
         width: window.innerWidth,
         dheight: window.innerHeight,
-=======
-        width: 1584,
-        height: 1584,
->>>>>>> map_overlap
         physics: {
               default: 'arcade',
               arcade: {
@@ -66,11 +64,8 @@
         },
 
         // funções da classe scene:
-<<<<<<< HEAD
-        scene: [Fase_03, Fase_01, Fase_04, Fase_05, Fase_06, Fase_08, brick_push_scene],
-=======
-        scene: [Fase_01, Fase_03, Fase_04, Fase_05, Fase_06, Fase_08, brick_push_scene],
->>>>>>> map_overlap
+        //scene: [Fase_03, Fase_01, Fase_04, Fase_05, Fase_06, Fase_08, brick_push_scene],
+        scene: [Fase_03],
     };
 
 // variáveis globais - jogo e jogador
