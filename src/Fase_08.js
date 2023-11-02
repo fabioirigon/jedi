@@ -21,23 +21,23 @@ class Fase_08 extends Phaser.Scene {
 
     // load tile sheet
     //this.load.image('tiles', 'assets/maps/dungeon-16-16.png');
-    this.load.image("tiles", "assets/maps/MapaV3/Mapacongelado.png");
+    this.load.image("tiles_8", "assets/maps/MapaV3/Mapacongelado.png");
 
     // load map
     //this.load.tilemapTiledJSON('themap', 'map_prj/the_map.json');
-    this.load.tilemapTiledJSON("themap", "assets/maps/MapaV3/MapaV3.json");
+    this.load.tilemapTiledJSON("themap_8", "assets/maps/MapaV3/MapaV3.json");
   }
 
   // função para criação dos elementos
   create() {
     // criação do mapa (json) e ligação com a imagem (tilesheet)
     this.map = this.make.tilemap({
-      key: "themap",
+      key: "themap_8",
       tileWidth: 16,
       tileHeight: 16,
     });
     //this.tileset = this.map.addTilesetImage('dungeon_ts', 'tiles');
-    this.tileset = this.map.addTilesetImage("MapaV3", "tiles");
+    this.tileset = this.map.addTilesetImage("MapaV3", "tiles_8");
 
     // criação das camadas
     //this.groundLayer = this.map.createLayer('ground', this.tileset, 0, 0);
