@@ -314,8 +314,8 @@ class Fase_01 extends Phaser.Scene{
         this.keyS = this.input.keyboard.addKey('S');
         this.keySPACE = this.input.keyboard.addKey('SPACE');
         this.keyEsc = this.input.keyboard.addKey("ESC");
-        this.keyN = this.input.keyboard.addKey('M');
-        this.keyM = this.input.keyboard.addKey('N');
+        this.keyN = this.input.keyboard.addKey('N');
+        this.keyM = this.input.keyboard.addKey('M');
         this.keyB = this.input.keyboard.addKey('B');
         this.keyV = this.input.keyboard.addKey('V');
         this.game_over = false;
@@ -422,8 +422,8 @@ class Fase_01 extends Phaser.Scene{
             }            
         }
 
-        if (this.keyN.isDown){this.scene.start('Fase_03')}
-        if (this.keyM.isDown){this.scene.start('Fase_04')}
+        if (this.keyN.isDown){this.scene.start('Fase_06')}
+        if (this.keyM.isDown){this.scene.start('Fase_03')}
         if (this.keyB.isDown){this.scene.start('Fase_05')}
         if (this.keyV.isDown){this.scene.start('Fase_08')}
     }
