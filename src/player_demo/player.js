@@ -1,12 +1,10 @@
+console.log("actors!! ")
 
 //class player extends Phaser.Physics.Arcade.Sprite {
 class player extends Actor {
   constructor(scene, x, y, texture, frame) {
     console.log("act 0", texture, frame)
     super(scene, x, y, texture, frame);
-    this.dead = 0;
-    this.direction = 0;
-    this.isInvulnerable = false;
     console.log("2")
     this.scene = scene
     scene.add.existing(this);
@@ -34,20 +32,17 @@ class player extends Actor {
     this.move_enable = true;
     this.attack_enable = true;
     this.facing = [0, 1];
-
     this.create_animations(texture);
 
-    this.has_sword = true;
+    this.has_sword = false;
     this.swingZone =  this.scene.add.zone(-50, -50).setSize(25, 25);
     this.swing = this.scene.add.sprite(this.x, this.y, 'swordSwing_sp', 0)
+    this.swing.setScale(1.5)
     this.swing.setVisible(false);
 
     this.scene.physics.world.enable(this.swingZone);
     this.swingZone.setOrigin(0.5, 0.5)
     this.enemyGroup = [];
-
-    this.create_animations(texture);
-    this.walkEnable = 1;
   }
 
   create_animations(texture){
@@ -143,58 +138,50 @@ class player extends Actor {
 
   }
 
-  set_player_velocity() {
-    if (this.walkEnable == 1) {
-        // velocidade horizontal
-        let velocityX = 0;
-        if (this.scene.keyD?.isDown) {
-            velocityX += 210;
-        }
-        if (this.scene.keyA?.isDown) {
-            velocityX -= 210;
-        }
-
-        // velocidade vertical
-        let velocityY = 0;
-        if (this.scene.keyW.isDown) {
-            velocityY -= 210;
-        }
-        if (this.scene.keyS.isDown) {
-            velocityY += 210;
-        }
-
-        // normaliza o vetor de velocidade diagonal
-        if (velocityX !== 0 && velocityY !== 0) {
-            const length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
-            const scaleFactor = 210 / length;
-            velocityX *= scaleFactor;
-            velocityY *= scaleFactor;
-        }
-
-        this.setVelocityX(velocityX);
-        this.setVelocityY(velocityY);
+  set_player_velocity(){
+    
+    if (this.scene.keyD?.isDown) {
+        //console.log(this.velocity)
+        this.vx = ((this.vx<210)?this.vx+20:210);
     }
-}
+    else if (this.scene.keyA?.isDown) {
+      this.vx = ((this.vx>-210)?this.vx-20:-210);
+    }
+    else{
+        this.vx=0;
+    }
+
+    // velocidade vertical
+    if (this.scene.keyW.isDown) {
+      this.vy = ((this.vy>-210)?this.vy-20:-210);
+    }
+    else if (this.scene.keyS.isDown) {
+        this.vy = ((this.vy<210)?this.vy+20:210);
+    }
+    else{
+        this.vy=0;
+    }    
+    this.setVelocityX(this.vx); 
+    this.setVelocityY(this.vy); 
+
+  }
+
   set_walk_animation(){
     if (this.body.velocity.x > 0){
       this.anims.play('walk_right', true);
       this.facing = [1, 0];
-      this.direction = 0;
     }
     else if (this.body.velocity.x < 0){
       this.anims.play('walk_left', true);
       this.facing = [-1, 0];      
-      this.direction = 1;
     }
     else if (this.body.velocity.y > 0){
       this.anims.play('walk_down', true);
       this.facing = [0, 1];
-      this.direction = 2;
     }
     else if (this.body.velocity.y < 0){
       this.anims.play('walk_up', true);
       this.facing = [0, -1];
-      this.direction = 3;
     }
     else{
       this.anims.stop();
@@ -203,8 +190,8 @@ class player extends Actor {
 
   attack(){ 
     
-    console.log('attack', this.facing, this.arrows.countActive(false));
-    if (this.arrows.countActive(true) <= 0){
+    //console.log('attack', this.facing, this.arrows.countActive(false));
+    if (this.arrows.countActive(false) <= 0){
       return;
     }
 
@@ -230,12 +217,11 @@ class player extends Actor {
     this.move_enable = false;
     this.on('animationcomplete', this.swingFinished);
     if (this.facing[0] == 1){
-      console.log('left', this.body.x, this.body.y)
+      this.swing.setPosition(this.body.x+30, this.body.y+5);
       this.anims.play('swing_right');
       this.swing.setRotation(0);
       this.swing.flipX = false;
       this.swing.flipY = false;
-      this.swing.setPosition(this.body.x+20, this.body.y+5);
       this.swing.setVisible(true)
       this.swing.play("swordSwing")
       //this.swingZone.setPosition(this.body.x+25, this.body.y+5)
@@ -253,7 +239,7 @@ class player extends Actor {
     else if (this.facing[1] == 1){
       this.anims.play('swing_down');
       //this.swingZone.setPosition(this.body.x+5, this.body.y+25)
-      this.swing.setPosition(this.body.x+5, this.body.y+15);
+      this.swing.setPosition(this.body.x+10, this.body.y+30);
       this.swing.setRotation(3.14*0.5);
       this.swing.flipX = false;
       this.swing.flipY = false;
@@ -269,7 +255,11 @@ class player extends Actor {
       this.swing.setRotation(3.14*1.5);
       this.swing.setVisible(true)
       this.swing.play("swordSwing")
-
+    }
+    if (typeof this.scene.checkSwingOverlap == 'function')
+    {
+      console.log('its a func');
+      this.scene.checkSwingOverlap();
     }
     //console.log('ovlp ', Phaser.Geom.Intersects.RectangleToRectangle(this.scene.spider.body, this.swing))
   }
@@ -280,19 +270,6 @@ class player extends Actor {
     this.move_enable = true;
   }
 
-
-  create_dialog(){
-    if (this.scene.keySpace?.isDown) {
-      if (this.dialog.isActive){
-
-        this.dialog.nextDlg()
-      }
-      else
-      {
-        this.create_dialog = true;
-      }
-    }
-  }
 
   re_enable(){
     this.removeListener('animationcomplete');
@@ -327,7 +304,7 @@ class player extends Actor {
   preUpdate (time, delta)
   {
     super.preUpdate(time, delta);
-
+  
     if (this.move_enable){
       this.set_player_velocity();
       this.set_walk_animation();
@@ -340,6 +317,7 @@ class player extends Actor {
     if (this.scene.keySPACE.isDown && this.attack_enable && this.has_bow) {
       this.attack();
     }
+
     if (this.scene.keySPACE.isDown && this.attack_enable && this.has_sword) {
       this.swattack();
     }
@@ -354,10 +332,7 @@ class player extends Actor {
       }
     };
    
-    if(this.hp == 0){
-      this.die();
-    }
-  }
+}
 
   die(){
     console.log('a')
@@ -366,17 +341,10 @@ class player extends Actor {
     this.move_enable = false;
     console.log('c')
     this.body.enable=false;
+    console.log(this.scene.gameOver)
     this.on('animationcomplete', this.scene.gameOver, this.scene);
     console.log('e')
     this.anims.play('die');
-    //console.log(this.scene.gameOver)
-    //this.on('animationcomplete', this.scene.gameOver, this.scene);
-    console.log('e')
-    if(this.dead == 0){
-      this.anims.play('die',true);
-      this.dead = 1;
-    }
-
   }
 
 }

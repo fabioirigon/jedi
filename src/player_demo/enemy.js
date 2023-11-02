@@ -1,12 +1,12 @@
-console.log("actors # ")
+console.log("enemy !! ")
 
-
+/*
 class Actor extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, texture, frame) {
     super(scene, x, y, texture, frame);
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.body.setCollideWorldBounds(true);
+    //this.body.setCollideWorldBounds(true);
     this.hp = 100;
     this.tam_rec=80;
     this.bar =  scene.add.rectangle(x, y-20, this.tam_rec, 8, 0x000000);
@@ -16,6 +16,7 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
     //this.bar = new HealthBar(scene, x, y);
     this.draw_bar();
   }
+
   getDamage(value){
     console.log("getDamage");
     this.hp = this.hp - value;
@@ -26,30 +27,19 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
     return this.hp;
   }
 
-  checkFlip(){ 
-    if (this.body.velocity.x < 0) {
-      //this.scaleX = -1;
-      this.flipX = true;
-    } else {
-      //this.scaleX = 1;
-      this.flipX = false;
-    }
+  preUpdate (time, delta)
+  {
+      super.preUpdate(time, delta);
+      this.draw_bar()
   }
 
-
-    preUpdate (time, delta)
-    {
-        super.preUpdate(time, delta);
-        this.draw_bar()
-    }
-
-    draw_bar()
-    {
-        //this.bar.originX = 0.9
-        this.bar.x = this.x
-        this.bar.y = this.y-20
-        this.bar_bg.x = this.x
-        this.bar_bg.y = this.y-20
+  draw_bar()
+  {
+    //this.bar.originX = 0.9
+    this.bar_bg.x = this.x
+    this.bar_bg.y = this.y-20
+    this.bar_fg.x = this.x-32
+    this.bar_fg.y = this.y-20
         /*
         this.bar.clear();
         //console.log(this.x, this.y)
@@ -75,10 +65,9 @@ class Actor extends Phaser.Physics.Arcade.Sprite {
         var d = Math.floor(0.76 * this.hp);
 
         this.bar.fillRect(this.x + 2, this.y + 2, d, 12);
-        */
     }
-
 }
+        */
 
 console.log("Criando inimigo");
 class Enemy extends Actor {

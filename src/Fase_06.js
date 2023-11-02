@@ -3,10 +3,14 @@ var collisionZoneExit;
 
 class Fase_06 extends Phaser.Scene {
 
+    constructor (){
+        console.log('constructor - fase 6');
+        super('Fase_06'); 
+    }
 
     // Preload
     preload() {
-        console.log('Load Spritesheet');
+        console.log('Load Spritesheet - fase 6');
         this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('fball_sp', 'assets/spritesheets/fireball.png', { frameWidth: 32, frameHeight: 32 });
         this.load.spritesheet('ice_tile_sp', 'assets/maps/IceTileset.png', { frameWidth: 32, frameHeight: 32, margin: 5 });
