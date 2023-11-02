@@ -131,9 +131,32 @@ class dialogs {
       {
           this.dlgTxt.text = this.txtSeq[this.txtIdx]
       }
-      else{
-        this.hideBox()
-        if (this.onComplete != null)
+      
+      updateDlgBox(txtSeq, txtIdx=0, onComplete=null){        
+
+        this.isActive=true;
+        this.dlActive=true;
+
+        var wsz = this._calcWindowSize()
+        this.wnd.setPosition(wsz.x, wsz.y)
+        this.wnd.setSize(wsz.w, wsz.h)
+        this.dlgTxt.setPosition(wsz.x, wsz.y)
+
+        this.txtIdx = txtIdx;
+        this.txtSeq = txtSeq;
+        this.dlgTxt.text = txtSeq[txtIdx]
+        this.dlgTxt.setVisible(true);
+        this.wnd.setVisible(true);
+        this.onComplete = onComplete;
+      }
+      
+      nextDlg(){
+        console.log("nextDlg", this.txtIdx)
+        if (typeof this.txtSeq == 'undefined'){
+          return;
+        }
+        this.txtIdx = this.txtIdx + 1;
+        if (this.txtIdx < this.txtSeq.length)
         {
           this.onComplete(this.scene);
         }
