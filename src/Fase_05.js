@@ -3,6 +3,7 @@ var collisionZoneExit;
 
 class Fase_05 extends Phaser.Scene {
 
+
     // Preload
     preload() {
         console.log('Load Spritesheet');
@@ -31,7 +32,8 @@ class Fase_05 extends Phaser.Scene {
         this.groundLayer = this.map.createLayer('chao', this.IceTileset, 0, 0);
         this.wallsLayer = this.map.createLayer('paredes', this.IceTileset, 0, 0);
         this.boardLayer = this.map.createLayer('placas', this.IceTileset, 0, 0);
-        this.iceLayer = this.map.createLayer('gelo', this.IceTileset, 0, 0);
+        this.iceLayerVert = this.map.createLayer('geloVertical', this.IceTileset, 0, 0);
+        this.iceLayerHor = this.map.createLayer('geloHorizontal', this.IceTileset, 0, 0);
         this.objLayer = this.map.createLayer('objetos', this.ObjTileset, 0, 0);
         this.stairLayer = this.map.createLayer('escada', this.ObjTileset, 0, 0);
 
@@ -208,50 +210,77 @@ class Fase_05 extends Phaser.Scene {
     }
 
     moveE(Enemy, speedX, speedY) {
-        Enemy.x += speedX;
-        Enemy.y += speedY;
+        Enemy.x += speedX*0.5;
+        Enemy.y += speedY*0.5;
     }
-
+    
     update() {
-
-
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
             if (this.dialog.isActive) {
-                this.dialog.nextDlg()
-            }
-            else {      
+                this.dialog.nextDlg();
+            } else {
                 this.create_dialog = true;
             }
         }
-
-        if (this.iceLayer.getTileAtWorldXY(this.player.x, this.player.y) == null) {
-            this.player.walkEnable = 1;
+    
+        if (this.isInvulnerable) {
+            // Verificar se o jogador está invulnerável antes de processar colisões
+            if (this.invulnerabilityEndTime > this.time.now) {
+                // Piscar o jogador (alternar a visibilidade)
+                if (this.time.now % 300 < 150) {
+                    this.player.setVisible(false);
+                } else {
+                    this.player.setVisible(true);
+                }
+            } else {
+                // Fim da invulnerabilidade, redefinir a cor e parar de piscar
+                this.player.clearTint();
+                this.player.setVisible(true);
+                this.isInvulnerable = false;
+            }
         } else {
-            this.player.walkEnable = 0;
+            if (this.iceLayerVert.getTileAtWorldXY(this.player.x, this.player.y) == null && this.iceLayerHor.getTileAtWorldXY(this.player.x, this.player.y) == null) {
+                this.player.walkEnable = 1;
+            } else {
+                if (this.iceLayerVert.getTileAtWorldXY(this.player.x, this.player.y) != null) {
+                    this.player.walkEnable = 0;
+                    if (this.player.facing[1] == -1) {
+                        this.player.setVelocityY(-210);
+                    } else if (this.player.facing[1] == 1) {
+                        this.player.setVelocityY(210);
+                    }
+                } else if (this.iceLayerHor.getTileAtWorldXY(this.player.x, this.player.y) != null) {
+                    this.player.walkEnable = 0;
+                    if (this.player.facing[0] == -1) {
+                        this.player.setVelocityX(-210);
+                    } else if (this.player.facing[0] == 1) {
+                        this.player.setVelocityX(210);
+                    }
+                }
+            }
+    
+            // Processar atualizações de inimigos somente se o jogador não estiver invulnerável
+            this.bat.update(this.player);
+            this.bat2.update(this.player);
+            this.bat3.update(this.player);
+            this.bat4.update(this.player);
+            this.bat5.update(this.player);
+            this.bat6.update(this.player);
+    
+            // Verificar se o jogador está morto
+            if (this.player.dead == 1) {
+                this.timedEvent = this.time.delayedCall(1500, resetFase, [], this);
+            }
         }
-
-        this.bat.update(this.player);
-        this.bat2.update(this.player);
-        this.bat3.update(this.player);
-        this.bat4.update(this.player);
-        this.bat5.update(this.player);
-        this.bat6.update(this.player);
-
-        if(this.player.dead == 1){
-            this.timedEvent = this.time.delayedCall(1500, resetFase, [], this);
-        }
-
-        
     }
 
     enemyHit(player, enemy) {
         player.getDamage(10);
-        if (player.getHPValue() == 0) {
+        if (player.getHPValue() <= 0) {
             // this.localStorage.setItem('hp', 100);
             player.die();
         }
     }
-
     playerCollideZone(player, zone) {
         // Ação a ser executada quando o jogador colide com a zona
         console.log('O jogador colidiu com a zona!');
@@ -276,16 +305,13 @@ class Fase_05 extends Phaser.Scene {
         console.log('Saindo da fase');
     }
 
-
     // createAnimation(){
     //     this.anims.create({
 
     //     });
     // }
 
-
 }
-
 
 
 function sortBoxes(scene) {
@@ -463,22 +489,34 @@ function errou_fcn(ptr){
     this.dialog.updateDlgBox(this.textQuestao1);
 }
 
-function damagePlayer(){
-    this.player.getDamage(10);
-    if(this.player.direction == 0){
-        console.log("aqui");
-        this.player.x = this.player.x - 40;
+
+function damagePlayer() {
+    if (!this.isInvulnerable) {
+        this.player.getDamage(10);
+        this.isInvulnerable = true;
+        this.invulnerabilityDuration = 1500; // Duração em milissegundos
+        this.invulnerabilityEndTime = this.time.now + this.invulnerabilityDuration;
+
+        // Defina a duração da invulnerabilidade (por exemplo, 2 segundos)
+        this.time.delayedCall(this.invulnerabilityDuration, () => {
+            this.isInvulnerable = false;
+        }, [], this);
+
+        // Aplicar o push-back
+        if (this.player.direction == 0) {
+            this.player.x -= 40;
+        } else if (this.player.direction == 1) {
+            this.player.x += 40;
+        } else if (this.player.direction == 2) {
+            this.player.y -= 40;
+        } else if (this.player.direction == 3) {
+            this.player.y += 40;
+        }
     }
-    if(this.player.direction == 1){
-        this.player.x = this.player.x + 40;
-    }
-    if(this.player.direction == 2){
-        this.player.y = this.player.y - 40;
-    }
-    if(this.player.direction == 3){
-        this.player.y = this.player.y + 40;
-    }
+    this.player.setVisible(true);
+
 }
+
 
 function damageEnemy(enemy){
     console.log("dano inimigo");

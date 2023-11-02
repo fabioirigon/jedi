@@ -7,6 +7,7 @@ class player extends Actor {
     super(scene, x, y, texture, frame);
     this.dead = 0;
     this.direction = 0;
+    this.isInvulnerable = false;
     console.log("2")
     this.scene = scene
     scene.add.existing(this);
@@ -94,30 +95,38 @@ class player extends Actor {
         });    
   }
 
-  set_player_velocity(){
-    if(this.walkEnable == 1){
-      if (this.scene.keyD?.isDown) {
-          this.setVelocityX(210);
-      }
-      else if (this.scene.keyA?.isDown) {
-          this.setVelocityX(-210);
-      }
-      else{
-          this.setVelocityX(0); 
-      }
+  set_player_velocity() {
+    if (this.walkEnable == 1) {
+        // velocidade horizontal
+        let velocityX = 0;
+        if (this.scene.keyD?.isDown) {
+            velocityX += 210;
+        }
+        if (this.scene.keyA?.isDown) {
+            velocityX -= 210;
+        }
 
-      // velocidade vertical
-      if (this.scene.keyW.isDown) {
-          this.setVelocityY(-210);
-      }
-      else if (this.scene.keyS.isDown) {
-          this.setVelocityY(210);
-      }
-      else{
-          this.setVelocityY(0); 
-      }    
+        // velocidade vertical
+        let velocityY = 0;
+        if (this.scene.keyW.isDown) {
+            velocityY -= 210;
+        }
+        if (this.scene.keyS.isDown) {
+            velocityY += 210;
+        }
+
+        // normaliza o vetor de velocidade diagonal
+        if (velocityX !== 0 && velocityY !== 0) {
+            const length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+            const scaleFactor = 210 / length;
+            velocityX *= scaleFactor;
+            velocityY *= scaleFactor;
+        }
+
+        this.setVelocityX(velocityX);
+        this.setVelocityY(velocityY);
     }
-  }
+}
 
   set_walk_animation(){
     if (this.body.velocity.x > 0){
