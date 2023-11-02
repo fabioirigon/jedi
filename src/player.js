@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-console.log("actors!! ")
-=======
->>>>>>> teamoxbacon
 
 //class player extends Phaser.Physics.Arcade.Sprite {
 class player extends Actor {
