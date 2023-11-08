@@ -185,7 +185,11 @@ class Fase_3 extends Phaser.Scene {
 
 
         this.esqueletos.getMatching('active', true).forEach(function (esqueleto) {
-            if(this.player.x > 300 ){
+            var dx = this.player.x - esqueleto.x;
+            var dy = this.player.y - esqueleto.y;
+            var amp = Math.sqrt(dx * dx + dy * dy);
+            // console.log("teste %f", amp)
+            if(amp < 200 ){
 
                 setEsqueletoSpeed(esqueleto, this.player)
             }else{
