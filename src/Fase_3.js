@@ -147,9 +147,16 @@ class Fase_3 extends Phaser.Scene {
         this.txtLst_2 = ["CUIDADO: A cidade está sitiada pelo o Rei do camundongos e seus servos os cabeça de caveira!\nCaso esteja perdido procure ajuda!"];
 
 
-        this.quest_0 = ["\n\n\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\n\n Jogar baralho é uma atividade que estimula o raciocínio. Um jogo tradicional é a Paciência, que utiliza 52 cartas. Inicialmente são formadas sete colunas com as cartas. A primeira coluna tem uma carta, a segunda tem duas cartas,w e assim sucessivamente até a sétima coluna, a qual tem sete cartas, e o que sobra forma o monte, que são as cartas não utilizadas nas colunas.\nA quantidade de cartas que forma o monte é",
-            1, "◯ 21 cartas", "◯ 24 cartas", "◯ 26 cartas", "◯ 28 cartas"]
-
+        this.questoes = [
+            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nUma professora ganhou ingressos para levar 50% de seus alunos ao circo da cidade.\n Considerando que essa professora leciona para 36 alunos, quantos alunos ela poderá levar?\n",
+            1, "◯ 9", "◯ 18", "◯ 24", "◯ 36"],
+            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nO carro de João consome 1 litro de gasolina a cada 10 quilômetros percorridos. Para ir da sua casa ao sítio, que fica distante 63 quilômetros, o carro consome:\n", 
+            2, "◯ 5,3L", "◯ 6L", "◯ 6,3L", "◯ 7L"],
+            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\n Um fazendeiro tinha 285 bois. Comprou mais 176 bois e depois vendeu 85 deles. \nQuantos bois esse fazendeiro tem agora?\n", 
+            1, "◯ 266", "◯ 376", "◯ 476", "◯ 486"],
+            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nUma escola recebeu a doação de 3 caixas de 1 000 livros, mais 8 caixas de 100 livros, mais 5 pacotes de 10 livros, mais 9 livros. Esta escola recebeu: \n", 
+            3, "◯ 3589", "◯ 38590", "◯ 30859", "◯ 3859"],
+        ];
 
 
         this.firstDialog = true;
@@ -184,25 +191,31 @@ class Fase_3 extends Phaser.Scene {
         }
 
 
-        this.esqueletos.getMatching('active', true).forEach(function (esqueleto) {
-            var dx = this.player.x - esqueleto.x;
-            var dy = this.player.y - esqueleto.y;
-            var amp = Math.sqrt(dx * dx + dy * dy);
-            // console.log("teste %f", amp)
-            if(amp < 200 ){
-
-                setEsqueletoSpeed(esqueleto, this.player)
-            }else{
+        // Se o diálogo estiver ativo, para o movimento dos esqueletos
+        if (this.dialogs.isActive) {
+            this.esqueletos.getChildren().forEach(function (esqueleto) {
                 esqueleto.setVelocityX(0);
                 esqueleto.setVelocityY(0);
-                
-            }
-            if (esqueleto.x < this.player.x) {
-                esqueleto.flipX = true;
-            } else {
-                esqueleto.flipX = false;
-            }
-        }, this);
+            });
+        } else {
+            // Se o diálogo não estiver ativo, mova os esqueletos
+            this.esqueletos.getMatching('active', true).forEach(function (esqueleto) {
+                var dx = this.player.x - esqueleto.x;
+                var dy = this.player.y - esqueleto.y;
+                var amp = Math.sqrt(dx * dx + dy * dy);
+                if (amp < 200) {
+                    setEsqueletoSpeed(esqueleto, this.player);
+                } else {
+                    esqueleto.setVelocityX(0);
+                    esqueleto.setVelocityY(0);
+                }
+                if (esqueleto.x < this.player.x) {
+                    esqueleto.flipX = true;
+                } else {
+                    esqueleto.flipX = false;
+                }
+            }, this);
+        }
 
 
 
@@ -245,7 +258,12 @@ class Fase_3 extends Phaser.Scene {
         }
 
         if (this.physics.overlap(this.player, this.zone_ques)) {
-            this.dialogs.scene.dialogs.makeQuestion(this.quest_0, acertou_fcn, errou_fcn);
+            // Se sobrepor com a zona da pergunta, selecionar uma pergunta aleatória
+            const randomIndex = Phaser.Math.Between(0, this.questoes.length - 1);
+            const randomQuestion = this.questoes[randomIndex];
+
+            // Chamar a função makeQuestion com a pergunta aleatória
+            this.dialogs.scene.dialogs.makeQuestion(randomQuestion, acertou_fcn, errou_fcn);
         }
 
         if (this.physics.overlap(this.player, this.zone_dlg1)) {
