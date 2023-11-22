@@ -8,6 +8,7 @@ class Fase_3 extends Phaser.Scene {
         this.load.spritesheet('seuze_sp', "assets/spritesheets/seuze_sp.png", { frameWidth: 64, frameHeight: 64 });
 
         this.load.spritesheet('esqueletobom', "assets/spritesheets/esqueletobom.png", { frameWidth: 64, frameHeight: 64 });
+        this.load.spritesheet('esqueletobom_', "assets/spritesheets/esqueletobom.png", { frameWidth: 64, frameHeight: 64, margin: 32 });
         this.load.spritesheet('ratoesqueleto_sp', "assets/spritesheets/ratoesqueleto_sp.png", { frameWidth: 64, frameHeight: 64 });
 
         this.load.image('tiles', "assets/maps/maptiles.png");
@@ -61,6 +62,7 @@ class Fase_3 extends Phaser.Scene {
             this.esqueletos.add(esqueleto);
         }
         console.log("create Actors")
+        console.log(this.rato)
     }
 
     createAnimations() {
@@ -68,6 +70,20 @@ class Fase_3 extends Phaser.Scene {
         this.anims.create({
             key: 'esqueleto_walk',
             frames: this.anims.generateFrameNumbers('esqueletobom', { start: 117, end: 125 }),
+            frameRate: 12,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'esqueleto_stop',
+            frames: this.anims.generateFrameNumbers('esqueletobom', { start: 117, end: 117 }),
+            frameRate: 12,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'esqueleto_atk',
+            frames: this.anims.generateFrameNumbers('esqueletobom_', { frames: [280, 276, 286, 284, 282, 278] }),//      [324, 326, 328, 330]
             frameRate: 12,
             repeat: -1
         });
@@ -147,16 +163,9 @@ class Fase_3 extends Phaser.Scene {
         this.txtLst_2 = ["CUIDADO: A cidade está sitiada pelo o Rei do camundongos e seus servos os cabeça de caveira!\nCaso esteja perdido procure ajuda!"];
 
 
-        this.questoes = [
-            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nUma professora ganhou ingressos para levar 50% de seus alunos ao circo da cidade.\n Considerando que essa professora leciona para 36 alunos, quantos alunos ela poderá levar?\n",
-            1, "◯ 9", "◯ 18", "◯ 24", "◯ 36"],
-            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nO carro de João consome 1 litro de gasolina a cada 10 quilômetros percorridos. Para ir da sua casa ao sítio, que fica distante 63 quilômetros, o carro consome:\n", 
-            2, "◯ 5,3L", "◯ 6L", "◯ 6,3L", "◯ 7L"],
-            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\n Um fazendeiro tinha 285 bois. Comprou mais 176 bois e depois vendeu 85 deles. \nQuantos bois esse fazendeiro tem agora?\n", 
-            1, "◯ 266", "◯ 376", "◯ 476", "◯ 486"],
-            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nUma escola recebeu a doação de 3 caixas de 1 000 livros, mais 8 caixas de 100 livros, mais 5 pacotes de 10 livros, mais 9 livros. Esta escola recebeu: \n", 
-            3, "◯ 3589", "◯ 38590", "◯ 30859", "◯ 3859"],
-        ];
+        this.quest_0 = ["\n\n\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\n\n Jogar baralho é uma atividade que estimula o raciocínio. Um jogo tradicional é a Paciência, que utiliza 52 cartas. Inicialmente são formadas sete colunas com as cartas. A primeira coluna tem uma carta, a segunda tem duas cartas,w e assim sucessivamente até a sétima coluna, a qual tem sete cartas, e o que sobra forma o monte, que são as cartas não utilizadas nas colunas.\nA quantidade de cartas que forma o monte é",
+            1, "◯ 21 cartas", "◯ 24 cartas", "◯ 26 cartas", "◯ 28 cartas"]
+
 
 
         this.firstDialog = true;
@@ -179,7 +188,6 @@ class Fase_3 extends Phaser.Scene {
         this.checkActiveZone();
 
 
-
         // verifica se precisa avançar no diálogo
         if (this.dialogs.isActive && !this.spacePressed && this.keySPACE.isDown) {
             this.dialogs.nextDlg();
@@ -190,47 +198,46 @@ class Fase_3 extends Phaser.Scene {
             this.spacePressed = false;
         }
 
+        
+        
+        let i = 0;
+        this.esqueletos.getMatching('active', true).forEach(function (esqueleto) {
+            setEsqueletoSpeed(esqueleto, this.player, i);
+            i+=1;
 
-        // Se o diálogo estiver ativo, para o movimento dos esqueletos
-        if (this.dialogs.isActive) {
-            this.esqueletos.getChildren().forEach(function (esqueleto) {
-                esqueleto.setVelocityX(0);
-                esqueleto.setVelocityY(0);
-            });
-        } else {
-            // Se o diálogo não estiver ativo, mova os esqueletos
-            this.esqueletos.getMatching('active', true).forEach(function (esqueleto) {
-                var dx = this.player.x - esqueleto.x;
-                var dy = this.player.y - esqueleto.y;
-                var amp = Math.sqrt(dx * dx + dy * dy);
-                if (amp < 200) {
-                    setEsqueletoSpeed(esqueleto, this.player);
-                } else {
-                    esqueleto.setVelocityX(0);
-                    esqueleto.setVelocityY(0);
+            var dx = this.player.x - esqueleto.x;
+            var dy = this.player.y - esqueleto.y;
+            var amp = Math.sqrt(dx * dx + dy * dy);
+            if (amp < 20){
+                if (esqueleto.anims.currentAnim.key != 'esqueleto_atk')
+                    esqueleto.play('esqueleto_atk');
+                if (amp < 2) {
+                    console.log("Dano");
+                    // this.enemyHit();
                 }
-                if (esqueleto.x < this.player.x) {
-                    esqueleto.flipX = true;
-                } else {
-                    esqueleto.flipX = false;
-                }
-            }, this);
-        }
+            }else{
+                if (esqueleto.anims.currentAnim.key != 'esqueleto_walk')
+                    esqueleto.play('esqueleto_walk');
+            }
+        
+            if (esqueleto.x < this.player.x) {
+                esqueleto.flipX = true;
+            } else {
+                esqueleto.flipX = false;
+            }
 
-
-
-
-
-
-        /*for (let esqueleto of this.esqueletos.getMatching('active', true)) {
-            //esqueleto.setRotation(Math.atan2(this.player.x-esqueleto.x, -this.player.y+esqueleto.y))
-            //console.log(this.player.x - esqueleto.x, -this.player.y+esqueleto.y)
-            setEsqueletoSpeed(esqueleto, this.player);
-        }*/
-
+        }, this);
 
     }
 
+    enemyHit (){
+        this.player.getDamage(3);
+        console.log(this.player.getHPValue())
+        if (this.player.getHPValue() <= 0){
+            localStorage.setItem('hp',100);
+            this.player.die();
+        }
+    }
     // trata zona ativa
     checkActiveZone() {
         // se jogador dentro de zona e o diálogo não está ativo
@@ -258,12 +265,7 @@ class Fase_3 extends Phaser.Scene {
         }
 
         if (this.physics.overlap(this.player, this.zone_ques)) {
-            // Se sobrepor com a zona da pergunta, selecionar uma pergunta aleatória
-            const randomIndex = Phaser.Math.Between(0, this.questoes.length - 1);
-            const randomQuestion = this.questoes[randomIndex];
-
-            // Chamar a função makeQuestion com a pergunta aleatória
-            this.dialogs.scene.dialogs.makeQuestion(randomQuestion, acertou_fcn, errou_fcn);
+            this.dialogs.scene.dialogs.makeQuestion(this.quest_0, acertou_fcn, errou_fcn);
         }
 
         if (this.physics.overlap(this.player, this.zone_dlg1)) {
@@ -271,7 +273,8 @@ class Fase_3 extends Phaser.Scene {
         }
     }
 }
-
+let coordSpawn = [[505,505], [545,518], [529,474], [564,480], [600,470]];
+let indice = 0;
 function acertou_fcn(ptr) {
     console.log("acertou");
     this.dialogs.hideBox();
@@ -286,25 +289,25 @@ function errou_fcn(ptr) {
     this.spawn_timer = this.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: spawn, callbackScope: this });
 }*/
 
+
 function spawn() {
     if (Phaser.Geom.Rectangle.Overlaps(this.zone_esqueleto.getBounds(), this.player.getBounds())) {
         console.log('spawn');
         var esqueleto = this.esqueletos.getFirstDead(false);
         if (esqueleto) {
 
-            esqueleto.body.reset(575, 450);
+            esqueleto.body.reset(coordSpawn[indice][0], coordSpawn[indice][1]);
+            indice += 1;
             esqueleto.setActive(true);
             esqueleto.setVisible(true);
             esqueleto.play('esqueleto_walk');
-
-            //spider.play('spider_walk');
         }
 
     }
     this.spawn_timer = this.time.addEvent({ delay: Phaser.Math.Between(1000, 3000), callback: spawn, callbackScope: this });
 }
 
-function setEsqueletoSpeed(esqueleto, player) {
+function setEsqueletoSpeed(esqueleto, player, i) {
     //console.log(esqueleto)
     /*
     if (esqueleto.anims.currentAnim.key == 'esqueleto_die' ){
@@ -314,11 +317,39 @@ function setEsqueletoSpeed(esqueleto, player) {
         return
     }*/
 
-    var dx = player.x - esqueleto.x;
-    var dy = player.y - esqueleto.y;
-    var amp = Math.sqrt(dx * dx + dy * dy);
-    esqueleto.setVelocityX(30 * dx / amp);
-    esqueleto.body.setVelocityY(30 * dy / amp);
+
+    if(player.x > 420 && player.y > 370 && player.y < 570 ){
+        var dx = player.x - esqueleto.x;
+        var dy = player.y - esqueleto.y;
+        var amp = Math.sqrt(dx * dx + dy * dy);
+        esqueleto.setVelocityX(30 * dx / amp);
+        esqueleto.body.setVelocityY(30 * dy / amp);
+    }else{
+        var dx = coordSpawn[i][0] - esqueleto.x;
+        var dy = coordSpawn[i][1] - esqueleto.y;
+        var amp = Math.sqrt(dx * dx + dy * dy);
+        if( amp < 1){
+            esqueleto.setVelocityX(0 * dx / amp);
+            esqueleto.body.setVelocityY(0 * dy / amp);
+            //esqueleto.anims.stop();  // Interrompe a animação atual
+            esqueleto.setTexture('esqueletobom', 117);
+        }else{
+            esqueleto.setVelocityX(30 * dx / amp);
+            esqueleto.body.setVelocityY(30 * dy / amp); 
+        }
+    }
+
+
+    
+        
+
+
+}
+
+function playerHit(player, esqueleto) {
+    // Lógica para tratar quando o jogador é atingido pelo esqueleto
+    // Adapte conforme a lógica do seu jogo, pode incluir redução de vida, efeitos, etc.
+    console.log('Player hit!');
 }
 
 function remove_esqueleto(par0) {
