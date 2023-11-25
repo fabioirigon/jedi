@@ -219,7 +219,7 @@ class Fase_3 extends Phaser.Scene {
                     esqueleto.play('esqueleto_atk');
                 if (amp < 2) {
                     console.log("Dano");
-                    // this.enemyHit();
+                    this.enemyHit();
                 }
             }else{
                 if (esqueleto.anims.currentAnim.key != 'esqueleto_walk')
