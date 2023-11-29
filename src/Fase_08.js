@@ -7,6 +7,7 @@ class Fase_08 extends Phaser.Scene {
       console.log('Fase_08')
   }
 
+  
   // função para carregamento de assets
   preload() {
     //load spritesheet
