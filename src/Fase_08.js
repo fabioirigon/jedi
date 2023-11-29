@@ -1,17 +1,16 @@
 class Fase_08 extends Phaser.Scene {
 
-  constructor ()
-  {
-      // ######## acertar nome da fase ##########
-      super('Fase_08'); 
-      console.log('Fase_08')
+  constructor() {
+    // ######## acertar nome da fase ##########
+    super('Fase_08');
+    console.log('Fase_08')
   }
-
+ 
   
   // função para carregamento de assets
   preload() {
     //load spritesheet
-    this.load.spritesheet("player_sp", "assets/spritesheets/player_sp.png", {
+    this.load.spritesheet("player_sp", "assets/spritesheets/playerbow_sp.png", {
       frameWidth: 64,
       frameHeight: 64,
     });
@@ -19,6 +18,15 @@ class Fase_08 extends Phaser.Scene {
       frameWidth: 48,
       frameHeight: 64,
     });
+    this.load.spritesheet("enemy_sp", "assets/spritesheets/Golem_attack.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+    this.load.spritesheet('gelinho', 'assets/spritesheets/gelinho.png', {
+      frameWidth: 32,
+      frameHeight: 48,
+    });
+
 
     // load tile sheet
     //this.load.image('tiles', 'assets/maps/dungeon-16-16.png');
@@ -29,8 +37,35 @@ class Fase_08 extends Phaser.Scene {
     this.load.tilemapTiledJSON("themap_8", "assets/maps/MapaV3/MapaV3.json");
   }
 
+  // criação das animações
+  create_animations() {
+    this.anims.create({
+      key: 'enemy_anims',
+      frames: this.anims.generateFrameNumbers('enemy_sp', {
+        frames:
+          [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+      }),
+      frameRate: 5,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'mago_anims',
+      frames: this.anims.generateFrameNumbers('npc_sp', {
+        frames:
+          [6, 7, 8]
+      }),
+      frameRate: 5,
+      repeat: -1
+    });
+  }
+
   // função para criação dos elementos
   create() {
+    this.cont=0;
+    // chadmada para função de animação dos personagens
+    this.create_animations();
+
     // criação do mapa (json) e ligação com a imagem (tilesheet)
     this.map = this.make.tilemap({
       key: "themap_8",
@@ -54,10 +89,40 @@ class Fase_08 extends Phaser.Scene {
     // criação do npc
     this.mago = this.physics.add.sprite(180, 125, "npc_sp", 7);
     this.mago.setScale(0.5);
+    this.mago.body.immovable = true;
+    this.mago.body.moves = false;
 
-    // criação da colisão com camadas
+    // criação do inimigo
+    this.enemy = new Actor(this, 500, 200, "enemy_sp", 0);
+    this.enemy.setScale(1);
+    this.enemy.bar_bg.setVisible(false);
+    this.enemy.bar_fg.setVisible(false);
+    this.zoneEnemy = this.add.zone(500, 200).setSize(100, 100);
+    this.enemy.setVisible(false);
+    //criação das balas do inimigo
+    this.shoot_golem = this.physics.add.group();
+    for (let i=0; i<2; i++){
+      var shoot2 = this.physics.add.sprite(-10, -10, 'gelinho', 0);
+      shoot2.setScale(0.5);
+      shoot2.setBodySize(5, 5)
+      shoot2.setActive(false);
+      shoot2.setVisible(false);
+      this.shoot_golem.add(shoot2);
+    }
+    this.timer = this.time.addEvent({
+      delay: Phaser.Math.Between(1000, 2000),
+      callback: this.boss_shoot,
+      callbackScope: this
+    });
+
+    // criação das colisões
     this.wallsLayer.setCollisionBetween(17, 50, true);
     this.physics.add.collider(this.player, this.wallsLayer);
+    this.physics.add.collider(this.player, this.mago);
+
+    //chama as funções de dano no enemy e no player
+    this.physics.add.overlap(this.player, this.shoot_golem, this.bulletHit, null, this);
+    this.physics.add.overlap(this.player.arrows, this.enemy, this.enemyHit, null, this);
 
     // ligação das teclas de movimento
     this.keyA = this.input.keyboard.addKey("A");
@@ -71,6 +136,9 @@ class Fase_08 extends Phaser.Scene {
     // definição de zoom da câmera e comando para seguir jogador
     this.cameras.main.setZoom(1.9);
     this.cameras.main.startFollow(this.player, true, 0.2, 0.2);
+
+    this.enemy.play('enemy_anims');
+    this.mago.play('mago_anims');
 
     // criação das zonas
     this.zone_dlg = this.add.zone(136, 130).setSize(48, 45);
@@ -86,6 +154,8 @@ class Fase_08 extends Phaser.Scene {
     var ch = this.cameras.main.height;
     var py = ch / 2 + (0.2 * ch) / this.cameras.main.zoom; // pos vertical
     console.log("pp", px, py);
+
+
     this.interact_txt = this.add.text(px, py, "Pressione E para interagir", {
       font: "15px Arial",
       fill: "#A0A0A0",
@@ -95,6 +165,7 @@ class Fase_08 extends Phaser.Scene {
     });
     this.interact_txt.setScrollFactor(0); // deixa em posição relativa à camera (e não ao mapa)
     this.interact_txt.setVisible(false); // deixa invisível
+
 
     // criação de lista de textos (diálogs) e do objeto dialog
     this.txtLst_0 = [
@@ -149,8 +220,11 @@ class Fase_08 extends Phaser.Scene {
 
   // update é chamada a cada novo quadro
   update() {
-    // verifica e trata se jogador em zona ativa
-    this.checkActiveZone();
+    console.log(this.enemy);
+    // verifica e trata se jogador em zona ativa e não repete caso ele tenha acertado uma questão
+    if(this.cont == 0){
+      this.checkActiveZone();
+    }
 
     // verifica se precisa avançar no diálogo
     if (this.dialogs.isActive && !this.spacePressed && this.keySPACE.isDown) {
@@ -160,6 +234,21 @@ class Fase_08 extends Phaser.Scene {
     // se tecla solta, limpa a flag
     if (!this.keySPACE.isDown) {
       this.spacePressed = false;
+    }
+    //fica atirando no player e para quando o inimigo morre
+    if(this.cont > 0 && this.cont != 25){
+      this.shoot_golem.getMatching('active', true).forEach(function(shoot2){
+        var dx = shoot2.body.x - this.enemy.x;
+        var dy = shoot2.body.y - this.enemy.y;
+    
+        if (dx*dx + dy *dy > 500*500){
+            shoot2.setVisible(false);
+            shoot2.setActive(false);
+            shoot2.setPosition(-10, -10);
+            shoot2.body.setVelocity(0, 0);
+        }
+      }, this);
+
     }
 
     // dano na agua gelada
@@ -173,6 +262,50 @@ class Fase_08 extends Phaser.Scene {
       this.player.getDamage(0.1);
     }
   }
+
+  boss_shoot(){
+    var shoot_golem1 = this.shoot_golem.getFirstDead(false);
+    var vx = this.player.x - this.enemy.x
+    var vy = this.player.y - this.enemy.y
+    var scl = 170/Math.sqrt(vx*vx+vy*vy)
+    //atira caso o inimigo já tenha aparecido
+    if (shoot_golem1 && this.cont > 0){
+        shoot_golem1.body.reset(this.enemy.x, this.enemy.y);
+        shoot_golem1.setActive(true);
+        shoot_golem1.setVisible(true);
+
+        shoot_golem1.body.setVelocityX(vx*scl);
+        shoot_golem1.body.setVelocityY(vy*scl);        
+    }
+
+    this.timer = this.time.addEvent({
+        delay: Phaser.Math.Between(200, 1500),
+        callback: this.boss_shoot,
+        callbackScope: this
+    });
+  }
+
+  //função que da dano no player caso ele seja acertado pelo tiro do inimigo
+  bulletHit(player, shoot_golem1){
+    player.getDamage(1);
+    shoot_golem1.setActive(false);
+    shoot_golem1.setVisible(false);
+    if (player.getHPValue() == 0){
+        localStorage.setItem('hp',100);
+        //player.die();
+    }
+  }
+
+  //da dano no inimigo caso seja acertado por uma flecha do player
+  enemyHit (enemy){
+    this.enemy.getDamage(0.5);
+    if (enemy.getHPValue() == 0){
+        localStorage.setItem('hp',100);
+        this.cont=25;//para caso o inimigo morra, pare de atirar
+       // player.die();
+    }
+}
+
 
   // trata zona ativa
   checkActiveZone() {
@@ -249,10 +382,32 @@ class Fase_08 extends Phaser.Scene {
 
 function acertou_fcn(ptr) {
   console.log("acertou");
+  this.cont++;//para não mostrar mais perguntas
   this.dialogs.hideBox();
+  this.interact_txt.setVisible(false);
+  this.enemy.setVisible(true);
+  this.physics.add.collider(this.player, this.enemy);
+  this.enemy.body.immovable = true;
+  this.enemy.body.moves = false;
+  this.zone_ques.setVisible(false);
+  this.enemy.bar_bg.setVisible(true);
+  this.enemy.bar_fg.setVisible(true);
+  if(this.player.getHPValue() <= 80){
+    this.player.getDamage(-20);//ganha vida
+  }
+  this.player.has_bow = true;
+  
+ // boss_shoot();
 }
 
 function errou_fcn(ptr) {
   console.log("errou");
+  if(this.player.getHPValue() >= 10){
+    this.player.getDamage(20);//perde vida
+  }else{
+    //this.player.bar_bg.setVisible(false);
+   // this.player.bar_fg.setVisible(false);
+   // this.player.die();
+  }
   this.dialogs.hideBox();
 }
