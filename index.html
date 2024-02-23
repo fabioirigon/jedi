@@ -20,6 +20,8 @@
     <script src="src/fase_01_map_overlap.js"></script>
      
     <script src="src/brick_push_scene.js"></script> 
+    
+     
     <script src="src/fase_03.js"></script> 
     <script src="src/fase_04.js"></script> 
     <script src="src/fase_05.js"></script> 
@@ -36,20 +38,17 @@
     </style>
 </head>
 <body>
- 
+
     <!-- código javascript -->
 <script type="text/javascript">
 
-
-
-
     // Configuração do jogo
-var config = {
-    type: Phaser.AUTO,
+    var config = {
+        type: Phaser.AUTO,
 
         // resolução e sistema de colisão.
-        width: 1584,
-        height: 1584,
+        width: window.innerWidth,
+        dheight: window.innerHeight,
         physics: {
               default: 'arcade',
               arcade: {
@@ -71,6 +70,9 @@ var config = {
 console.log('start*');
 var game = new Phaser.Game(config);
 
+    // variáveis globais - jogo e jogador
+    console.log('start*');
+    var game = new Phaser.Game(config);
 
 </script>
 

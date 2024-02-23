@@ -40,6 +40,7 @@ class player extends Actor {
     this.has_sword = true;
     this.swingZone =  this.scene.add.zone(-50, -50).setSize(25, 25);
     this.swing = this.scene.add.sprite(this.x, this.y, 'swordSwing_sp', 0)
+    this.swing.setScale(1.5)
     this.swing.setVisible(false);
 
     this.scene.physics.world.enable(this.swingZone);
@@ -269,7 +270,6 @@ class player extends Actor {
       this.swing.setRotation(3.14*1.5);
       this.swing.setVisible(true)
       this.swing.play("swordSwing")
-
     }
     //console.log('ovlp ', Phaser.Geom.Intersects.RectangleToRectangle(this.scene.spider.body, this.swing))
   }
