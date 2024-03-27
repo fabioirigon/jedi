@@ -1,12 +1,12 @@
 class Fase_03 extends Phaser.Scene {
-	// O construtor registra o nome da cena
+	// O construtor registra o nome da cena.
 	constructor() {
 		super("Fase_03");
 	}
 
 	// função para carregamento de assets
 	preload() {
-		// Personagem principal
+		// Personagem principal 
 		this.load.spritesheet("playerbow_sp", "assets/spritesheets/playerbow_sp.png", {
 			frameWidth: 64,
 			frameHeight: 64,
