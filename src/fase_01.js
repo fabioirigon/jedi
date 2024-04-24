@@ -422,10 +422,9 @@ class Fase_01 extends Phaser.Scene{
             }            
         }
 
-        if (this.keyN.isDown){this.scene.start('Fase_06')}
-        if (this.keyM.isDown){this.scene.start('Fase_03')}
-        if (this.keyB.isDown){this.scene.start('Fase_05')}
-        if (this.keyV.isDown){this.scene.start('Fase_08')}
+        if (this.keyN.isDown){
+            this.scene.start('Fase_03')
+        }
     }
 
     trataPorta (porta, player){
@@ -554,6 +553,7 @@ class Fase_01 extends Phaser.Scene{
 function onEndDialog(scene){
     scene.mageDisapear.play();
 }
+
 function acertou(pointer){
     console.log('acertou');
     this.dialogs.hideBox();
