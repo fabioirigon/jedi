@@ -173,7 +173,7 @@ class Fase_08 extends Phaser.Scene {
       this.player.getDamage(0.1);
     }
     if (this.keyN.isDown) {
-      console.log("n")
+      console.log("start Fase_3")
       this.scene.start('Fase_3')
     }
 
