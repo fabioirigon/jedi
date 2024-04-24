@@ -3,20 +3,30 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
+
+
     <title>Phase 1</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
-    <script src="src/player_demo/actors.js"></script> 
+
+    <script src="src/player_demo/actors.js"></script>  
+    <script src="src/player_demo/enemy.js"></script>
     <script src="src/dialogs.js"></script> 
     <script src="src/player_demo/player.js"></script> 
     <script src="src/player_demo/wizard.js"></script> 
     <script src="src/player_demo/orc.js"></script> 
     <script src="src/player_demo/elfa.js"></script> 
     <script src="src/splash_scene.js"></script> 
-    <script src="src/fase_01.js"></script> 
+    <script src="src/fase_01.js"></script>
+    <script src="src/fase_01_map_overlap.js"></script>
+     
     <script src="src/brick_push_scene.js"></script> 
+    <script src="src/Fase_3.js"></script> 
     <script src="src/fase_03.js"></script> 
+    <script src="src/fase_04.js"></script> 
     <script src="src/fase_05.js"></script> 
+    <script src="src/Fase_06.js"></script> 
     <script src="src/fase_07.js"></script> 
+    <script src="src/Fase_08.js"></script> 
 
     <!-- <script src="src/player_demo/fase_01_player.js"></script> -->
 
@@ -38,27 +48,25 @@
 var config = {
     type: Phaser.AUTO,
 
-    // resolução e sistema de colisão.
-    //width: 800,
-    //height: 600,
-    width: window.innerWidth,
-    height: window.innerHeight,
-    physics: {
-          default: 'arcade',
-          arcade: {
-              debug: true,
-          },
-    },
+        // resolução e sistema de colisão.
+        width: window.innerWidth,
+        dheight: window.innerHeight,
+        physics: {
+              default: 'arcade',
+              arcade: {
+                  debug: true,
+              },
+        },
 
-    // tratamento dos gráficos: pixelado
-    render: {
-      antialiasGL: false,
-      pixelArt: true,
-    },
+        // tratamento dos gráficos: pixelado
+        render: {
+          antialiasGL: false,
+          pixelArt: true,
+        },
 
-    // funções da classe scene:
-    scene: [Fase_01, splash_scene, Fase_03, brick_push_scene, Fase_05],
-};
+        // funções da classe scene:
+        scene: [Fase_3, Fase_01, Fase_04, Fase_05, Fase_06, Fase_08, brick_push_scene],
+    };
 
 // variáveis globais - jogo e jogador
 console.log('start*');

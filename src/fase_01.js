@@ -315,6 +315,9 @@ class Fase_01 extends Phaser.Scene{
         this.keySPACE = this.input.keyboard.addKey('SPACE');
         this.keyEsc = this.input.keyboard.addKey("ESC");
         this.keyN = this.input.keyboard.addKey('N');
+        this.keyM = this.input.keyboard.addKey('M');
+        this.keyB = this.input.keyboard.addKey('B');
+        this.keyV = this.input.keyboard.addKey('V');
         this.game_over = false;
 
         // estado do jogador
