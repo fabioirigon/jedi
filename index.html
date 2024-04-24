@@ -1,5 +1,5 @@
 <!doctype html> 
-    <!-- HTML Padrão -->
+    <!-- HTML Padrão tst -->
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
@@ -20,6 +20,7 @@
     <script src="src/fase_01_map_overlap.js"></script>
      
     <script src="src/brick_push_scene.js"></script> 
+    <script src="src/Fase_3.js"></script> 
     <script src="src/fase_03.js"></script> 
     <script src="src/fase_04.js"></script> 
     <script src="src/fase_05.js"></script> 
@@ -48,8 +49,8 @@ var config = {
     type: Phaser.AUTO,
 
         // resolução e sistema de colisão.
-        width: 1584,
-        height: 1584,
+        width: window.innerWidth,
+        dheight: window.innerHeight,
         physics: {
               default: 'arcade',
               arcade: {
@@ -64,7 +65,7 @@ var config = {
         },
 
         // funções da classe scene:
-        scene: [Fase_06, Fase_03, Fase_04, Fase_05, Fase_01, Fase_08, brick_push_scene],
+        scene: [Fase_3, Fase_01, Fase_04, Fase_05, Fase_06, Fase_08, brick_push_scene],
     };
 
 // variáveis globais - jogo e jogador
