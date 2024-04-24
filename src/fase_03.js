@@ -1,22 +1,13 @@
 class Fase_03 extends Phaser.Scene {
-<<<<<<< HEAD
-	// O construtor registra o nome da cena.
-	constructor() {
-=======
 	// O construtor registra o nome da cena
 	constructor() {
 		console.log('fase 03')
->>>>>>> main
 		super("Fase_03");
 	}
 
 	// função para carregamento de assets
 	preload() {
-<<<<<<< HEAD
-		// Personagem principal 
-=======
 		// Personagem principal
->>>>>>> main
 		this.load.spritesheet("playerbow_sp", "assets/spritesheets/playerbow_sp.png", {
 			frameWidth: 64,
 			frameHeight: 64,
@@ -126,27 +117,16 @@ class Fase_03 extends Phaser.Scene {
 		this.robin.body.moves = false;
 
 		// Criação do personagem principal
-<<<<<<< HEAD
-		this.player = new player(this, 815, 100, 'playerbow_sp', 26);
-		//this.player = new player(this, 40, 730, 'playerbow_sp', 26);
-=======
 		//this.player = new player(this, 815, 100, 'playerbow_sp', 26);
 		this.player = new player(this, 40, 730, 'playerbow_sp', 26);
->>>>>>> main
 		this.player.setScale(0.4);
 		this.player.setSize(32, 32);
 		this.player.setOffset(16, 32);
 		this.player.has_bow = false;
 
-<<<<<<< HEAD
-		this.spider = this.physics.add.sprite(810, 140, 'spider_sp', 0);
-		this.spider.setScale(0.5)
-		this.spider.body.setSize(this.spider.width*0.5, this.spider.height*0.5)
-=======
 		//this.spider = this.physics.add.sprite(810, 140, 'spider_sp', 0);
 		//this.spider.setScale(0.5)
 		//qthis.spider.body.setSize(this.spider.width*0.5, this.spider.height*0.5)
->>>>>>> main
 
 		this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
 		this.light.setScale(2);
@@ -606,11 +586,7 @@ class Fase_03 extends Phaser.Scene {
 	// update é chamada a cada novo quadro
 	update() {
 
-<<<<<<< HEAD
-		this.spider.setRotation(Math.atan2(this.player.x-this.spider.x, -this.player.y+this.spider.y))
-=======
 		//this.spider.setRotation(Math.atan2(this.player.x-this.spider.x, -this.player.y+this.spider.y))
->>>>>>> main
 
 		this.player.body.debugBodyColor = this.player.body.touching.none ? 0x0099ff : 0xff9900;
 		if (this.player.body.embedded && this.dialogs.isActive==false){
