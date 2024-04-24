@@ -72,6 +72,137 @@ class Fase_06 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.objLayer);
 
 
+        // criação do jogador
+        this.player = this.physics.add.sprite(137, 75, 'player_sp', 0)
+        this.player.setScale(0.6)
+
+
+        // camera seguindo o jogador
+        this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
+        this.cameras.main.setZoom(1.5);
+
+    }
+
+    create_animations()
+    {
+        // animações (caminhando)        
+        this.anims.create({
+            key: 'pl_wlk_dwn',
+            frames: this.anims.generateFrameNumbers('player_sp', {frames: [0, 4, 8, 12]}),
+            frameRate: 8,
+            repeat: -1
+            });
+        this.anims.create({
+            key: 'pl_wlk_lef',
+            frames: this.anims.generateFrameNumbers('player_sp', {frames: [1, 5, 9, 13]}),
+            frameRate: 8,
+            repeat: -1
+            });
+        this.anims.create({
+            key: 'pl_wlk_up',
+            frames: this.anims.generateFrameNumbers('player_sp', {frames: [2, 6, 10, 14]}),
+            frameRate: 8,
+            repeat: -1
+            });
+        this.anims.create({
+            key: 'pl_wlk_rig',
+            frames: this.anims.generateFrameNumbers('player_sp', {frames: [3, 7, 11, 15]}),
+            frameRate: 8,
+            repeat: -1
+            });
+
+    }
+
+    create_collisions()
+    {
+
+        // criação da colisão com paredes
+        this.wallsMap.setCollisionBetween(0, 1, true)
+        this.physics.add.collider(this.player, this.wallsMap);
+        
+    }
+
+    create_tweens()
+    {
+        var t0 = this.add.text(80, 300, "Alguns dizem que há um tesouro no fim da caverna", {
+            font: "15px Arial",
+            fill: "#20C020",
+            align: "center"
+        });        
+
+        var t1 = this.add.text(150, 300, "Continue por sua conta e risco", {
+            font: "15px Arial",
+            fill: "#20C020",
+            align: "center"
+        });
+
+        t0.alpha = 0
+        t1.alpha = 0
+
+        this.timeline = this.tweens.createTimeline();
+        this.timeline.add({
+            targets: t0,
+            alpha: 1,
+            ease: 'linear',
+            duration: 500, 
+            yoyo: true,
+            hold: 3500
+        });
+
+        this.timeline.add({
+            targets: t1,
+            alpha: 1,
+            ease: 'linear',
+            duration: 500,
+            yoyo: true,
+            hold: 3500
+        });
+
+
+        var t3 = this.add.text(374, 920, "Preparesse para morrer", {
+        font: "15px Arial",
+        fill: "#f72b2b",
+        align: "center"
+        });        
+
+        t3.alpha = 0
+
+        this.timelineChefao = this.tweens.createTimeline();
+        this.timelineChefao.add({
+            targets: t3,
+            alpha: 1,
+            ease: 'linear',
+            duration: 500, 
+            yoyo: true,
+            hold: 3500
+        });
+
+    }
+
+    // função para criação dos elementos
+    create ()
+    {
+        this.create_map();
+
+        this.create_actors();
+
+        this.create_collisions();
+
+        this.create_animations();
+
+        this.create_tweens();
+
+        //Zona cavaleiro
+        this.zoneDialog = true;
+        this.zone = this.add.zone(200, 300).setSize(200, 200);
+        this.physics.world.enable(this.zone);
+        this.physics.add.overlap(this.player, this.zone, this.onZone, null, this);
+
+        // Zona chefão
+        this.zoneDialogChefao = true;
+        this.zoneChefao = this.add.zone(450, 900).setSize(300, 300);
+        this.physics.world.enable(this.zoneChefao);
+        this.physics.add.overlap(this.player, this.zoneChefao, this.onZoneChefao, null, this);
 
         // ligação das teclas de movimento
         this.keyA = this.input.keyboard.addKey('A');
