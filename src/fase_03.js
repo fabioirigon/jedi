@@ -1,7 +1,7 @@
 class Fase_03 extends Phaser.Scene {
 	// O construtor registra o nome da cena
 	constructor() {
-
+		console.log('fase 03')
 		super("Fase_03");
 	}
 
@@ -586,7 +586,7 @@ class Fase_03 extends Phaser.Scene {
 	// update é chamada a cada novo quadro
 	update() {
 
-		this.spider.setRotation(Math.atan2(this.player.x-this.spider.x, -this.player.y+this.spider.y))
+		//this.spider.setRotation(Math.atan2(this.player.x-this.spider.x, -this.player.y+this.spider.y))
 
 		this.player.body.debugBodyColor = this.player.body.touching.none ? 0x0099ff : 0xff9900;
 		if (this.player.body.embedded && this.dialogs.isActive==false){
