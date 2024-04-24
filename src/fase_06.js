@@ -210,6 +210,8 @@ class Fase_06 extends Phaser.Scene {
         this.keyW = this.input.keyboard.addKey('W');
         this.keyS = this.input.keyboard.addKey('S');
         this.keySPACE = this.input.keyboard.addKey('SPACE');
+        console.log('adding N')
+		this.keyN = this.input.keyboard.addKey("N");
 
         // definição de zoom da câmera e comando para seguir jogador
         this.cameras.main.setZoom(1.3);
@@ -350,6 +352,11 @@ class Fase_06 extends Phaser.Scene {
     }
     
     update() {
+        if (this.keyN.isDown) {
+            console.log("n")
+            this.scene.start('Fase_08')
+          }
+
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
             if (this.dialog.isActive) {
                 this.dialog.nextDlg();
@@ -407,6 +414,7 @@ class Fase_06 extends Phaser.Scene {
                 this.timedEvent = this.time.delayedCall(1500, resetFase, [], this);
             }
         }
+      
     }
 
     enemyHit(player, enemy) {

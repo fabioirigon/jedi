@@ -4,7 +4,7 @@ class Fase_08 extends Phaser.Scene {
   {
       // ######## acertar nome da fase ##########
       super('Fase_08'); 
-      console.log('Fase_08')
+      console.log('Fase_08 start')
   }
 
   // função para carregamento de assets
@@ -64,6 +64,7 @@ class Fase_08 extends Phaser.Scene {
     this.keyW = this.input.keyboard.addKey("W");
     this.keyS = this.input.keyboard.addKey("S");
     this.keySPACE = this.input.keyboard.addKey("SPACE");
+		this.keyN = this.input.keyboard.addKey("N");
 
     this.keyE = this.input.keyboard.addKey("E");
 
@@ -171,6 +172,11 @@ class Fase_08 extends Phaser.Scene {
       console.log("Dano");
       this.player.getDamage(0.1);
     }
+    if (this.keyN.isDown) {
+      console.log("n")
+      this.scene.start('Fase_3')
+    }
+
   }
 
   // trata zona ativa
