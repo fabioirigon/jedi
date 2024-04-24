@@ -1,6 +1,7 @@
 class Fase_03 extends Phaser.Scene {
 	// O construtor registra o nome da cena
 	constructor() {
+
 		super("Fase_03");
 	}
 
@@ -116,16 +117,16 @@ class Fase_03 extends Phaser.Scene {
 		this.robin.body.moves = false;
 
 		// Criação do personagem principal
-		this.player = new player(this, 815, 100, 'playerbow_sp', 26);
-		//this.player = new player(this, 40, 730, 'playerbow_sp', 26);
+		//this.player = new player(this, 815, 100, 'playerbow_sp', 26);
+		this.player = new player(this, 40, 730, 'playerbow_sp', 26);
 		this.player.setScale(0.4);
 		this.player.setSize(32, 32);
 		this.player.setOffset(16, 32);
 		this.player.has_bow = false;
 
-		this.spider = this.physics.add.sprite(810, 140, 'spider_sp', 0);
-		this.spider.setScale(0.5)
-		this.spider.body.setSize(this.spider.width*0.5, this.spider.height*0.5)
+		//this.spider = this.physics.add.sprite(810, 140, 'spider_sp', 0);
+		//this.spider.setScale(0.5)
+		//qthis.spider.body.setSize(this.spider.width*0.5, this.spider.height*0.5)
 
 		this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
 		this.light.setScale(2);
