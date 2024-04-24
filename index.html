@@ -1,5 +1,5 @@
 <!doctype html> 
-    <!-- HTML Padrão -->
+    <!-- HTML Padrão tst -->
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
@@ -7,28 +7,10 @@
 
     <title>Phase 1</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
-
-    <script src="src/player_demo/actors.js"></script>  
-    <script src="src/player_demo/enemy.js"></script>
-    <script src="src/dialogs.js"></script> 
-    <script src="src/player_demo/player.js"></script> 
-    <script src="src/player_demo/wizard.js"></script> 
-    <script src="src/player_demo/orc.js"></script> 
-    <script src="src/player_demo/elfa.js"></script> 
-    <script src="src/splash_scene.js"></script> 
-    <script src="src/fase_01.js"></script>
-    <script src="src/fase_01_map_overlap.js"></script>
-     
-    <script src="src/brick_push_scene.js"></script> 
-    <script src="src/fase_03.js"></script> 
-    <script src="src/fase_04.js"></script> 
-    <script src="src/fase_05.js"></script> 
-    <script src="src/Fase_06.js"></script> 
-    <script src="src/fase_07.js"></script> 
-    <script src="src/Fase_08.js"></script> 
-
-    <!-- <script src="src/player_demo/fase_01_player.js"></script> -->
-
+    <!--<script src="phaser.js"></script> -->
+    <script src="src/Fase_04.js"></script>
+    <script src="src/dialogs.js"></script>
+    <script src="src/actors.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -48,8 +30,8 @@ var config = {
     type: Phaser.AUTO,
 
         // resolução e sistema de colisão.
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: 1584,
+        height: 1584,
         physics: {
               default: 'arcade',
               arcade: {
@@ -63,8 +45,8 @@ var config = {
           pixelArt: true,
         },
 
-        // funções da classe scene: 
-        scene: [Fase_08, Fase_03, Fase_04, Fase_05, Fase_06, Fase_01, brick_push_scene],
+        // funções da classe scene:
+        scene: [Fase_04],
     };
 
 // variáveis globais - jogo e jogador
