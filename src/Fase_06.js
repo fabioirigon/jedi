@@ -278,7 +278,7 @@ class Fase_06 extends Phaser.Scene {
             }
         }
         if (this.keyN.isDown) {
-            console.log("n")
+            console.log("nova")
             this.scene.start('Fase_08')
           }
 
