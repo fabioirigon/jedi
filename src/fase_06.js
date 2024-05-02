@@ -26,7 +26,7 @@ class Fase_06 extends Phaser.Scene {
 
     // criar elementos
     create() {
-        console.log('Create map');
+        console.log('Create map - gelo');
         // criação do mapa e ligação com as imagens
         this.map = this.make.tilemap({ key: 'Mapa_Fase6', tileWidth: 32, tileHeight: 32 });
         this.IceTileset = this.map.addTilesetImage('IceTiled', 'ice_tiles');
