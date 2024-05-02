@@ -609,6 +609,7 @@ class Fase_05 extends Phaser.Scene{
     this.keyW = this.input.keyboard.addKey('W');
     this.keyS = this.input.keyboard.addKey('S');
     this.keySPACE = this.input.keyboard.addKey('SPACE');
+		this.keyN = this.input.keyboard.addKey("N");
 
     // estado do jogador
     this.cur_wlk = 0
@@ -692,6 +693,11 @@ class Fase_05 extends Phaser.Scene{
         this.scene.restart();
       }
     }
+
+    if (this.keyN.isDown) {
+      this.scene.start('Fase_gelo')
+    }
+
   }
 
   bulletHit(player, bullet){

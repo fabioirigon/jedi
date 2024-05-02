@@ -1,5 +1,8 @@
 class Fase_3 extends Phaser.Scene {
 
+    constructor (){
+        super('Fase_3'); 
+    }
 
     // função para carregamento de assets
     preload() {
@@ -11,16 +14,16 @@ class Fase_3 extends Phaser.Scene {
         this.load.spritesheet('esqueletobom_', "assets/spritesheets/esqueletobom.png", { frameWidth: 64, frameHeight: 64, margin: 32 });
         this.load.spritesheet('ratoesqueleto_sp', "assets/spritesheets/ratoesqueleto_sp.png", { frameWidth: 64, frameHeight: 64 });
 
-        this.load.image('tiles', "assets/maps/maptiles.png");
-        this.load.image('tiles1', "assets/maps/props.png");
+        this.load.image('tiles_3', "assets/maps/maptiles.png");
+        this.load.image('tiles1_3', "assets/maps/props.png");
 
-        this.load.tilemapTiledJSON("map", "assets/maps/mapa2.json");
+        this.load.tilemapTiledJSON("map_3", "assets/maps/mapa2.json");
     }
 
     createMap() {
-        this.map = this.make.tilemap({ key: 'map', tileWidth: 16, tileHeight: 16 });
-        this.tileset = this.map.addTilesetImage('maptiles', 'tiles');
-        this.tileset1 = this.map.addTilesetImage('props', 'tiles1');
+        this.map = this.make.tilemap({ key: 'map_3', tileWidth: 16, tileHeight: 16 });
+        this.tileset = this.map.addTilesetImage('maptiles', 'tiles_3');
+        this.tileset1 = this.map.addTilesetImage('props', 'tiles1_3');
 
         this.wallsLayer = this.map.createDynamicLayer('ground', this.tileset, 0, 0);
         this.wallsLayer1 = this.map.createDynamicLayer('colision', this.tileset, 0, 0);
@@ -105,6 +108,7 @@ class Fase_3 extends Phaser.Scene {
 
     // função para criação dos elementos
     create() {
+        console.log("create Fase_3")
         this.createMap();
         this.createActors();
         this.createAnimations();
@@ -113,6 +117,7 @@ class Fase_3 extends Phaser.Scene {
 
 
         // ligação das teclas de movimento
+        console.log("keys Fase_3")
         this.keyA = this.input.keyboard.addKey('A');
         this.keyD = this.input.keyboard.addKey('D');
         this.keyW = this.input.keyboard.addKey('W');
