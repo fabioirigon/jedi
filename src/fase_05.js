@@ -695,7 +695,7 @@ class Fase_05 extends Phaser.Scene{
     }
 
     if (this.keyN.isDown) {
-      this.scene.start('Fase_06')
+      this.scene.start('Fase_gelo')
     }
 
   }
