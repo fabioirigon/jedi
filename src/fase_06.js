@@ -8,6 +8,8 @@ class Fase_06 extends Phaser.Scene {
         super('Fase_06'); 
     }
 
+    //first commit hugoserra [Test]
+
     // Preload  
     preload() {
         console.log('Load Spritesheet - fase 6');
