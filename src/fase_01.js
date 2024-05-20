@@ -320,11 +320,12 @@ class Fase_01 extends Phaser.Scene{
         this.keyV = this.input.keyboard.addKey('V');
         this.game_over = false;
 
-        //bash
+        //bash--------------------------------------
         this.keyX = this.input.keyboard.addKey('X');
         this.isPushBack = false;
-        this.pushBackDuration = 400; // Duração do empurrão em milissegundos
+        this.pushBackDuration = 300; // Duração do empurrão em milissegundos
         this.pushBackTimer = 0;
+        //------------------------------------------
 
         // estado do jogador
         this.cur_wlk = 0
@@ -386,27 +387,29 @@ class Fase_01 extends Phaser.Scene{
             enemy.setVelocityX(0);
             enemy.setVelocityY(0);
         }
-        //parte do bash
-        if (this.isPushBack) {
-            var pushBackScale = 100 / Math.sqrt(dx*dx+dy*dy);
+        //bash--------------------------------------
+        if (this.isPushBack && dx*dx + dy*dy < 100*100) {
+            var pushBackScale = 150 / Math.sqrt(dx*dx+dy*dy); //"forca" do empurrao
             enemy.setVelocityX(-dx * pushBackScale);
             enemy.setVelocityY(-dy * pushBackScale);
         }
+        //------------------------------------------
     }
 
     // update é chamada a cada novo quadro
     update (time, delta){
+        //bash--------------------------------------
         if (Phaser.Input.Keyboard.JustDown(this.keyX)) {
-            this.isPushBack = true;
+            this.isPushBack = true; //ativa o empurrao
             this.pushBackTimer = this.pushBackDuration;
         }
         if (this.isPushBack) {
-            this.pushBackTimer -= delta;
+            this.pushBackTimer -= delta; 
             if (this.pushBackTimer <= 0) {
-                this.isPushBack = false;
+                this.isPushBack = false; //desativa
             }
         }
-        
+        //------------------------------------------
 
         if (Phaser.Input.Keyboard.JustDown(this.keySPACE)){
             console.log(this.player.x, this.player.y);
