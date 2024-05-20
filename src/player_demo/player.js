@@ -11,8 +11,6 @@ class player extends Actor {
     scene.physics.add.existing(this);
     this.setSize(this.width/2, 2*this.height/3, true);
     this.setOffset(this.width/4, this.height/3);
-    this.vx = 0;
-    this.vy = 0;
 
     this.canvas = this.scene.sys.game.canvas;
     console.log('cw', this.canvas.width);
@@ -43,6 +41,15 @@ class player extends Actor {
     this.scene.physics.world.enable(this.swingZone);
     this.swingZone.setOrigin(0.5, 0.5)
     this.enemyGroup = [];
+
+    this.acceleration = player.DEFAULT_ACCELERATION;
+    this.drag = player.DEFAULT_DRAG;
+
+    this.move = new Movement(player.MAX_SPEED);
+    this.knockback = {
+      move: new Movement(),
+      list: []
+    };
   }
 
   create_animations(texture){
@@ -138,48 +145,60 @@ class player extends Actor {
 
   }
 
-  set_player_velocity(){
-    
-    if (this.scene.keyD?.isDown) {
-        //console.log(this.velocity)
-        this.vx = ((this.vx<210)?this.vx+20:210);
-    }
-    else if (this.scene.keyA?.isDown) {
-      this.vx = ((this.vx>-210)?this.vx-20:-210);
-    }
-    else{
-        this.vx=0;
-    }
+  set_move_velocity(delta){
+    let x = this.scene.keyD?.isDown - this.scene.keyA?.isDown;
+    let y = this.scene.keyS?.isDown - this.scene.keyW?.isDown;
 
-    // velocidade vertical
-    if (this.scene.keyW.isDown) {
-      this.vy = ((this.vy>-210)?this.vy-20:-210);
-    }
-    else if (this.scene.keyS.isDown) {
-        this.vy = ((this.vy<210)?this.vy+20:210);
-    }
-    else{
-        this.vy=0;
-    }    
-    this.setVelocityX(this.vx); 
-    this.setVelocityY(this.vy); 
+    this.move
+      .setAcceleration(x, y, this.acceleration)
+      .applyAcceleration(delta)
+      .applyDrag(delta, this.drag);
+  }
 
+  set_knockback_velocity(delta) {
+    this.knockback.move
+      .applyDrag(delta, this.drag);
+
+    let vx = this.knockback.list
+      .reduce((x, v) => x + v.x, 0);
+
+    let vy = this.knockback.list
+      .reduce((y, v) => y + v.y, 0);
+
+    let v = new Vector2(vx, vy);
+
+    this.knockback.move
+      .addVelocity(v);
+
+    this.knockback.list = [];
+  }
+
+  addKnocback(vx, vy, scale_factor = 1) {
+    let knockback_vector = new Vector2(vx, vy).scale(scale_factor);
+    this.knockback.list.push(knockback_vector);
+  }
+
+  set_player_velocity() {
+    let vx = this.move.velocity.x + this.knockback.move.velocity.x;
+    let vy = this.move.velocity.y + this.knockback.move.velocity.y;
+
+    this.setVelocity(vx, vy);
   }
 
   set_walk_animation(){
-    if (this.body.velocity.x > 0){
+    if (this.move.velocity.x > 0){
       this.anims.play('walk_right', true);
       this.facing = [1, 0];
     }
-    else if (this.body.velocity.x < 0){
+    else if (this.move.velocity.x < 0){
       this.anims.play('walk_left', true);
       this.facing = [-1, 0];      
     }
-    else if (this.body.velocity.y > 0){
+    else if (this.move.velocity.y > 0){
       this.anims.play('walk_down', true);
       this.facing = [0, 1];
     }
-    else if (this.body.velocity.y < 0){
+    else if (this.move.velocity.y < 0){
       this.anims.play('walk_up', true);
       this.facing = [0, -1];
     }
@@ -270,7 +289,6 @@ class player extends Actor {
     this.move_enable = true;
   }
 
-
   re_enable(){
     this.removeListener('animationcomplete');
     this.attack_enable = true;
@@ -300,18 +318,20 @@ class player extends Actor {
     }
   }
 
-
-  preUpdate (time, delta)
-  {
+  preUpdate (time, delta) {
     super.preUpdate(time, delta);
-  
+
     if (this.move_enable){
+      let delta_seconds = delta / 1000;
+      this.set_knockback_velocity(delta_seconds);
+      this.set_move_velocity(delta_seconds);
       this.set_player_velocity();
       this.set_walk_animation();
     }
     else{
-      this.setVelocityX(0); 
-      this.setVelocityY(0); 
+      this.body.stop();
+      this.move.stop();
+      this.knockback.move.stop();
     }
 
     if (this.scene.keySPACE.isDown && this.attack_enable && this.has_bow) {
@@ -322,7 +342,6 @@ class player extends Actor {
       this.swattack();
     }
 
-   
     for (let v of this.arrows.getMatching('visible', true)){
       if (v.x > this.canvas.width || v.x < 0 || v.y > this.canvas.height || v.y <0){
         v.setActive(false);
@@ -331,7 +350,6 @@ class player extends Actor {
         v.body.reset(-10, -10);
       }
     };
-   
 }
 
   die(){
@@ -348,4 +366,27 @@ class player extends Actor {
   }
 
 }
+
+// Constantes de Classe
+
+Object.defineProperty(player, 'MAX_SPEED', {
+  value: 200,
+  writable : false,
+  enumerable : true,
+  configurable : false
+});
+
+Object.defineProperty(player, 'DEFAULT_ACCELERATION', {
+  value: 300,
+  writable : false,
+  enumerable : true,
+  configurable : false
+});
+
+Object.defineProperty(player, 'DEFAULT_DRAG', {
+  value: 400,
+  writable : false,
+  enumerable : true,
+  configurable : false
+});
 
