@@ -320,6 +320,12 @@ class Fase_01 extends Phaser.Scene{
         this.keyV = this.input.keyboard.addKey('V');
         this.game_over = false;
 
+        //bash
+        this.keyX = this.input.keyboard.addKey('X');
+        this.isPushBack = false;
+        this.pushBackDuration = 400; // Duração do empurrão em milissegundos
+        this.pushBackTimer = 0;
+
         // estado do jogador
         this.cur_wlk = 0
         if (this.movingWall_sts == 0){
@@ -367,9 +373,11 @@ class Fase_01 extends Phaser.Scene{
     }
 
     move_enemy(enemy){
+        //calcula as distancias
         var dx = this.player.x-enemy.x;
         var dy = this.player.y-enemy.y;
         var scl = 130/Math.sqrt(dx*dx+dy*dy)
+        //se tiver dentro do range, vai pra cima do player
         if (dx*dx + dy*dy < 200*200 && scl>0){
             enemy.setVelocityX(dx*scl);
             enemy.setVelocityY(dy*scl);
@@ -378,10 +386,28 @@ class Fase_01 extends Phaser.Scene{
             enemy.setVelocityX(0);
             enemy.setVelocityY(0);
         }
+        //parte do bash
+        if (this.isPushBack) {
+            var pushBackScale = 100 / Math.sqrt(dx*dx+dy*dy);
+            enemy.setVelocityX(-dx * pushBackScale);
+            enemy.setVelocityY(-dy * pushBackScale);
+        }
     }
 
     // update é chamada a cada novo quadro
-    update (){
+    update (time, delta){
+        if (Phaser.Input.Keyboard.JustDown(this.keyX)) {
+            this.isPushBack = true;
+            this.pushBackTimer = this.pushBackDuration;
+        }
+        if (this.isPushBack) {
+            this.pushBackTimer -= delta;
+            if (this.pushBackTimer <= 0) {
+                this.isPushBack = false;
+            }
+        }
+        
+
         if (Phaser.Input.Keyboard.JustDown(this.keySPACE)){
             console.log(this.player.x, this.player.y);
             //onEndDialog(this)
