@@ -45,7 +45,7 @@ class player extends Actor {
     this.acceleration = player.DEFAULT_ACCELERATION;
     this.drag = player.DEFAULT_DRAG;
 
-    this.move = new Movement(player.MAX_SPEED);
+    this.move = new Movement(player.DEFAULT_MAX_SPEED);
     this.knockback = {
       move: new Movement(),
       list: []
@@ -148,10 +148,10 @@ class player extends Actor {
   set_move_velocity(delta){
     let x = this.scene.keyD?.isDown - this.scene.keyA?.isDown;
     let y = this.scene.keyS?.isDown - this.scene.keyW?.isDown;
+    let acc = this.acceleration;
 
     this.move
-      .setAcceleration(x, y, this.acceleration)
-      .applyAcceleration(delta)
+      .applyAcceleration(x, y, acc, delta)
       .applyDrag(delta, this.drag);
   }
 
@@ -369,7 +369,7 @@ class player extends Actor {
 
 // Constantes de Classe
 
-Object.defineProperty(player, 'MAX_SPEED', {
+Object.defineProperty(player, 'DEFAULT_MAX_SPEED', {
   value: 200,
   writable : false,
   enumerable : true,
@@ -377,14 +377,14 @@ Object.defineProperty(player, 'MAX_SPEED', {
 });
 
 Object.defineProperty(player, 'DEFAULT_ACCELERATION', {
-  value: 300,
+  value: 500,
   writable : false,
   enumerable : true,
   configurable : false
 });
 
 Object.defineProperty(player, 'DEFAULT_DRAG', {
-  value: 400,
+  value: 500,
   writable : false,
   enumerable : true,
   configurable : false

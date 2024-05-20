@@ -7,11 +7,6 @@ class Movement {
         this.velocity = new Vector2();
         this.max_speed = max_speed;
     }
-
-    setAcceleration(x = 0, y = 0, scale_factor = 0) {
-        this.acceleration.set(x, y).scale(scale_factor);
-        return this;
-    }
     
     setVelocity(x = 0, y = 0) {
         this.velocity.set(x, y);
@@ -19,7 +14,7 @@ class Movement {
         if(this.velocity.length() > this.max_speed) {
             this.velocity.setLength(this.max_speed);
         }
-
+        
         return this;
     }
 
@@ -38,9 +33,10 @@ class Movement {
         return this;
     }
     
-    applyAcceleration(delta) {
-        this.acceleration.scale(delta);
+    applyAcceleration(x, y, scale_factor, delta) {
+        this.acceleration.set(x, y).scale(scale_factor * delta);
         this.addVelocity(this.acceleration);
+
         return this;
     }
     
@@ -70,12 +66,14 @@ class Movement {
         }
 
         this.velocity.set(vx, vy);
+
         return this;
     }
 
     stop() {
         this.acceleration.reset();
         this.velocity.reset();
+
         return this;
     }
 }
