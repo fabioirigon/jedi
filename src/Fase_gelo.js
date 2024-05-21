@@ -531,12 +531,13 @@ function damagePlayer() {
         }
     }
     this.player.setVisible(true);
-
+    loadAudio('../assets/audio/damage_hit.mp3');
 }
 
 
 function damageEnemy(enemy){
     console.log("dano inimigo");
+    loadAudio('../assets/audio/fight_hit.mp3');
     enemy.getDamage(3);
     console.log(enemy.getHPValue())
     if (enemy.getHPValue()<0) {
@@ -546,6 +547,7 @@ function damageEnemy(enemy){
         enemy.bar.setVisible(false);
         enemy.bar_bg.setVisible(false);
     }
+
 }
 
 function resetFase(){

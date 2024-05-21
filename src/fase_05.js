@@ -643,6 +643,7 @@ class Fase_05 extends Phaser.Scene{
     if (player.getHPValue() <= 0){
       player.die();
     }
+    loadAudio('../assets/audio/damage_hit.mp3');
   }
 
   // update é chamada a cada novo quadro
@@ -707,6 +708,7 @@ class Fase_05 extends Phaser.Scene{
     if (player.getHPValue() == 0){
       player.die();
     }
+    loadAudio('../assets/audio/damage_hit.mp3');
   }
 
   bulletHitWall(bullet){
@@ -786,7 +788,7 @@ class Fase_05 extends Phaser.Scene{
 
   acertouCadeado(){
     console.log("acertouCadeado");
-
+    loadAudio('../assets/audio/correct.mp3');
     this.quest0.setVisible(false);
     this.a0.setVisible(false);
     this.a1.setVisible(false);
@@ -849,7 +851,7 @@ class Fase_05 extends Phaser.Scene{
 
   acertouG(){
     console.log("acertouG");
-
+    loadAudio('../assets/audio/correct.mp3');
     this.quest.setVisible(false);
     this.a0.setVisible(false);
     this.a1.setVisible(false);
@@ -974,6 +976,7 @@ function projectilHitActor(actor, projectil){
     actor.die();
     //this.physics.world.removeCollider(collider);
   }
+  loadAudio('../assets/audio/damage_hit.mp3');
   console.log('HP', actor.getHPValue())
 }
 

@@ -248,6 +248,7 @@ class Fase_3 extends Phaser.Scene {
             localStorage.setItem('hp',100);
             this.player.die();
         }
+        loadAudio('../assets/audio/damage_hit.mp3');
     }
     // trata zona ativa
     checkActiveZone() {

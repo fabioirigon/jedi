@@ -435,6 +435,7 @@ class Fase_01 extends Phaser.Scene{
 
     enemyHit (player, enemy){
         player.getDamage(3);
+        loadAudio('../assets/audio/damage_hit.mp3');
         if (player.getHPValue() == 0){
             localStorage.setItem('hp',100);
             player.die();
@@ -444,6 +445,7 @@ class Fase_01 extends Phaser.Scene{
     trapHit(player, trap){
         if (trap.anims.getProgress() > 0.1){
             player.getDamage(5);
+            loadAudio('../assets/audio/damage_hit.mp3');
             if (player.getHPValue() == 0){
                 localStorage.setItem('hp',100);
                 player.die();
@@ -465,6 +467,7 @@ class Fase_01 extends Phaser.Scene{
 
     bulletHit(player, bullet){
         player.getDamage(20);
+        loadAudio('../assets/audio/damage_hit.mp3');
         bullet.setActive(false);
         bullet.setVisible(false);
         if (player.getHPValue() == 0){

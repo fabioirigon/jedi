@@ -286,6 +286,7 @@ class Fase_06 extends Phaser.Scene {
 
     enemyHit(player, enemy) {
         player.getDamage(10);
+        loadAudio('../assets/audio/damage_hit.mp3');
         if (player.getHPValue() <= 0) {
             // this.localStorage.setItem('hp', 100);
             player.die();
@@ -510,6 +511,7 @@ function errou_fcn(ptr){
 function damagePlayer() {
     if (!this.isInvulnerable) {
         this.player.getDamage(10);
+        loadAudio('../assets/audio/damage_hit.mp3');
         this.isInvulnerable = true;
         this.invulnerabilityDuration = 1500; // Duração em milissegundos
         this.invulnerabilityEndTime = this.time.now + this.invulnerabilityDuration;
@@ -537,6 +539,7 @@ function damagePlayer() {
 
 function damageEnemy(enemy){
     console.log("dano inimigo");
+    loadAudio('../assets/audio/fight_hit.mp3');
     enemy.getDamage(3);
     console.log(enemy.getHPValue())
     if (enemy.getHPValue()<0) {
