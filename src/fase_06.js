@@ -5,10 +5,10 @@ class Fase_06 extends Phaser.Scene {
 
     constructor (){
         console.log('##constructor - fase 6');
-        super('Fase_06'); 
+        super('Fase_06');
     }
 
-    // Preload  
+    // Preload
     preload() {
         console.log('Load Spritesheet - fase 6');
         this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
@@ -79,7 +79,7 @@ class Fase_06 extends Phaser.Scene {
         this.keyW = this.input.keyboard.addKey('W');
         this.keyS = this.input.keyboard.addKey('S');
         this.keySPACE = this.input.keyboard.addKey('SPACE');
-		this.keyN = this.input.keyboard.addKey("N");  
+		this.keyN = this.input.keyboard.addKey("N");
 
         // definição de zoom da câmera e comando para seguir jogador
         this.cameras.main.setZoom(1.3);
@@ -131,11 +131,11 @@ class Fase_06 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.zoneEst2, Questao2, null, this);
 
         this.quest_3 = ["Para continuar sua jornada, outra resposta você deve responder:\n 3x9 - 5 = ?",
-	        1, "A - ◯ 24",  "B - ◯ 22",  "C - ◯ 23"]  
+	        1, "A - ◯ 24",  "B - ◯ 22",  "C - ◯ 23"]
         this.quest_4 = ["Para continuar sua jornada, outra resposta você deve responder:\n 4x7 - 13 = ?",
 	        1, "A - ◯ 17",  "B - ◯ 15",  "C - ◯ 16"]
         this.quest_5 = ["Para continuar sua jornada, outra resposta você deve responder:\n 2x8 - 4 = ?",
-	        1, "A - ◯ 14",  "B - ◯ 12",  "C - ◯ 11"]  
+	        1, "A - ◯ 14",  "B - ◯ 12",  "C - ◯ 11"]
 
         this.zonePlaca2a = this.add.zone(32*39, 32*20).setSize(64, 64);
         this.physics.world.enable(this.zonePlaca2a);
@@ -218,7 +218,7 @@ class Fase_06 extends Phaser.Scene {
         Enemy.x += speedX*0.5;
         Enemy.y += speedY*0.5;
     }
-    
+
     update() {
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
             if (this.dialog.isActive) {
@@ -227,7 +227,7 @@ class Fase_06 extends Phaser.Scene {
                 this.create_dialog = true;
             }
         }
-    
+
         if (this.isInvulnerable) {
             // Verificar se o jogador está invulnerável antes de processar colisões
             if (this.invulnerabilityEndTime > this.time.now) {
@@ -263,7 +263,7 @@ class Fase_06 extends Phaser.Scene {
                     }
                 }
             }
-    
+
             // Processar atualizações de inimigos somente se o jogador não estiver invulnerável
             this.bat.update(this.player);
             this.bat2.update(this.player);
@@ -271,7 +271,7 @@ class Fase_06 extends Phaser.Scene {
             this.bat4.update(this.player);
             this.bat5.update(this.player);
             this.bat6.update(this.player);
-    
+
             // Verificar se o jogador está morto
             if (this.player.dead == 1) {
                 this.timedEvent = this.time.delayedCall(1500, resetFase, [], this);
@@ -368,7 +368,7 @@ function onTextCorr(scene, text) {
 
 function changeFase() {
     console.log("Saiu da fase");
-    
+
 }
 
 function flashColor(scene) {
@@ -490,12 +490,19 @@ function Questao2(){
     }
 }
 
+function loadAudio(audioName) {
+    audio = new Audio(audioName);
+    audio.play();
+}
+
 function acertou_fcn(ptr){
+    loadAudio('../assets/audio/correct.mp3');
     this.dialog.hideBox();
     this.dialog.updateDlgBox(this.textQuestao1);
 }
 
 function errou_fcn(ptr){
+    loadAudio('../assets/audio/error.mp3');
     this.dialog.updateDlgBox(this.textQuestao1);
 }
 

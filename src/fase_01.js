@@ -2,7 +2,7 @@
 class Fase_01 extends Phaser.Scene{
     // O construtor registra o nome da cena
     constructor (){
-        super('Fase_01'); 
+        super('Fase_01');
     }
 
     // esta função é usada para receber dados, no caso o status da parede
@@ -21,7 +21,7 @@ class Fase_01 extends Phaser.Scene{
         this.load.spritesheet('tiles_sp', 'assets/images/dungeon-16-16.png', { frameWidth: 16, frameHeight: 16});
         this.load.spritesheet('lightning_sp', 'assets/spritesheets/lightning.png', { frameWidth: 32, frameHeight: 32});
         this.load.spritesheet('swordSwing_sp', 'assets/spritesheets/sw_swing.png', { frameWidth: 16, frameHeight: 16});
-        
+
         // carregando mapa (json) e gráficos do mapa
         this.load.image('tiles', 'assets/images/dungeon-16-16.png');
         this.load.tilemapTiledJSON('themap', 'assets/maps/map_phase_01.json');
@@ -39,7 +39,7 @@ class Fase_01 extends Phaser.Scene{
         this.wallsLayer = this.map.createLayer('walls', this.tileset, 0, 0);
         if (this.movingWall_sts != 1){
             this.movingWall = this.map.createLayer('movingWall', this.tileset, 0, 0);
-        }    
+        }
     }
 
     create_actors(){
@@ -104,10 +104,10 @@ class Fase_01 extends Phaser.Scene{
 
         // camera seguindo o jogador
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
-        this.cameras.main.setZoom(1.5)   
+        this.cameras.main.setZoom(1.5)
 
         this.stairs = this.physics.add.sprite(98*16, 58*16, 'tiles_sp', 357);
-        
+
         var text_cfg = {font: "30px Arial", fill: "#00C040", align: "center"}
         var tip_cfg = {font: "15px Arial", fill: "#00C040", align: "center"}
         //this.T1 = this.add.text(100, 750, "24", text_cfg);
@@ -192,7 +192,7 @@ class Fase_01 extends Phaser.Scene{
         this.physics.add.overlap(this.player, this.enemy_4, this.enemyHit, null, this);
         this.physics.add.overlap(this.player, this.enemy_5, this.enemyHit, null, this);
         this.physics.add.overlap(this.player, this.bullets, this.bulletHit, null, this);
-        
+
         // colisão com armadilhas
         this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
 
@@ -218,7 +218,7 @@ class Fase_01 extends Phaser.Scene{
             ease: 'Sine.easeInOut',
             offset: 2000,
             //easeParams: [ 3.5 ],
-            delay: 1000, 
+            delay: 1000,
             repeat: -1,
             yoyo: true,
         });
@@ -248,7 +248,7 @@ class Fase_01 extends Phaser.Scene{
             targets: t0,
             alpha: 1,
             ease: 'linear',
-            duration: 500, 
+            duration: 500,
             yoyo: true,
             hold: 3500,
             onStart: this.createBox,
@@ -288,7 +288,7 @@ class Fase_01 extends Phaser.Scene{
             duration: 500,
             paused: true,
         });
-        
+
         console.log('tline');
     }
 
@@ -354,8 +354,8 @@ class Fase_01 extends Phaser.Scene{
             }
         }
         this.player.getDamage(0);
-        //this.music = this.sound.add('surf');
-        //this.music.play();
+        // this.music = this.sound.add('surf');
+        // this.music.play();
 
         this.score = this.add.text(300, 150, "score: " + 0, {font: "15px Arial",fill: "#FFFFFF", align: "center"});
         this.score.setScrollFactor(0);
@@ -363,7 +363,7 @@ class Fase_01 extends Phaser.Scene{
         var question =  ["Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros e mais 9 livrinhos diversos.\nQuantos livros eu tenho?",
         1, "◯ 3589 livros", "◯ 3859 livros", "◯ 30859 livros", "◯ 38590 livros"]
 
-        //this.dialogs.makeQuestion(question, acertou, errou)
+        this.dialogs.makeQuestion(question, acertou, errou)
     }
 
     move_enemy(enemy){
@@ -395,7 +395,7 @@ class Fase_01 extends Phaser.Scene{
         this.move_enemy(this.enemy_4);
         this.move_enemy(this.enemy_5);
 
-        // inimigo atira 
+        // inimigo atira
         this.bullets.getMatching('active', true).forEach(function(blt){
             var dx = blt.body.x - this.enemy_6.x;
             var dy = blt.body.y - this.enemy_6.y;
@@ -407,7 +407,7 @@ class Fase_01 extends Phaser.Scene{
                 blt.body.setVelocity(0, 0);
             }
         }, this);
-    
+
         if (this.keyEsc.isDown){
             if (this.timeline.isPlaying()){
               this.timeline.setTimeScale(100);
@@ -419,7 +419,7 @@ class Fase_01 extends Phaser.Scene{
                 //this.movingWall_sts = 0;
                 //this.scene.restart();
                 this.scene.start('Fase_01', {'movingWall_sts': 0});
-            }            
+            }
         }
 
         if (this.keyN.isDown){
@@ -495,7 +495,7 @@ class Fase_01 extends Phaser.Scene{
             bullet.setVisible(true);
 
             bullet.body.setVelocityX(vx*scl);
-            bullet.body.setVelocityY(vy*scl);        
+            bullet.body.setVelocityY(vy*scl);
         }
 
         this.timer = this.time.addEvent({
@@ -504,14 +504,15 @@ class Fase_01 extends Phaser.Scene{
             callbackScope: this
         });
     }
-    
+
     gameOver(){
         console.log('game over');
+        loadAudio("../assets/audio/error.mp3");
         this.game_over = true;
         player.move_enable = false;
 
         var wd = window.innerWidth;
-        var wh = window.innerHeight;        
+        var wh = window.innerHeight;
         var txt_cfg = {font: "15px Arial", fill: "#F0F000", align: "center"}
         console.log(this.player.x, this.player.y, txt_cfg)
         var t0 = this.add.text(this.player.x, this.player.y, "Pressione Espaço para reiniciar", txt_cfg);
@@ -536,7 +537,7 @@ class Fase_01 extends Phaser.Scene{
             this.timer.remove(false);
             this.stairs.body.enable = true;
             this.stairs.setVisible(true);
-    
+
             this.light.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
                 console.log('done');
                 this.enemy_6.setVisible(false);
@@ -554,12 +555,19 @@ function onEndDialog(scene){
     scene.mageDisapear.play();
 }
 
+function loadAudio(audioName) {
+    audio = new Audio(audioName);
+    audio.play();
+}
+
 function acertou(pointer){
     console.log('acertou');
+    loadAudio('../assets/audio/correct.mp3');
     this.dialogs.hideBox();
 }
 function errou(pointer){
     console.log('errou', this);
+    loadAudio('../assets/audio/error.mp3');
     this.dialogs.hideBox();
 }
 

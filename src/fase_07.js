@@ -6,7 +6,7 @@ class Fase_07 extends Phaser.Scene
     constructor ()
     {
         // ######## acertar nome da fase ##########
-        super('Fase_07'); 
+        super('Fase_07');
         console.log('Fase_07')
     }
 
@@ -16,14 +16,14 @@ class Fase_07 extends Phaser.Scene
         // carregando spritesheets
         this.load.spritesheet('wizardIdle_sp', 'assets/spritesheets/wizard_idle.png', { frameWidth: 80, frameHeight: 80});
         this.load.spritesheet('player_sp', 'assets/spritesheets/dante_1.png', { frameWidth: 48, frameHeight: 48 });
-        
+
         // carregando mapa (json) e gráficos do mapa
         this.load.image('tiles_1', 'assets/images/tls_solaria.png');
         this.load.image('tiles_2', 'assets/images/tls_elfo.png');
         this.load.image('tiles_3', 'assets/images/tls_ork.png');
         this.load.tilemapTiledJSON('themap', 'assets/maps/fase_07.json');
     }
-	
+
     create_map(){
         // criação do mapa e ligação com a imagem (tilesheet)
         this.map = this.make.tilemap({ key: 'themap', tileWidth: 16, tileHeight: 16 });
@@ -43,10 +43,10 @@ class Fase_07 extends Phaser.Scene
         // criação do jogador
         this.player = this.physics.add.sprite(250, 75, 'player_sp', 0)
         this.player.setScale(0.6)
- 
+
         this.mage  = this.physics.add.sprite(770, 100, 'wizardIdle_sp', 0);
         this.mage.setScale(0.9)
- 
+
         // camera seguindo o jogador
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
         this.cameras.main.setZoom(1.5)
@@ -73,7 +73,7 @@ class Fase_07 extends Phaser.Scene
         // colisão com armadilhas
         //this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
     }
-       
+
     // criação do diálogo
     create_tweens()
     {
@@ -81,7 +81,7 @@ class Fase_07 extends Phaser.Scene
             font: "10px Arial",
             fill: "#F0A020",
             align: "center"
-        });        
+        });
         var t1 = this.add.text(160, 100, "Vai se lascar!", {
             font: "25px Arial",
             fill: "#20C020",
@@ -99,7 +99,7 @@ class Fase_07 extends Phaser.Scene
             targets: t0,
             alpha: 1,
             ease: 'linear',
-            duration: 500, 
+            duration: 500,
             yoyo: true,
             hold: 3500
         });
@@ -182,7 +182,7 @@ class Fase_07 extends Phaser.Scene
     update ()    {
         // variável enaable move controla o movimento
         if (this.enable_move){
-            // testa se tecla pressionada e seta a velocidade do jogador 
+            // testa se tecla pressionada e seta a velocidade do jogador
             if (this.keyD?.isDown) {
                 this.player.setVelocityX(210);
             }
@@ -190,7 +190,7 @@ class Fase_07 extends Phaser.Scene
                 this.player.setVelocityX(-210);
             }
             else{
-                this.player.setVelocityX(0); 
+                this.player.setVelocityX(0);
             }
 
             // velocidade vertical
@@ -201,11 +201,11 @@ class Fase_07 extends Phaser.Scene
                 this.player.setVelocityY(210);
             }
             else{
-                this.player.setVelocityY(0); 
+                this.player.setVelocityY(0);
             }
         }
         else{
-                this.player.setVelocity(0, 0); 
+                this.player.setVelocity(0, 0);
         }
     }
      // cria os textos
@@ -213,7 +213,7 @@ class Fase_07 extends Phaser.Scene
         if (this.zoneDialog){
             this.zoneDialog = false;
 
-            // pergunta: 
+            // pergunta:
             this.quest = this.add.text(400, 100, "Meu avô tem 5 filhos, cada filho tem 3 filhos.\n Quantos primos eu tenho?", {
                 font: "15px Arial",
                 fill: "#20C020",
@@ -250,19 +250,26 @@ class Fase_07 extends Phaser.Scene
 
     }
 
+    loadAudio(audioName) {
+        audio = new Audio(audioName);
+        audio.play();
+    }
+
     // função erro e acerto
     errou(){
         console.log("errou");
+        loadAudio('../assets/audio/error.mp3');
          this.scene.restart();
     }
 
     acertou(){
         console.log("acertou");
+        loadAudio('../assets/audio/correct.mp3');
          this.enable_move = true;
          this.quest.setVisible(false);
          this.a0.setVisible(false);
          this.a1.setVisible(false);
          this.a2.setVisible(false);
     }
-    
+
 }

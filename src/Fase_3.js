@@ -1,7 +1,7 @@
 class Fase_3 extends Phaser.Scene {
 
     constructor (){
-        super('Fase_3'); 
+        super('Fase_3');
     }
 
     // função para carregamento de assets
@@ -170,14 +170,14 @@ class Fase_3 extends Phaser.Scene {
         this.questoes = [
             ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nUma professora ganhou ingressos para levar 50% de seus alunos ao circo da cidade.\n Considerando que essa professora leciona para 36 alunos, quantos alunos ela poderá levar?\n",
             1, "◯ 9", "◯ 18", "◯ 24", "◯ 36"],
-            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nO carro de João consome 1 litro de gasolina a cada 10 quilômetros percorridos. Para ir da sua casa ao sítio, que fica distante 63 quilômetros, o carro consome:\n", 
+            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nO carro de João consome 1 litro de gasolina a cada 10 quilômetros percorridos. Para ir da sua casa ao sítio, que fica distante 63 quilômetros, o carro consome:\n",
             2, "◯ 5,3L", "◯ 6L", "◯ 6,3L", "◯ 7L"],
-            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\n Um fazendeiro tinha 285 bois. Comprou mais 176 bois e depois vendeu 85 deles. \nQuantos bois esse fazendeiro tem agora?\n", 
+            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\n Um fazendeiro tinha 285 bois. Comprou mais 176 bois e depois vendeu 85 deles. \nQuantos bois esse fazendeiro tem agora?\n",
             1, "◯ 266", "◯ 376", "◯ 476", "◯ 486"],
-            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nUma escola recebeu a doação de 3 caixas de 1 000 livros, mais 8 caixas de 100 livros, mais 5 pacotes de 10 livros, mais 9 livros. Esta escola recebeu: \n", 
+            ["\nOlá humano desprezivel, para passar por mim você precisará acertar uma questão de matemática!\nUma escola recebeu a doação de 3 caixas de 1 000 livros, mais 8 caixas de 100 livros, mais 5 pacotes de 10 livros, mais 9 livros. Esta escola recebeu: \n",
             3, "◯ 3589", "◯ 38590", "◯ 30859", "◯ 3859"],
         ];
-            
+
 
         this.firstDialog = true;
         this.dialogs = new dialogs(this);
@@ -209,8 +209,8 @@ class Fase_3 extends Phaser.Scene {
             this.spacePressed = false;
         }
 
-        
-        
+
+
         let i = 0;
         this.esqueletos.getMatching('active', true).forEach(function (esqueleto) {
             setEsqueletoSpeed(esqueleto, this.player, i);
@@ -230,7 +230,7 @@ class Fase_3 extends Phaser.Scene {
                 if (esqueleto.anims.currentAnim.key != 'esqueleto_walk')
                     esqueleto.play('esqueleto_walk');
             }
-        
+
             if (esqueleto.x < this.player.x) {
                 esqueleto.flipX = true;
             } else {
@@ -276,7 +276,7 @@ class Fase_3 extends Phaser.Scene {
         }
 
         if (this.physics.overlap(this.player, this.zone_ques)) {
-    
+
             // Se sobrepor com a zona da pergunta, selecionar uma pergunta aleatória
             const randomIndex = Phaser.Math.Between(0, this.questoes.length - 1);
             const randomQuestion = this.questoes[randomIndex];
@@ -292,12 +292,20 @@ class Fase_3 extends Phaser.Scene {
 }
 let coordSpawn = [[505,505], [545,518], [529,474], [564,480], [600,470]];
 let indice = 0;
+
+function loadAudio(audioName) {
+    audio = new Audio(audioName);
+    audio.play();
+}
+
 function acertou_fcn(ptr) {
+    loadAudio('../assets/audio/correct.mp3');
     console.log("acertou");
     this.dialogs.hideBox();
 }
 
 function errou_fcn(ptr) {
+    loadAudio('../assets/audio/error.mp3');
     console.log("errou")
     this.dialogs.hideBox();
 }
@@ -352,13 +360,13 @@ function setEsqueletoSpeed(esqueleto, player, i) {
             esqueleto.setTexture('esqueletobom', 117);
         }else{
             esqueleto.setVelocityX(30 * dx / amp);
-            esqueleto.body.setVelocityY(30 * dy / amp); 
+            esqueleto.body.setVelocityY(30 * dy / amp);
         }
     }
 
 
-    
-        
+
+
 
 
 }

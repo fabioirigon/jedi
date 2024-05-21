@@ -333,7 +333,7 @@ class Fase_05 extends Phaser.Scene{
   create_tweens(){
     this.dialog_bg = this.add.rectangle(
       this.cameras.main.width*0.5,
-      this.cameras.main.height*0.65, 
+      this.cameras.main.height*0.65,
       this.cameras.main.width*0.4,
       this.cameras.main.height*0.2,
       0x000000
@@ -397,7 +397,7 @@ class Fase_05 extends Phaser.Scene{
       duration: 500,
       yoyo: true,
       hold: 3500,
-      onStart: showDlg, 
+      onStart: showDlg,
       onStartParams: [this.dialog_bg, this.player]
     });
     this.orcEdialog.add({
@@ -407,7 +407,7 @@ class Fase_05 extends Phaser.Scene{
       duration: 500,
       yoyo: true,
       hold: 3500,
-      onComplete: hideDlg, 
+      onComplete: hideDlg,
       onCompleteParams: [this.dialog_bg, this.player]
     });
     this.orcEdialog.add({
@@ -433,9 +433,9 @@ class Fase_05 extends Phaser.Scene{
       yoyo: true,
       hold: 3500,
 
-      onStart: showDlg, 
+      onStart: showDlg,
       onStartParams: [this.dialog_bg, this.player],
-      onComplete: hideDlg, 
+      onComplete: hideDlg,
       onCompleteParams: [this.dialog_bg, this.player]
     });
 
@@ -456,7 +456,7 @@ class Fase_05 extends Phaser.Scene{
       duration: 500,
       yoyo: true,
       hold: 3500,
-      onStart: showDlg, 
+      onStart: showDlg,
       onStartParams: [this.dialog_bg, this.player]
     });
     this.pixieDialog2.add({
@@ -487,7 +487,7 @@ class Fase_05 extends Phaser.Scene{
       duration: 500,
       yoyo: true,
       hold: 3500,
-      onStart: showDlg, 
+      onStart: showDlg,
       onStartParams: [this.dialog_bg, this.player]
     });
     this.pixieDialog3.add({
@@ -497,7 +497,7 @@ class Fase_05 extends Phaser.Scene{
       duration: 500,
       yoyo: true,
       hold: 3500,
-      onComplete: hideDlg, 
+      onComplete: hideDlg,
       onCompleteParams: [this.dialog_bg, this.player]
     });
 
@@ -515,7 +515,7 @@ class Fase_05 extends Phaser.Scene{
       duration: 500,
       yoyo: true,
       hold: 3500,
-      onStart: showDlg, 
+      onStart: showDlg,
       onStartParams: [this.dialog_bg, this.player]
     });
 
@@ -532,7 +532,7 @@ class Fase_05 extends Phaser.Scene{
       duration: 500,
       yoyo: true,
       hold: 3500,
-      onStart: showDlg, 
+      onStart: showDlg,
       onStartParams: [this.dialog_bg, this.player]
     });
 
@@ -554,7 +554,7 @@ class Fase_05 extends Phaser.Scene{
       duration: 500,
       yoyo: true,
       hold: 3500,
-      onStart: showDlg, 
+      onStart: showDlg,
       onStartParams: [this.dialog_bg, this.player]
     });
     this.orcCdialog.add({
@@ -564,7 +564,7 @@ class Fase_05 extends Phaser.Scene{
       duration: 500,
       yoyo: true,
       hold: 3500,
-      onStart: hideDlg, 
+      onStart: hideDlg,
       onStartParams: [this.dialog_bg, this.player]
     });
   }
@@ -898,9 +898,14 @@ class Fase_05 extends Phaser.Scene{
     this.a3.on('pointerdown', this.errou, this);
   }
 
+  loadAudio(audioName) {
+    audio = new Audio(audioName);
+    audio.play();
+  }
+
   acertouX(){
     console.log("acertouX");
-
+    loadAudio('../assets/audio/correct.mp3');
     this.quest2.setVisible(false);
     this.a0.setVisible(false);
     this.a1.setVisible(false);
@@ -925,6 +930,7 @@ class Fase_05 extends Phaser.Scene{
 
   errou(){
     console.log("errou");
+    loadAudio('../assets/audio/error.mp3');
     this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
     //this.light.setScale(2);
     this.light.play("lightning_anim");

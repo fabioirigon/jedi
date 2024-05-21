@@ -3,7 +3,7 @@ class Fase_08 extends Phaser.Scene {
   constructor ()
   {
       // ######## acertar nome da fase ##########
-      super('Fase_08'); 
+      super('Fase_08');
       console.log('Fase_08 start')
   }
 
@@ -252,12 +252,19 @@ class Fase_08 extends Phaser.Scene {
   }
 }
 
+function loadAudio(audioName) {
+  audio = new Audio(audioName);
+  audio.play();
+}
+
 function acertou_fcn(ptr) {
   console.log("acertou");
+  loadAudio('../assets/audio/correct.mp3');
   this.dialogs.hideBox();
 }
 
 function errou_fcn(ptr) {
   console.log("errou");
+  loadAudio('../assets/audio/error.mp3');
   this.dialogs.hideBox();
 }

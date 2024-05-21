@@ -12,7 +12,7 @@ class Fase_03 extends Phaser.Scene {
 			frameWidth: 64,
 			frameHeight: 64,
 		});
-		// 
+		//
 		this.load.spritesheet("spider_sp", "assets/spritesheets/spider11.png", {
 			frameWidth: 64,
 			frameHeight: 64,
@@ -21,7 +21,7 @@ class Fase_03 extends Phaser.Scene {
 		this.load.spritesheet("elfa", "assets/spritesheets/elfa.png", {
 			frameWidth: 64,
 			frameHeight: 64,
-		});    
+		});
 		// Robin Rocks
 		this.load.spritesheet("robin_sp", "assets/spritesheets/robin_sp.png", {
 			frameWidth: 64,
@@ -32,7 +32,7 @@ class Fase_03 extends Phaser.Scene {
 			frameWidth: 32,
 			frameHeight: 48,
 		});
-		
+
 		// Elementos gráficos do mapa
 		this.load.spritesheet("tls_firstasset", "assets/maps/first_asset.png", {
 			frameWidth: 32,
@@ -46,7 +46,7 @@ class Fase_03 extends Phaser.Scene {
 		this.load.spritesheet("tls_topdown-forest", "assets/maps/top-down-forest-tileset.png", {
 			frameWidth: 32,
 			frameHeight: 32,
-			margin: 16 
+			margin: 16
 		});
 
 		this.load.spritesheet('elfa_bullet', 'assets/spritesheets/elfa_bullet.png', { frameWidth: 16, frameHeight: 16});
@@ -131,8 +131,8 @@ class Fase_03 extends Phaser.Scene {
 		this.light = this.add.sprite(this.player.x, this.player.y, 'lightning_sp')
 		this.light.setScale(2);
 		this.light.setVisible(false);
-	
-		
+
+
 		// Criação da Good Witch
 		this.bruxa = this.physics.add.sprite(1032, 660, "witch_sp", 1);
 		this.bruxa.setScale(0.7);
@@ -162,7 +162,7 @@ class Fase_03 extends Phaser.Scene {
 		this.esfera4 = this.physics.add.sprite(1150, 525, "tls_solaria", 331);
 		this.esfera4.body.immovable = true;
 		this.esfera4.body.moves = false;
-		
+
 		var e5 = this.add.text(1135, 545, "5", {font: "12px Arial",fill: "#000000",align: "center"});
 		this.esfera5 = this.physics.add.sprite(1150, 550, "tls_solaria", 331);
 		this.esfera5.body.immovable = true;
@@ -172,7 +172,7 @@ class Fase_03 extends Phaser.Scene {
 		this.esfera6 = this.physics.add.sprite(1150, 575, "tls_solaria", 331);
 		this.esfera6.body.immovable = true;
 		this.esfera6.body.moves = false;
-		
+
 		var e7 = this.add.text(1135, 595, "7", {font: "12px Arial",fill: "#000000",align: "center"});
 		this.esfera7 = this.physics.add.sprite(1150, 600, "tls_solaria", 331);
 		this.esfera7.body.immovable = true;
@@ -189,7 +189,7 @@ class Fase_03 extends Phaser.Scene {
 		// camera seguindo o jogador
 		this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 		this.cameras.main.setZoom(2);
-		
+
 	}
 
 
@@ -231,7 +231,7 @@ class Fase_03 extends Phaser.Scene {
 		this.physics.add.collider(this.player, this.houseLayer);
 		this.physics.add.collider(this.player.arrows, this.houseLayer, projectilHitWall, null, this);
 
-			
+
 		this.physics.add.collider(this.player, this.robin);
 		this.physics.add.collider(this.player, this.bruxa);
 
@@ -261,11 +261,11 @@ class Fase_03 extends Phaser.Scene {
 //          font: "15px Arial",
 //          fill: "#674ea7",
 //          align: "center"
-//      });        
+//      });
 		var px = this.cameras.main.width*0.35;
 		var py = 2*this.cameras.main.height/3
 		console.log(this.cameras.main.width, this.cameras.main.height, px, py);
-		this.dialog_bg =  this.add.rectangle(this.cameras.main.width*0.5, this.cameras.main.height*0.65, 
+		this.dialog_bg =  this.add.rectangle(this.cameras.main.width*0.5, this.cameras.main.height*0.65,
 			this.cameras.main.width*0.4, this.cameras.main.height*0.2, 0x000000);
 		this.dialog_bg.setScrollFactor(0);
 		this.dialog_bg.setVisible(false);
@@ -273,7 +273,7 @@ class Fase_03 extends Phaser.Scene {
 			this.interact_txt = this.add.text(px, py, "Pressione E para interagir", {
 				font: "15px Arial",
 				fill: "#A0A0A0",
-				align: "center", 
+				align: "center",
 				stroke: '#000000',
 				strokeThickness: 4,
 		});
@@ -289,7 +289,7 @@ class Fase_03 extends Phaser.Scene {
 					font: "15px Arial",
 					fill: "#674ea7",
 					align: "center"
-			});        
+			});
 			var t1 = this.add.text(px, py, "Siga para cima.\n As árvores te mostrarão o caminho", {
 					font: "15px Arial",
 					fill: "#674ea7",
@@ -299,7 +299,7 @@ class Fase_03 extends Phaser.Scene {
 				font: "15px Arial",
 				fill: "#DC143C",
 				align: "center"
-			});        
+			});
 
 			//t88.setScrollFactor(0);
 
@@ -312,7 +312,7 @@ class Fase_03 extends Phaser.Scene {
 			t2.alpha = 0
 
 
-			
+
 			// timeline: sequência
 			this.timeline = this.tweens.createTimeline({paused: true});
 
@@ -321,10 +321,10 @@ class Fase_03 extends Phaser.Scene {
 					targets: t0,
 					alpha: 1,
 					ease: 'linear',
-					duration: 1000, 
+					duration: 1000,
 					yoyo: true,
 					hold: 3000,
-					onStart: this.showDlg, 
+					onStart: this.showDlg,
 					onStartParams: [this.dialog_bg]
 
 			});
@@ -347,32 +347,32 @@ class Fase_03 extends Phaser.Scene {
 				duration: 1000,
 				yoyo: true,
 				hold: 3000,
-				onComplete: this.hideDlg, 
+				onComplete: this.hideDlg,
 				onCompleteParams: [this.dialog_bg, this.player]
 
 			});
-			
+
 	// ----------------------------------------------------------------
 	// Falas da segunda cena
 
-	
+
 		var t3 = this.add.text(px, py, "Olá, o senhor sabe como atravessar o rio?", {
 			font: "15px Arial",
 			fill: "#DC143C"
 			//align: "center"
-		});   
-				 
+		});
+
 		var t4 = this.add.text(px, py, "O que me diz de uma troca justa?\n Uma resposta por outra.", {
 				font: "15px Arial",
 				fill: "#744700",
 				align: "center"
 		});
-		
+
 		var t5 = this.add.text(px, py, "Manda ver!", {
 			font: "15px Arial",
 			fill: "#DC143C",
 			align: "center"
-		});        
+		});
 
 		t3.setScrollFactor(0);
 		t4.setScrollFactor(0);
@@ -391,10 +391,10 @@ class Fase_03 extends Phaser.Scene {
 				targets: t3,
 				alpha: 1,
 				ease: 'linear',
-				duration: 1000, 
+				duration: 1000,
 				yoyo: true,
 				hold: 3000,
-				onStart: this.showDlg, 
+				onStart: this.showDlg,
 				onStartParams: [this.dialog_bg]
 		});
 
@@ -425,25 +425,25 @@ class Fase_03 extends Phaser.Scene {
 			font: "15px Arial",
 			fill: "#744700",
 			align: "center"
-		});   
-				 
+		});
+
 		var t7 = this.add.text(px, py, "Para atravessar o rio, atire nos cristais\nde número primo que estão na outra margem.", {
 				font: "15px Arial",
 				fill: "#744700",
 				align: "center"
 		});
-		
+
 		var t8 = this.add.text(px, py, "Assim a ponte será revelada!", {
 			font: "15px Arial",
 			fill: "#744700",
 			align: "center"
-		});       
+		});
 
 		var t9 = this.add.text(px, py, "Valeu meu consagrado!", {
 			font: "15px Arial",
 			fill: "#DC143C",
 			align: "center"
-		});  
+		});
 
 		t6.setScrollFactor(0);
 		t7.setScrollFactor(0);
@@ -458,17 +458,17 @@ class Fase_03 extends Phaser.Scene {
 		// timeline: sequência
 		this.timelineRobin2 = this.tweens.createTimeline({paused: true});
 
-		// 
+		//
 		this.timelineRobin2.add({
 				targets: t6,
 				alpha: 1,
 				ease: 'linear',
-				duration: 1000, 
+				duration: 1000,
 				yoyo: true,
 				hold: 3000
 		});
 
-		// 
+		//
 		this.timelineRobin2.add({
 				targets: t7,
 				alpha: 1,
@@ -478,7 +478,7 @@ class Fase_03 extends Phaser.Scene {
 				hold: 3000
 		});
 
-		// 
+		//
 		this.timelineRobin2.add({
 			targets: t8,
 			alpha: 1,
@@ -488,7 +488,7 @@ class Fase_03 extends Phaser.Scene {
 			hold: 3000
 		});
 
-		// 
+		//
 		this.timelineRobin2.add({
 			targets: t9,
 			alpha: 1,
@@ -496,7 +496,7 @@ class Fase_03 extends Phaser.Scene {
 			duration: 1000,
 			yoyo: true,
 			hold: 3000,
-			onComplete: this.hideDlg, 
+			onComplete: this.hideDlg,
 			onCompleteParams: [this.dialog_bg, this.player]
 
 		});
@@ -574,7 +574,7 @@ class Fase_03 extends Phaser.Scene {
 			0, "◯ 4725 livros", "◯ 4752 livros",  "◯ 47250 livros",  "◯ 427 livros"]
 			this.questions = [this.Q0, this.Q1, this.Q2]
 
-		this.dialogs = new dialogs(this);   
+		this.dialogs = new dialogs(this);
 		this.dlgBox = true;
 		this.askQuestion = true;
 		//createQuestion(this);
@@ -582,7 +582,7 @@ class Fase_03 extends Phaser.Scene {
 		this.interact_txt.alpha = 1;
 		this.create_elfa()
 	}
- 
+
 	// update é chamada a cada novo quadro
 	update() {
 
@@ -631,12 +631,12 @@ class Fase_03 extends Phaser.Scene {
 			if (this.dialogs.isActive){
 				this.dialogs.nextDlg();
 			}
-			
+
 			else if (this.player.attack_enable && this.player.has_bow){
 				this.player.attack_enable = true;
 				this.player.attack();
 			}
-			
+
 
 		}
 
@@ -655,9 +655,9 @@ class Fase_03 extends Phaser.Scene {
 		if (this.game_over){
 			if (this.keySPACE.isDown) {
 					this.scene.restart();
-			}            
+			}
 		}
-		
+
 }
 
 	onZoneSaida(){
@@ -672,7 +672,7 @@ class Fase_03 extends Phaser.Scene {
 				// impede o movimento
 				this.player.move_enable = false;
 				this.player.anims.stop();
-				
+
 				//this.dlgBox.setVisible(true)
 				this.timeline.play();
 
@@ -694,17 +694,17 @@ class Fase_03 extends Phaser.Scene {
 
 			//this.dlgBox.setVisible(true)
 			this.timelineRobin.play();
-			 
+
 			// impede o movimento
 			this.player.move_enable = false;
 			this.player.anims.stop();
-			
+
 			this.player.setVelocityX(0);
 			this.player.setVelocityY(0);
 
 //      setTimeout(() => {
 //
-//        // pergunta: 
+//        // pergunta:
 //        this.quest = this.add.text(975, 660, "Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?", {
 //          font: "15px Arial",
 //          fill: "#744700",
@@ -750,7 +750,7 @@ class Fase_03 extends Phaser.Scene {
  //     this.a2.on('pointerdown', this.errou, this);
  //     this.a3.setInteractive();
  //     this.a3.on('pointerdown', this.errou, this);
- //     
+ //
  //   }, 15000);
 //
 		}
@@ -761,7 +761,7 @@ class Fase_03 extends Phaser.Scene {
 		var py = this.cameras.main.height*0.6
 		console.log('pergunta', px, py);
 
-		// pergunta: 
+		// pergunta:
 		this.quest = this.add.text(px, py-25, "Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros, e mais 9 livrinhos diversos.\nQuantos livros eu tenho?", {
 			font: "15px Arial",
 			fill: "#744700",
@@ -812,6 +812,7 @@ class Fase_03 extends Phaser.Scene {
 	// função erro e acerto
 	errou(){
 			console.log("errou");
+			loadAudio('../assets/audio/error.mp3');
 			 this.scene.restart();
 	}
 
@@ -838,7 +839,7 @@ class Fase_03 extends Phaser.Scene {
 			alter.setInteractive(false);
 		 });
 		*/
-		
+
 		// Criação da Elfa
 		this.elfa = new Elfa(this, 225, 270, 'elfa', 26);
 		this.elfa.setScale(0.4);
@@ -860,9 +861,9 @@ class Fase_03 extends Phaser.Scene {
 		console.log('game over');
 		this.game_over = true;
 		player.move_enable = false;
-	
+
 		var wd = window.innerWidth;
-		var wh = window.innerHeight;        
+		var wh = window.innerHeight;
 		var txt_cfg = {font: "15px Arial",fill: "#F0F000", align: "center"}
 		console.log(this.player.x, this.player.y, txt_cfg)
 		var t0 = this.add.text(this.player.x, this.player.y, "Pressione Espaço para reiniciar", txt_cfg);
@@ -962,15 +963,21 @@ function projectilHitCrystal7(crystal, projectil){
 }
 
 function makeQuestion(scene){
-	
+
 	var question = scene.questions[Math.floor(Math.random() * scene.questions.length)];
 	console.log('mkquestion', question);
 	//scene.dialogs.makeQuestion(question, acertou2, errou2)
 	scene.dialogs.makeQuestion(question, acertou2, errou2)
 }
 
+function loadAudio(audioName) {
+    audio = new Audio(audioName);
+    audio.play();
+}
+
 function acertou2(pointer){
 	console.log('acertou');
+	loadAudio('../assets/audio/correct.mp3');
 	this.dialogs.hideBox();
 	this.askQuestion = false;
 	this.dialogs.updateDlgBox(this.txts[2], 0, give_bow);
@@ -984,6 +991,7 @@ function give_bow(scene){
 
 function errou2(pointer){
 	console.log('errou');
+	loadAudio('../assets/audio/error.mp3');
 	//scene.light.setPosition(scene.player.x, scene.player.y);
 	this.dialogs.hideBox();
 	this.light.setPosition(this.player.x, this.player.y);

@@ -14,7 +14,7 @@ class Fase_02 extends Phaser.Scene
         this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
         this.load.spritesheet('mage_sp', 'assets/spritesheets/Mage.png', { frameWidth:48, frameHeight: 48});
         this.load.spritesheet('mage_sp2', 'assets/spritesheets/Mage.png', { frameWidth:48, frameHeight: 48});
-        
+
         this.load.image('bullet', 'assets/images/bullet.png');
 
         // carregando mapa (json) e gráficos do mapa
@@ -35,7 +35,7 @@ class Fase_02 extends Phaser.Scene
 
     create_actors()
     {
-        
+
         this.mage0 = this.physics.add.sprite(291.69999999999993, 2435.5, 'mage_sp',0)
         this.mage0.setScale(0.6)
         this.mage1 = this.physics.add.sprite(1347.2 , 2371.7, 'mage_sp2',0)
@@ -66,8 +66,8 @@ class Fase_02 extends Phaser.Scene
 
         // colisão com armadilhas
         this.physics.add.overlap(this.player, this.traps, this.trapHit, null, this);
-        
-      
+
+
     }
 
     // criação do diálogo
@@ -112,7 +112,7 @@ class Fase_02 extends Phaser.Scene
             targets: t0,
             alpha: 1,
             ease: 'linear',
-            duration: 500, 
+            duration: 500,
             yoyo: true,
             hold: 3500
         });
@@ -188,7 +188,7 @@ class Fase_02 extends Phaser.Scene
         /*
         // variável enaable move controla o movimento
         if (this.enable_move){
-            // testa se tecla pressionada e seta a velocidade do jogador 
+            // testa se tecla pressionada e seta a velocidade do jogador
             if (this.keyD?.isDown) {
                 this.player.setVelocityX(210);
             }
@@ -196,7 +196,7 @@ class Fase_02 extends Phaser.Scene
                 this.player.setVelocityX(-210);
             }
             else{
-                this.player.setVelocityX(0); 
+                this.player.setVelocityX(0);
             }
 
             // velocidade vertical
@@ -207,25 +207,25 @@ class Fase_02 extends Phaser.Scene
                 this.player.setVelocityY(210);
             }
             else{
-                this.player.setVelocityY(0); 
+                this.player.setVelocityY(0);
             }
         }
         else{
-                this.player.setVelocity(0, 0); 
+                this.player.setVelocity(0, 0);
         }
         if(this.keyP?.isDown){
             console.log("x",this.player.body.x,"y",this.player.body.y);
         }
         */
     }
-        
+
     // ###################################################################
     // cria os textos
     onZone(){
         if (this.zoneDialog){
             this.zoneDialog = false;
             //this.cameras.
-            // pergunta: 
+            // pergunta:
             this.quest.alpha = 1;
             this.a0.alpha = 1;
             this.a1.alpha = 1;
@@ -246,14 +246,21 @@ class Fase_02 extends Phaser.Scene
 
     }
 
+    loadAudio(audioName) {
+        audio = new Audio(audioName);
+        audio.play();
+    }
+
     // função erro e acerto
     errou(){
         console.log("errou");
+        loadAudio('../assets/audio/error.mp3');
          this.scene.restart();
     }
 
     acertou(){
         console.log("acertou");
+        loadAudio('../assets/audio/correct.mp3');
          this.player.move_enable = true;
          this.quest.setVisible(false);
          this.a0.setVisible(false);

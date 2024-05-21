@@ -7,13 +7,13 @@ class Fase_04 extends Phaser.Scene
     constructor ()
     {
         // ######## acertar nome da fase ##########
-        super('Fase_04'); 
+        super('Fase_04');
     }
 
    // função para carregamento de assets
     preload ()
     {
-        
+
         this.load.spritesheet('king_sp', 'assets/spritesheets/a-king.png', { frameWidth: 78, frameHeight: 58 });
         this.load.spritesheet('fball_sp', 'assets/spritesheets/fireball.png', { frameWidth: 32, frameHeight: 32});
         this.load.spritesheet('heroi_sp', 'assets/spritesheets/heroi.jpeg', { frameWidth: 50, frameHeight: 60 });
@@ -32,7 +32,7 @@ create_tweens()
         font: "20px Arial",
         fill: "#000000",
         align: "center"
-    });        
+    });
     var t1 = this.add.text(100, 400, "Susurro: Aventureiro venha cá", {
         font: "15px Arial",
         fill: "#000080",
@@ -109,7 +109,7 @@ create_tweens()
         fill: "#000080",
         align: "center"
     });
-    
+
     t0.alpha = 0
     t1.alpha = 0
     t2.alpha = 0
@@ -135,7 +135,7 @@ create_tweens()
         targets: t0,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -180,7 +180,7 @@ create_tweens()
         targets: t5,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -188,7 +188,7 @@ create_tweens()
         targets: t6,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -196,7 +196,7 @@ create_tweens()
         targets: t7,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -207,7 +207,7 @@ create_tweens()
         targets: t8,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -215,17 +215,17 @@ create_tweens()
         targets: t9,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
-    
+
     this.timeline4 = this.tweens.createTimeline({paused: true});
     this.timeline4.add({
         targets: t10,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -233,7 +233,7 @@ create_tweens()
         targets: t11,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -241,7 +241,7 @@ create_tweens()
         targets: t12,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -249,7 +249,7 @@ create_tweens()
         targets: t13,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -257,7 +257,7 @@ create_tweens()
         targets: t14,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -265,7 +265,7 @@ create_tweens()
         targets: 15,
         alpha: 1,
         ease: 'linear',
-        duration: 500, 
+        duration: 500,
         yoyo: true,
         hold: 3500
     });
@@ -283,7 +283,7 @@ create_tweens()
     this.tileset2 = this.map.addTilesetImage('Solaria Demo Update 01', 'tiles2');
 
     // criação das camadas
-    
+
     this.chaolayer = this.map.createLayer('Agrupar 1/chao', [this.tileset,this.tileset2], 0, 0);
     this.arvorelayer = this.map.createLayer('Agrupar 1/arvore', [this.tileset,this.tileset2], 0, 0);
     this.cercalayer = this.map.createLayer('Agrupar 1/cerca', [this.tileset,this.tileset2], 0, 0);
@@ -294,13 +294,13 @@ create_tweens()
     this.chaodiferentepedralayer = this.map.createLayer('Agrupar 1/chao diferente pedra', [this.tileset,this.tileset2], 0, 0);
     this.saidasantuariolayer = this.map.createLayer('Agrupar 1/Saida santuario', [this.tileset,this.tileset2], 0, 0);
     this.perfumarialayer = this.map.createLayer('Agrupar 1/perfumaria', [this.tileset,this.tileset2], 0, 0);
-    
-    
+
+
 
     // criação do rei
     //king = this.physics.add.sprite(100, 300, 'king_sp', 5);
     //console.log(Actor)
-    
+
     //king
     this.king = this.physics.add.sprite(100, 490, 'king_sp', 5);
     this.king.setScale(0.5);
@@ -316,7 +316,7 @@ create_tweens()
     //this.heroi.setOffset(7,26);
 
     // criação do jogador
-    
+
     //esqueleto
     this.esqueleto = this.physics.add.sprite(300, 490, 'esqueleto_sp', 0);
     this.esqueleto.setScale(0.5);
@@ -359,16 +359,16 @@ create_tweens()
     this.physics.add.overlap(this.king, this.zone3, this.onZone3, null, this);
 
 
-    
-   
+
+
 
     // ligação das teclas de movimento
     this.keyA = this.input.keyboard.addKey('A');
     this.keyD = this.input.keyboard.addKey('D');
     this.keyW = this.input.keyboard.addKey('W');
     this.keyS = this.input.keyboard.addKey('S');
-    
-     
+
+
 
 }
 
@@ -397,37 +397,37 @@ create_tweens()
         if (this.zoneDialog3){
             this.zoneDialog3 = false;
 
-        // pergunta: 
+        // pergunta:
         this.quest = this.add.text(50, 300, "Numa fazenda, havia 524 bois. Na feira de gado,\no fazendeiro vendeu 183 de seus bois e comprou mais 266 bois.\nQuantos bois há agora na fazenda?", {
           font: "12px Arial",
           fill: "#000000",
           align: "center"
         });
-  
+
         this.a0 = this.add.text(50, 325, "◯ 507 bois", {
             font: "12px Arial",
             fill: "#000000",
             align: "center"
         });
-  
+
         this.a1 = this.add.text(50, 350, "◯ 607 bois", {
             font: "12px Arial",
             fill: "#000000",
             align: "center"
         });
-  
+
         this.a2 = this.add.text(50, 375, "◯ 707 bois", {
             font: "12px Arial",
             fill: "#000000",
             align: "center"
         });
-  
+
         this.a3 = this.add.text(50, 400, "◯ 727 bois", {
           font: "12px Arial",
           fill: "#000000",
           align: "center"
       });
-  
+
         // deixa clicar e liga com a função
         this.a0.setInteractive();
         this.a0.on('pointerdown', this.errou, this);
@@ -439,34 +439,41 @@ create_tweens()
         this.a3.on('pointerdown', this.errou, this);
         }
      }, 15000);
-  
+
     }
-  
+
+    loadAudio(audioName) {
+        audio = new Audio(audioName);
+        audio.play();
+    }
+
     // função erro e acerto
     errou(){
+        loadAudio('../assets/audio/error.mp3');
         console.log("errou");
          this.scene.restart();
     }
-  
+
     acertou(){
         console.log("acertou");
+        loadAudio('../assets/audio/correct.mp3');
         this.quest.setVisible(false);
         this.a0.setVisible(false);
         this.a1.setVisible(false);
         this.a2.setVisible(false);
         this.a3.setVisible(false);
         this.timeline4.play();
-     
+
     }
 
- 
+
 
 
 
 // update é chamada a cada novo quadro
  update ()
 {
-   // testa se tecla pressionada e seta a velocidade do jogador 
+   // testa se tecla pressionada e seta a velocidade do jogador
    if (this.keyD?.isDown) {
     this.king.setVelocityX(201);
 }
@@ -474,7 +481,7 @@ else if (this.keyA?.isDown) {
     this.king.setVelocityX(-210);
 }
 else{
-    this.king.setVelocityX(0); 
+    this.king.setVelocityX(0);
 }
 
 // velocidade vertical
@@ -485,10 +492,10 @@ else if (this.keyS.isDown) {
     this.king.setVelocityY(210);
 }
 else{
-    this.king.setVelocityY(0); 
+    this.king.setVelocityY(0);
 }
 
-    
+
 }
 
 
