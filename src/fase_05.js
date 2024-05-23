@@ -3,7 +3,7 @@ class Fase_05 extends Phaser.Scene{
   // O construtor registra o nome da cena
   constructor (){
     super('Fase_05');
-  }
+  }//teste
 
   // função para carregamento de assets
   preload (){
