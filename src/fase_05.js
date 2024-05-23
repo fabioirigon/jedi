@@ -101,6 +101,9 @@ class Fase_05 extends Phaser.Scene{
     this.orcC = new orc(this, 1185, 605, 'orc_chefe_sp', 'orc_chefe_sp');
     this.orcC.setScale(0.5);
 
+    // Adicionar checkpoint
+    this.heart_0 = this.physics.add.sprite(40, 880, 'tiles_sp', 530)
+
     // Adiciona inimigos
     this.orc1 = new orc(this, 269.5, 928, 'orc_femea_sp', 'orc_femea_sp');
     this.orc1.setScale(0.5);
@@ -253,6 +256,9 @@ class Fase_05 extends Phaser.Scene{
     this.wallsLayer5.setCollisionBetween(0, 10000,true);
     this.wallsLayer6.setCollisionBetween(0, 10000,false);
     this.groundLayer2.setCollisionBetween(0, 10000,false);
+
+    // Colisão com o checkpoint
+    this.physics.add.overlap(this.player, this.heart_0, this.getHeart, null, this);
 
     this.addColisoesParedes(this.player);
     this.addColisoesParedes(this.orc1);
@@ -942,6 +948,18 @@ class Fase_05 extends Phaser.Scene{
     this.physics.add.overlap(this.orcC, this.player.arrows, projectilHitActor, null, this);
   }
 
+  getHeart(player, heart){
+    console.log("getheart");
+    localStorage.setItem('px', heart.x);
+    localStorage.setItem('py', heart.y);
+  
+    player.hp = (player.hp+20 > 100 ? 100 : player.hp+20);
+    player.getDamage(0);
+    heart.setVisible(false);
+    heart.disableBody();
+    this.tip.setVisible(true);
+  }
+
   gameOver(){
     console.log('game over');
     this.game_over = true;
@@ -970,6 +988,7 @@ function projectilHitActor(actor, projectil){
   }
   console.log('HP', actor.getHPValue())
 }
+
 
 function projectilHitWall(projectil, wall){
   projectil.setActive(false);
