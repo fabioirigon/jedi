@@ -143,6 +143,14 @@ class Fase_03 extends Phaser.Scene {
         this.arrow7.setScale(0.2);
         this.arrow8 = this.physics.add.sprite(982, 162, 'arrow', 10)
         this.arrow8.setScale(0.2);
+        this.arrow9 = this.physics.add.sprite(1034, 37, 'arrow', 10)
+        this.arrow9.setScale(0.2);
+        this.arrow10 = this.physics.add.sprite(1028, 33, 'arrow', 10)
+        this.arrow10.setScale(0.2);
+        this.arrow11 = this.physics.add.sprite(1024, 35, 'arrow', 10)
+        this.arrow11.setScale(0.2);
+        this.arrow12 = this.physics.add.sprite(1030, 39, 'arrow', 10)
+        this.arrow12.setScale(0.2);
 
 		//this.spider = this.physics.add.sprite(810, 140, 'spider_sp', 0);
 		//this.spider.setScale(0.5)
@@ -281,11 +289,16 @@ class Fase_03 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.shild, this.getShild, null, this);
         this.physics.add.overlap(this.player, this.arrow, this.getArrow, null, this);
         this.physics.add.overlap(this.player, this.arrow2, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow3, this.getArrow, null, this);
         this.physics.add.overlap(this.player, this.arrow4, this.getArrow, null, this);
         this.physics.add.overlap(this.player, this.arrow5, this.getArrow, null, this);
         this.physics.add.overlap(this.player, this.arrow6, this.getArrow, null, this);
         this.physics.add.overlap(this.player, this.arrow7, this.getArrow, null, this);
         this.physics.add.overlap(this.player, this.arrow8, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow9, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow10, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow11, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow12, this.getArrow, null, this);
 	}
 
 	// criação do diálogo
@@ -615,7 +628,6 @@ class Fase_03 extends Phaser.Scene {
 		//createQuestion(this);
 		//this.dialogs.makeQuestion(this.Q0, acertou2, errou2)
 		this.interact_txt.alpha = 1;
-		this.create_elfa()
 	}
  
 	// update é chamada a cada novo quadro
@@ -925,6 +937,11 @@ class Fase_03 extends Phaser.Scene {
         arrow.setVisible(false);
         arrow.disableBody();
         player.arrows_count += 1;
+
+        setInterval(() => {
+            arrow.setVisible(true);
+            arrow.enableBody() = true;
+        }, 30000);
     }
 }
 
