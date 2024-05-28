@@ -120,12 +120,29 @@ class Fase_03 extends Phaser.Scene {
 		this.robin.body.moves = false;
 
 		// Criação do personagem principal
-		// this.player = new player(this, 815, 100, 'playerbow_sp', 26);
 		this.player = new player(this, 40, 730, 'playerbow_sp', 26);
+		// this.player = new player(this, 815, 100, 'playerbow_sp', 26);
 		this.player.setScale(0.4);
 		this.player.setSize(32, 32);
 		this.player.setOffset(16, 32);
 		this.player.has_bow = false;
+
+        this.arrow = this.physics.add.sprite(305, 530, 'arrow', 10)
+        this.arrow.setScale(0.2);
+        this.arrow2 = this.physics.add.sprite(984, 752, 'arrow', 10)
+        this.arrow2.setScale(0.2);
+        this.arrow3 = this.physics.add.sprite(41, 627, 'arrow', 10)
+        this.arrow3.setScale(0.2);
+        this.arrow4 = this.physics.add.sprite(984, 158, 'arrow', 10)
+        this.arrow4.setScale(0.2);
+        this.arrow5 = this.physics.add.sprite(988, 160, 'arrow', 10)
+        this.arrow5.setScale(0.2);
+        this.arrow6 = this.physics.add.sprite(980, 162, 'arrow', 10)
+        this.arrow6.setScale(0.2);
+        this.arrow7 = this.physics.add.sprite(986, 166, 'arrow', 10)
+        this.arrow7.setScale(0.2);
+        this.arrow8 = this.physics.add.sprite(982, 162, 'arrow', 10)
+        this.arrow8.setScale(0.2);
 
 		//this.spider = this.physics.add.sprite(810, 140, 'spider_sp', 0);
 		//this.spider.setScale(0.5)
@@ -196,8 +213,7 @@ class Fase_03 extends Phaser.Scene {
         //criação do escudo e flexa no mapa, como objeto com fisica
         this.shild = this.physics.add.sprite(88, 450, 'shild', 10)
         this.shild.setScale(0.8);
-        this.arrow = this.physics.add.sprite(780, 200, 'arrow', 10)
-        this.arrow.setScale(0.2);
+        
 		
 	}
 
@@ -264,6 +280,12 @@ class Fase_03 extends Phaser.Scene {
         //pegar escudo e pegar flexa ao colidir
         this.physics.add.overlap(this.player, this.shild, this.getShild, null, this);
         this.physics.add.overlap(this.player, this.arrow, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow2, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow4, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow5, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow6, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow7, this.getArrow, null, this);
+        this.physics.add.overlap(this.player, this.arrow8, this.getArrow, null, this);
 	}
 
 	// criação do diálogo
@@ -638,7 +660,7 @@ class Fase_03 extends Phaser.Scene {
 		}
 
 		if (Phaser.Input.Keyboard.JustDown(this.keySPACE)){
-			//console.log(this.player.anims)
+			console.log("Position: ", this.player.x, this.player.y);
 			//this.player.anims.play('attack_up')
 			console.log(this.player.x, this.player.y, this.player.has_bow, this.player.attack_enable)
 			if (this.dialogs.isActive){

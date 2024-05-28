@@ -4,13 +4,11 @@ var collisionZoneExit;
 class Fase_06 extends Phaser.Scene {
 
     constructor (){
-        console.log('##constructor - fase 6');
+        console.log('constructor - fase 6');
         super('Fase_06'); 
     }
 
-    //first commit hugoserra [Test]
-
-    // Preload  
+    // Preload
     preload() {
         console.log('Load Spritesheet - fase 6');
         this.load.spritesheet('player_sp', 'assets/spritesheets/player_sp.png', { frameWidth: 64, frameHeight: 64 });
@@ -28,7 +26,7 @@ class Fase_06 extends Phaser.Scene {
 
     // criar elementos
     create() {
-        console.log('Create map - gelo');
+        console.log('Create map');
         // criação do mapa e ligação com as imagens
         this.map = this.make.tilemap({ key: 'Mapa_Fase6', tileWidth: 32, tileHeight: 32 });
         this.IceTileset = this.map.addTilesetImage('IceTiled', 'ice_tiles');
@@ -81,7 +79,7 @@ class Fase_06 extends Phaser.Scene {
         this.keyW = this.input.keyboard.addKey('W');
         this.keyS = this.input.keyboard.addKey('S');
         this.keySPACE = this.input.keyboard.addKey('SPACE');
-		this.keyN = this.input.keyboard.addKey("N");  
+		this.keyN = this.input.keyboard.addKey("N");
 
         // definição de zoom da câmera e comando para seguir jogador
         this.cameras.main.setZoom(1.3);
