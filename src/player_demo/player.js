@@ -29,6 +29,7 @@ class player extends Actor {
         arrow.setVisible(false);
     }
     this.arrows_count = 0;
+    this.has_shild = false;
 
     this.has_bow = true;
     this.move_enable = true;

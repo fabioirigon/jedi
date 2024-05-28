@@ -120,8 +120,8 @@ class Fase_03 extends Phaser.Scene {
 		this.robin.body.moves = false;
 
 		// Criação do personagem principal
-		this.player = new player(this, 815, 100, 'playerbow_sp', 26);
-		// this.player = new player(this, 40, 730, 'playerbow_sp', 26);
+		// this.player = new player(this, 815, 100, 'playerbow_sp', 26);
+		this.player = new player(this, 40, 730, 'playerbow_sp', 26);
 		this.player.setScale(0.4);
 		this.player.setSize(32, 32);
 		this.player.setOffset(16, 32);
@@ -194,7 +194,7 @@ class Fase_03 extends Phaser.Scene {
 		this.cameras.main.setZoom(2);
 
         //criação do escudo e flexa no mapa, como objeto com fisica
-        this.shild = this.physics.add.sprite(80, 730, 'shild', 10)
+        this.shild = this.physics.add.sprite(88, 450, 'shild', 10)
         this.shild.setScale(0.8);
         this.arrow = this.physics.add.sprite(780, 200, 'arrow', 10)
         this.arrow.setScale(0.2);
@@ -895,6 +895,7 @@ class Fase_03 extends Phaser.Scene {
     getShild(player, shild){
         shild.setVisible(false);
         shild.disableBody();
+        player.has_shild = true;
     }
 
     //função para remover o flexa do chão, e atribui-lo ao jogador
