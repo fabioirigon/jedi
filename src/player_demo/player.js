@@ -28,6 +28,8 @@ class player extends Actor {
         arrow.setActive(false);
         arrow.setVisible(false);
     }
+    this.arrows_count = 0;
+
     this.has_bow = true;
     this.move_enable = true;
     this.attack_enable = true;
@@ -190,10 +192,14 @@ class player extends Actor {
 
   attack(){ 
     
-    //console.log('attack', this.facing, this.arrows.countActive(false));
     if (this.arrows.countActive(false) <= 0){
       return;
     }
+
+    if(this.arrows_count <= 0) 
+        return;
+    else
+        this.arrows_count -= 1;
 
     this.anims.stop();
     this.attack_enable = false;
