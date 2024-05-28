@@ -53,10 +53,13 @@ class Fase_03 extends Phaser.Scene {
 		this.load.spritesheet('lightning_sp', 'assets/spritesheets/lightning.png', { frameWidth: 32, frameHeight: 32});
 		this.load.spritesheet('swordSwing_sp', 'assets/spritesheets/sw_swing.png', { frameWidth: 16, frameHeight: 16});
 
+        //carregamento das imagens do escudo e flexa
+        this.load.spritesheet('shild', 'assets/images/shild.png', { frameWidth: 40, frameHeight: 40});
+		this.load.image('arrow', 'assets/images/arrow.png');
+
 		this.load.image("tiles1", "assets/maps/first_asset.png");
 		this.load.image("tiles2", "assets/maps/solaria.png");
 		this.load.image('bullet', 'assets/images/bullet.png');
-		this.load.image('arrow', 'assets/images/arrow.png');
 		this.load.image("tiles3", "assets/maps/top-down-forest-tileset.png");
 
 		this.load.tilemapTiledJSON("fase3", "assets/maps/fase.json");
@@ -189,6 +192,12 @@ class Fase_03 extends Phaser.Scene {
 		// camera seguindo o jogador
 		this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 		this.cameras.main.setZoom(2);
+
+        //criação do escudo e flexa no mapa, como objeto com fisica
+        this.shild = this.physics.add.sprite(80, 730, 'shild', 10)
+        this.shild.setScale(0.8);
+        this.arrow = this.physics.add.sprite(120, 730, 'arrow', 10)
+        this.arrow.setScale(0.2);
 		
 	}
 
@@ -251,6 +260,10 @@ class Fase_03 extends Phaser.Scene {
 		this.physics.add.collider(this.player.arrows, this.esfera7, projectilHitCrystal7, null, this);
 
 		this.physics.add.collider(this.player, this.invisible);
+
+        //pegar escudo e pegar flexa ao colidir
+        this.physics.add.overlap(this.player, this.shild, this.getShild, null, this);
+        this.physics.add.overlap(this.player, this.arrow, this.getArrow, null, this);
 	}
 
 	// criação do diálogo
@@ -878,6 +891,17 @@ class Fase_03 extends Phaser.Scene {
 		gameObject.setVisible(true);
 	}
 
+    //função para remover o escudo do chão, e atribui-lo ao jogador
+    getShild(player, shild){
+        shild.setVisible(false);
+        shild.disableBody();
+    }
+
+    //função para remover o flexa do chão, e atribui-lo ao jogador
+    getArrow(player, arrow){
+        arrow.setVisible(false);
+        arrow.disableBody();
+    }
 }
 
 function projectilHitActor(actor, projectil){
