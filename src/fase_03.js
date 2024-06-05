@@ -119,6 +119,11 @@ class Fase_03 extends Phaser.Scene {
 		this.robin.body.immovable = true;
 		this.robin.body.moves = false;
 
+        this.create_chests();
+
+        //criação do escudo e flexa no mapa, como objeto com fisica
+        this.shild = this.physics.add.sprite(88, 450, 'shild', 10).setScale(0.8).setVisible(false);
+
 		// Criação do personagem principal
 		this.player = new player(this, 40, 730, 'playerbow_sp', 26);
 		// this.player = new player(this, 815, 100, 'playerbow_sp', 26);
@@ -127,30 +132,18 @@ class Fase_03 extends Phaser.Scene {
 		this.player.setOffset(16, 32);
 		this.player.has_bow = false;
 
-        this.arrow = this.physics.add.sprite(305, 530, 'arrow', 10)
-        this.arrow.setScale(0.2);
-        this.arrow2 = this.physics.add.sprite(984, 752, 'arrow', 10)
-        this.arrow2.setScale(0.2);
-        this.arrow3 = this.physics.add.sprite(41, 627, 'arrow', 10)
-        this.arrow3.setScale(0.2);
-        this.arrow4 = this.physics.add.sprite(984, 158, 'arrow', 10)
-        this.arrow4.setScale(0.2);
-        this.arrow5 = this.physics.add.sprite(988, 160, 'arrow', 10)
-        this.arrow5.setScale(0.2);
-        this.arrow6 = this.physics.add.sprite(980, 162, 'arrow', 10)
-        this.arrow6.setScale(0.2);
-        this.arrow7 = this.physics.add.sprite(986, 166, 'arrow', 10)
-        this.arrow7.setScale(0.2);
-        this.arrow8 = this.physics.add.sprite(982, 162, 'arrow', 10)
-        this.arrow8.setScale(0.2);
-        this.arrow9 = this.physics.add.sprite(1034, 37, 'arrow', 10)
-        this.arrow9.setScale(0.2);
-        this.arrow10 = this.physics.add.sprite(1028, 33, 'arrow', 10)
-        this.arrow10.setScale(0.2);
-        this.arrow11 = this.physics.add.sprite(1024, 35, 'arrow', 10)
-        this.arrow11.setScale(0.2);
-        this.arrow12 = this.physics.add.sprite(1030, 39, 'arrow', 10)
-        this.arrow12.setScale(0.2);
+        this.arrow = this.physics.add.sprite(305, 530, 'arrow', 10).setScale(0.2);
+        this.arrow2 = this.physics.add.sprite(984, 752, 'arrow', 10).setScale(0.2);
+        this.arrow3 = this.physics.add.sprite(41, 627, 'arrow', 10).setScale(0.2);
+        this.arrow4 = this.physics.add.sprite(984, 158, 'arrow', 10).setScale(0.2);
+        this.arrow5 = this.physics.add.sprite(988, 160, 'arrow', 10).setScale(0.2);
+        this.arrow6 = this.physics.add.sprite(980, 162, 'arrow', 10).setScale(0.2);
+        this.arrow7 = this.physics.add.sprite(986, 166, 'arrow', 10).setScale(0.2);
+        this.arrow8 = this.physics.add.sprite(982, 162, 'arrow', 10).setScale(0.2);
+        this.arrow9 = this.physics.add.sprite(1034, 37, 'arrow', 10).setScale(0.2);
+        this.arrow10 = this.physics.add.sprite(1028, 33, 'arrow', 10).setScale(0.2);
+        this.arrow11 = this.physics.add.sprite(1024, 35, 'arrow', 10).setScale(0.2);
+        this.arrow12 = this.physics.add.sprite(1030, 39, 'arrow', 10).setScale(0.2);
 
 		//this.spider = this.physics.add.sprite(810, 140, 'spider_sp', 0);
 		//this.spider.setScale(0.5)
@@ -217,12 +210,6 @@ class Fase_03 extends Phaser.Scene {
 		// camera seguindo o jogador
 		this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 		this.cameras.main.setZoom(2);
-
-        //criação do escudo e flexa no mapa, como objeto com fisica
-        this.shild = this.physics.add.sprite(88, 450, 'shild', 10)
-        this.shild.setScale(0.8);
-        
-		
 	}
 
 
@@ -285,8 +272,7 @@ class Fase_03 extends Phaser.Scene {
 
 		this.physics.add.collider(this.player, this.invisible);
 
-        //pegar escudo e pegar flexa ao colidir
-        this.physics.add.overlap(this.player, this.shild, this.getShild, null, this);
+        //pegar flexa ao colidir
         this.physics.add.overlap(this.player, this.arrow, this.getArrow, null, this);
         this.physics.add.overlap(this.player, this.arrow2, this.getArrow, null, this);
         this.physics.add.overlap(this.player, this.arrow3, this.getArrow, null, this);
@@ -672,7 +658,8 @@ class Fase_03 extends Phaser.Scene {
 		}
 
 		if (Phaser.Input.Keyboard.JustDown(this.keySPACE)){
-			console.log("Position: ", this.player.x, this.player.y);
+
+            this.open_chest();
 			//this.player.anims.play('attack_up')
 			console.log(this.player.x, this.player.y, this.player.has_bow, this.player.attack_enable)
 			if (this.dialogs.isActive){
@@ -942,6 +929,51 @@ class Fase_03 extends Phaser.Scene {
             arrow.setVisible(true);
             arrow.enableBody() = true;
         }, 30000);
+    }
+
+    //Esta função cria os sprites de baús aberto pelo mapa, visiveis apenas quando o player aperta SPACE.
+    //tambem é responsavel por sortear aleatoriamente um dos baús para conter o escudo.
+    create_chests()
+    {
+        // this.closed_chest1 = this.physics.add.sprite(600, 632, 'tls_solaria', 230).setVisible(false);
+
+        //o primeiro elemento é o sprite do baú, em cima do baú com caixa de colisão do mapa.
+        //o segundo elemento do array informa se este bau contem ou nao o escudo
+        this.open_chests = [];
+                                //sprite                                                                //sem baú
+        this.open_chests[0] = [this.physics.add.sprite(600, 632, 'tls_solaria', 258).setVisible(false), false];
+        this.open_chests[1] = [this.physics.add.sprite(40, 600, 'tls_solaria', 258).setVisible(false).setAngle(-90), false];
+        this.open_chests[2] = [this.physics.add.sprite(1032, 24, 'tls_solaria', 258).setVisible(false), false];
+        
+        //gera um numero aleatorio de 0 a 2
+        var random_number = Math.floor(Math.random() * 3);
+        this.open_chests[random_number][1] = true;
+    }
+
+    //esta função abre o báu quando o jogador preciona SPACE proximo.
+    open_chest()
+    {
+        this.open_chests.forEach(open_chest => 
+        {
+            open_chest[0].body.setSize(18,18);
+            this.physics.overlap(this.player, open_chest[0], () => 
+            {
+                open_chest[0].setVisible(true);
+                if(open_chest[1])// se este baú contem o escudo;
+                {
+                    open_chest[1] = false; // passa a não conter
+
+                    this.shild.body.setSize(3,3);
+                    this.shild.setPosition(this.player.x + 4, this.player.y + 4);
+                    this.shild.setVisible(true).set;
+                    console.log("SHILD VISIBLE");
+                    setTimeout(() => 
+                    {
+                        this.physics.add.overlap(this.player, this.shild, this.getShild, null, this);
+                    }, 2000);
+                }
+            });
+        });
     }
 }
 
