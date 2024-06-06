@@ -117,8 +117,9 @@ class Fase_03 extends Phaser.Scene {
 		this.robin.body.moves = false;
 
 		// Criação do personagem principal
-		//this.player = new player(this, 815, 100, 'playerbow_sp', 26);
-		this.player = new player(this, 40, 730, 'playerbow_sp', 26);
+		//this.player = new player(this, 815, 100, 'playerbow_sp', 26);		
+
+		this.player = new player(this, 1033, 51, 'playerbow_sp', 26);
 		this.player.setScale(0.4);
 		this.player.setSize(32, 32);
 		this.player.setOffset(16, 32);
@@ -580,7 +581,7 @@ class Fase_03 extends Phaser.Scene {
 		//createQuestion(this);
 		//this.dialogs.makeQuestion(this.Q0, acertou2, errou2)
 		this.interact_txt.alpha = 1;
-		this.create_elfa()
+		//this.create_elfa()
 	}
  
 	// update é chamada a cada novo quadro
@@ -841,6 +842,7 @@ class Fase_03 extends Phaser.Scene {
 		
 		// Criação da Elfa
 		this.elfa = new Elfa(this, 225, 270, 'elfa', 26);
+		//this.elfa = new Elfa(this, 180, 750, 'elfa', 26);
 		this.elfa.setScale(0.4);
 		this.elfa.setSize(32, 32);
 		this.elfa.setOffset(16, 32);
