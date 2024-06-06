@@ -391,7 +391,7 @@ class Fase_01 extends Phaser.Scene{
         }
     
         //se ta sendo empurrado
-        if (this.isPushBack) {
+        if (this.isPushBack && distanceSquared<100*100) {
             //calcula a velocidade inicial
             var maxDistance = 100 * 100; //range maximo
             var pushBackScale = 8 * (1 - distanceSquared / maxDistance); //velocidade max
