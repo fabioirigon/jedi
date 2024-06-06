@@ -363,13 +363,29 @@ class Fase_01 extends Phaser.Scene{
         this.score = this.add.text(300, 150, "score: " + 0, {font: "15px Arial",fill: "#FFFFFF", align: "center"});
         this.score.setScrollFactor(0);
 
-        this.dialogs2 = new dialogs(this)
-        var commands =  ["\n  W  \nA S D\n  SPACE", 1, "ENTENDI"]
-        this.dialogs2.makeQuestion(commands, errou, acertou)
-
+        //this.dialogs.makeQuestion(commands, errou, acertou)
+        
         var question =  ["Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros e mais 9 livrinhos diversos.\nQuantos livros eu tenho?",
         1, "◯ 3589 livros", "◯ 3859 livros", "◯ 30859 livros", "◯ 38590 livros"]     
         this.dialogs.makeQuestion(question, acertou, errou)
+
+        // if (Phaser.Input.Keyboard.JustDown(this.keyE)){
+            // this.txts =  ["\n  W  \nA S D\n  SPACE"]
+            // this.dlgBox = true;
+            // if (this.dlgBox){
+            //     this.dialogs.updateDlgBox(this.txts);
+            //     this.dlgBox = false;
+            // }
+
+            // if (Phaser.Input.Keyboard.JustDown(this.keySPACE)){
+            //     //console.log(this.player.anims)
+            //     //this.player.anims.play('attack_up')
+            //     console.log(this.player.x, this.player.y, this.player.has_bow, this.player.attack_enable)
+            //     if (this.dialogs.isActive){
+            //         this.dialogs.nextDlg();
+            //     }
+            // }
+        // }
     }
 
     move_enemy(enemy){
@@ -573,12 +589,24 @@ function acertou(pointer){
     console.log('acertou');
     loadAudio('../assets/audio/correct.mp3');
     this.dialogs.hideBox();
-    return true
+    this.txts =  ["\n  W  \nA S D\n  SPACE"]
+    this.dlgBox = true;
+    if (this.dlgBox){
+        this.dialogs.updateDlgBox(this.txts);
+        this.dlgBox = false;
+    }
+    
 }
 function errou(pointer){
     console.log('errou', this);
     loadAudio('../assets/audio/error.mp3');
     this.dialogs.hideBox();
+    this.txts =  ["\n  W  \nA S D\n  SPACE"]
+    this.dlgBox = true;
+    if (this.dlgBox){
+        this.dialogs.updateDlgBox(this.txts);
+        this.dlgBox = false;
+    }
 }
 
 function sortBoxes(scene){
