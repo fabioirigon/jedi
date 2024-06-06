@@ -43,6 +43,7 @@ class Fase_01 extends Phaser.Scene{
     }
 
     create_actors(){
+        
         // criação das armadilhas
         this.traps  = this.physics.add.group();
         for (let i=36; i<=43; i++){
@@ -320,6 +321,8 @@ class Fase_01 extends Phaser.Scene{
         this.keyV = this.input.keyboard.addKey('V');
         this.game_over = false;
 
+        
+
         // estado do jogador
         this.cur_wlk = 0
         if (this.movingWall_sts == 0){
@@ -360,9 +363,12 @@ class Fase_01 extends Phaser.Scene{
         this.score = this.add.text(300, 150, "score: " + 0, {font: "15px Arial",fill: "#FFFFFF", align: "center"});
         this.score.setScrollFactor(0);
 
-        var question =  ["Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros e mais 9 livrinhos diversos.\nQuantos livros eu tenho?",
-        1, "◯ 3589 livros", "◯ 3859 livros", "◯ 30859 livros", "◯ 38590 livros"]
+        this.dialogs2 = new dialogs(this)
+        var commands =  ["\n  W  \nA S D\n  SPACE", 1, "ENTENDI"]
+        this.dialogs2.makeQuestion(commands, errou, acertou)
 
+        var question =  ["Tenho 3 caixas gigantes com 1000 livros cada!\nMais 8 caixas de 100 livros, mais 5 pacotes\nde 10 livros e mais 9 livrinhos diversos.\nQuantos livros eu tenho?",
+        1, "◯ 3589 livros", "◯ 3859 livros", "◯ 30859 livros", "◯ 38590 livros"]     
         this.dialogs.makeQuestion(question, acertou, errou)
     }
 
@@ -567,6 +573,7 @@ function acertou(pointer){
     console.log('acertou');
     loadAudio('../assets/audio/correct.mp3');
     this.dialogs.hideBox();
+    return true
 }
 function errou(pointer){
     console.log('errou', this);
