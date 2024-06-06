@@ -817,7 +817,7 @@ class Fase_03 extends Phaser.Scene {
 	}
 
 	create_elfa(){
-			/*
+			/*teste
 			console.log("acertou");
 			this.quest.setVisible(false);
 			this.a0.setVisible(false);
