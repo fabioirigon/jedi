@@ -323,7 +323,7 @@ class Fase_01 extends Phaser.Scene{
         //bash--------------------------------------
         this.keyX = this.input.keyboard.addKey('X');
         this.isPushBack = false;
-        this.pushBackDuration = 300; // Duração do empurrão em milissegundos
+        this.pushBackDuration = 250; // Duração do empurrão em milissegundos
         this.pushBackTimer = 0;
         //------------------------------------------
 
@@ -374,27 +374,50 @@ class Fase_01 extends Phaser.Scene{
     }
 
     move_enemy(enemy){
-        //calcula as distancias
-        var dx = this.player.x-enemy.x;
-        var dy = this.player.y-enemy.y;
-        var scl = 130/Math.sqrt(dx*dx+dy*dy)
-        //se tiver dentro do range, vai pra cima do player
-        if (dx*dx + dy*dy < 200*200 && scl>0){
-            enemy.setVelocityX(dx*scl);
-            enemy.setVelocityY(dy*scl);
+        //calcula distancias
+        var dx = this.player.x - enemy.x;
+        var dy = this.player.y - enemy.y;
+        var distanceSquared = dx*dx + dy*dy;
+        
+        //ve se ta no range pra seguir
+        if (distanceSquared < 200*200){
+            var scl = 130 / Math.sqrt(distanceSquared);
+            enemy.setVelocityX(dx * scl);
+            enemy.setVelocityY(dy * scl);
         }
         else{
             enemy.setVelocityX(0);
             enemy.setVelocityY(0);
         }
-        //bash--------------------------------------
-        if (this.isPushBack && dx*dx + dy*dy < 100*100) {
-            var pushBackScale = 150 / Math.sqrt(dx*dx+dy*dy); //"forca" do empurrao
-            enemy.setVelocityX(-dx * pushBackScale);
-            enemy.setVelocityY(-dy * pushBackScale);
-        }
-        //------------------------------------------
-    }
+    
+        //se ta sendo empurrado
+        if (this.isPushBack) {
+            //calcula a velocidade inicial
+            var maxDistance = 100 * 100; //range maximo
+            var pushBackScale = 8 * (1 - distanceSquared / maxDistance); //velocidade max
+            
+            //limita a velocidade inicial do empurrão
+            var initialPushVelocity = Math.max(pushBackScale, 0);
+
+            //calcula a velocidade atual
+            var elapsedTime = this.pushBackDuration - this.pushBackTimer;
+            var currentPushVelocity = initialPushVelocity * (1 - elapsedTime / this.pushBackDuration);
+
+            //limita a velocidade minima
+            currentPushVelocity = Math.max(0, currentPushVelocity);
+
+            //alica a velocidade
+            enemy.setVelocityX(-dx * currentPushVelocity);
+            enemy.setVelocityY(-dy * currentPushVelocity);
+    
+            //verifica se o tempo de empurrão
+            if (elapsedTime <= 0) {
+                this.isPushBack = false; //desativa o empurrão
+            }//if tempo
+        }//if empurrado
+    }//move_enemy
+    
+
 
     // update é chamada a cada novo quadro
     update (time, delta){
@@ -402,13 +425,13 @@ class Fase_01 extends Phaser.Scene{
         if (Phaser.Input.Keyboard.JustDown(this.keyX)) {
             this.isPushBack = true; //ativa o empurrao
             this.pushBackTimer = this.pushBackDuration;
-        }
+        }//if apertou x
         if (this.isPushBack) {
             this.pushBackTimer -= delta; 
             if (this.pushBackTimer <= 0) {
                 this.isPushBack = false; //desativa
-            }
-        }
+            }//if passou o tempo
+        }//if empurrado
         //------------------------------------------
 
         if (Phaser.Input.Keyboard.JustDown(this.keySPACE)){
