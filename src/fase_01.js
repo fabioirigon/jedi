@@ -21,6 +21,10 @@ class Fase_01 extends Phaser.Scene{
         this.load.spritesheet('tiles_sp', 'assets/images/dungeon-16-16.png', { frameWidth: 16, frameHeight: 16});
         this.load.spritesheet('lightning_sp', 'assets/spritesheets/lightning.png', { frameWidth: 32, frameHeight: 32});
         this.load.spritesheet('swordSwing_sp', 'assets/spritesheets/sw_swing.png', { frameWidth: 16, frameHeight: 16});
+        // spritesheets da explosao do bash
+        this.load.spritesheet('explosion_sp', 'assets/spritesheets/PngItem_316563.png', { frameWidth: 210, frameHeight: 197 });
+
+        
         
         // carregando mapa (json) e gráficos do mapa
         this.load.image('tiles', 'assets/images/dungeon-16-16.png');
@@ -152,6 +156,21 @@ class Fase_01 extends Phaser.Scene{
         });
 
         this.anims.create({
+            key: 'explosion_anim',
+            frames: this.anims.generateFrameNumbers('explosion_sp', { start: 0, end: 15 }), // Ajuste os índices conforme necessário
+            frameRate: 20,
+            hideOnComplete: true,
+            repeat: 0
+        });
+    
+        // Criação do grupo de explosão
+        this.explosionGroup = this.add.group({
+            defaultKey: 'explosion_sp',
+            maxSize: 30
+        });
+        
+
+        this.anims.create({
             key: 'enemy_1_anim',
             frames: this.anims.generateFrameNumbers('tiles_sp', {start: 503, end: 510}),
             frameRate: 12,
@@ -169,6 +188,23 @@ class Fase_01 extends Phaser.Scene{
             yoyo: true
         });
     }
+
+    createExplosion(x, y) {
+        const explosion = this.explosionGroup.get(x, y);
+    
+        if (explosion) {
+            explosion.setActive(true);
+            explosion.setVisible(true);
+            explosion.setScale(0.4); // Redimensiona o sprite para 50% do tamanho original
+            explosion.play('explosion_anim');
+            explosion.on('animationcomplete', () => {
+                explosion.setActive(false);
+                explosion.setVisible(false);
+            }, this);
+        }
+    }
+    
+    
 
     create_collisions(){
         // criação da colisão com paredes
@@ -373,49 +409,56 @@ class Fase_01 extends Phaser.Scene{
         //this.dialogs.makeQuestion(question, acertou, errou)
     }
 
-    move_enemy(enemy){
-        //calcula distancias
+    move_enemy(enemy) {
+        // calcula distancias
         var dx = this.player.x - enemy.x;
         var dy = this.player.y - enemy.y;
-        var distanceSquared = dx*dx + dy*dy;
-        
-        //ve se ta no range pra seguir
-        if (distanceSquared < 200*200){
+        var distanceSquared = dx * dx + dy * dy;
+    
+        // verifica se está no range
+    
+        // verifica se está no range para seguir
+        if (distanceSquared < 200 * 200) {
             var scl = 130 / Math.sqrt(distanceSquared);
             enemy.setVelocityX(dx * scl);
             enemy.setVelocityY(dy * scl);
-        }
-        else{
+        } else {
             enemy.setVelocityX(0);
             enemy.setVelocityY(0);
         }
     
-        //se ta sendo empurrado
-        if (this.isPushBack && distanceSquared<100*100) {
-            //calcula a velocidade inicial
-            var maxDistance = 100 * 100; //range maximo
-            var pushBackScale = 8 * (1 - distanceSquared / maxDistance); //velocidade max
-            
-            //limita a velocidade inicial do empurrão
+        // se está sendo empurrado
+        if (this.isPushBack && distanceSquared < 100 * 100) {
+            // calcula a velocidade inicial
+            var maxDistance = 100 * 100; // range máximo
+            var pushBackScale = 8 * (1 - distanceSquared / maxDistance); // velocidade máxima
+    
+            // limita a velocidade inicial do empurrão
             var initialPushVelocity = Math.max(pushBackScale, 0);
-
-            //calcula a velocidade atual
+    
+            // calcula a velocidade atual
             var elapsedTime = this.pushBackDuration - this.pushBackTimer;
             var currentPushVelocity = initialPushVelocity * (1 - elapsedTime / this.pushBackDuration);
-
-            //limita a velocidade minima
+    
+            // limita a velocidade mínima
             currentPushVelocity = Math.max(0, currentPushVelocity);
-
-            //alica a velocidade
+    
+            // aplica a velocidade
             enemy.setVelocityX(-dx * currentPushVelocity);
             enemy.setVelocityY(-dy * currentPushVelocity);
     
-            //verifica se o tempo de empurrão
+            // cria a explosão
+            this.createExplosion(this.player.x, this.player.y);
+    
+            // verifica se o tempo de empurrão acabou
             if (elapsedTime <= 0) {
-                this.isPushBack = false; //desativa o empurrão
-            }//if tempo
-        }//if empurrado
-    }//move_enemy
+                this.isPushBack = false; // desativa o empurrão
+            }
+        }
+    }
+    
+    
+    
     
 
 
