@@ -47,7 +47,7 @@ class player extends Actor {
 
     this.move = new Movement(player.DEFAULT_MAX_SPEED);
     this.knockback = {
-      move: new Movement(),
+      move: new Movement(player.DEFAULT_MAX_SPEED * 1.6),
       list: []
     };
   }
@@ -173,7 +173,7 @@ class player extends Actor {
     this.knockback.list = [];
   }
 
-  addKnocback(vx, vy, scale_factor = 1) {
+  addKnockback(vx, vy, scale_factor = 1) {
     let knockback_vector = new Vector2(vx, vy).scale(scale_factor);
     this.knockback.list.push(knockback_vector);
   }

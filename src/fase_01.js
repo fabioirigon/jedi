@@ -433,11 +433,15 @@ class Fase_01 extends Phaser.Scene{
         this.scene.start('brick_push_scene');
     }
 
-    enemyHit (player, enemy){
-        player.getDamage(3);
-        if (player.getHPValue() == 0){
+    enemyHit (scene_player, enemy){
+        let v = enemy.body.velocity.clone().normalize();
+        scene_player.addKnockback(v.x, v.y, player.DEFAULT_MAX_SPEED/2)
+    
+        scene_player.getDamage(3);
+
+        if (scene_player.getHPValue() == 0){
             localStorage.setItem('hp',100);
-            player.die();
+            scene_player.die();
         }
     }
 
