@@ -589,19 +589,21 @@ function acertou(pointer){
     console.log('acertou');
     loadAudio('../assets/audio/correct.mp3');
     this.dialogs.hideBox();
-    this.txts =  ["\n  W  \nA S D\n  SPACE"]
+    //this.txts =  ["\n  "+  this.scene.load.image('WASD', '../assets/images/WASD.jpg')+ "\n  SPACE"]
+    const wasd = this.add.image(1400, 750, 'WASD');
+    this.dialogs.hideBox();
+    this.txts =  ["Comandos para andar\n  W  \nA S D\n\nFases N M B V\n\nAtirar com arco SPACE"]
     this.dlgBox = true;
     if (this.dlgBox){
         this.dialogs.updateDlgBox(this.txts);
         this.dlgBox = false;
     }
-    
 }
 function errou(pointer){
     console.log('errou', this);
     loadAudio('../assets/audio/error.mp3');
     this.dialogs.hideBox();
-    this.txts =  ["\n  W  \nA S D\n  SPACE"]
+    this.txts =  ["Comandos para andar\n  W  \nA S D\n\nFases N M B V\n\nAtirar com arco SPACE"]
     this.dlgBox = true;
     if (this.dlgBox){
         this.dialogs.updateDlgBox(this.txts);
