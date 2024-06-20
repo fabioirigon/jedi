@@ -841,7 +841,7 @@ class Fase_03 extends Phaser.Scene {
 		*/
 		
 		// Criação da Elfa
-		this.elfa = new Elfa(this, 225, 270, 'elfa', 26);
+		this.elfa = new Elfa(this, 214, 270, 'elfa', 26);
 		//this.elfa = new Elfa(this, 180, 750, 'elfa', 26);
 		this.elfa.setScale(0.4);
 		this.elfa.setSize(32, 32);
