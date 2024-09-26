@@ -276,12 +276,12 @@ class player extends Actor {
     this.attack_enable = true;
     this.move_enable = true;
 
-    var arrow = this.arrows.getFirstDead(false);
+    var arrow = this.arrows.getFirstDead(false, this.x, this.y);
     if (arrow){
         var vx = this.facing[0] * 100
         var vy = this.facing[1] * 100
 
-        arrow.body.reset(this.x, this.y);
+        //arrow.body.reset(this.x, this.y);
         arrow.setActive(true);
         arrow.setVisible(true);
 
@@ -295,7 +295,7 @@ class player extends Actor {
           ang = -0.5;
         else if  (this.facing[1] == 1)
            ang = 1;
-        console.log(ang, this.facing);
+        console.log('ren', ang, this.facing, this);
         arrow.rotation = ang*pi;
     }
   }
@@ -323,8 +323,10 @@ class player extends Actor {
     }
 
    
-    for (let v of this.arrows.getMatching('visible', true)){
-      if (v.x > this.canvas.width || v.x < 0 || v.y > this.canvas.height || v.y <0){
+    for (let v of this.arrows.getMatching('active', true)){
+      var h = this.scene.map.heightInPixels
+      var w = this.scene.map.widthInPixels
+      if (v.x > w+200 || v.x < -200 || v.y > h + 200 || v.y < -200){
         v.setActive(false);
         v.setVisible(false);
         v.setVelocity(0, 0);

@@ -394,9 +394,9 @@ class Fase_05 extends Phaser.Scene{
       targets: doe0,
       alpha: 1,
       ease: 'linear',
-      duration: 500,
+      duration: 200,
       yoyo: true,
-      hold: 3500,
+      hold: 1000,
       onStart: showDlg, 
       onStartParams: [this.dialog_bg, this.player]
     });
@@ -404,9 +404,9 @@ class Fase_05 extends Phaser.Scene{
       targets: doe1,
       alpha: 1,
       ease: 'linear',
-      duration: 500,
+      duration: 200,
       yoyo: true,
-      hold: 3500,
+      hold: 1000,
       onComplete: hideDlg, 
       onCompleteParams: [this.dialog_bg, this.player]
     });
@@ -414,7 +414,7 @@ class Fase_05 extends Phaser.Scene{
       targets: this.orcE,
       alpha: 0,
       ease: 'linear',
-      duration: 500
+      duration: 200
     });
 
 
